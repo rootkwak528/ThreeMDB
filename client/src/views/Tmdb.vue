@@ -4,6 +4,9 @@
     <TmdbSearchBox
       @tmdb-text-input="onTmdbTextInput"
     />
+    <LikedThreeMovieCards 
+    
+    />
     <TmdbDetail
       :selectedMovie="selectedMovie"
     />
@@ -20,6 +23,7 @@ import axios from 'axios'
 import TmdbDetail from '@/components/TmdbDetail'
 import TmdbSearchBox from '@/components/TmdbSearchBox'
 import TmdbSearchList from '@/components/TmdbSearchList'
+import LikedThreeMovieCards from '@/components/LikedThreeMovieCards'
 
 const API_URL = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY
@@ -35,7 +39,8 @@ export default {
   components: {
     TmdbDetail,
     TmdbSearchBox,
-    TmdbSearchList
+    TmdbSearchList,
+    LikedThreeMovieCards,
   },
   methods: {
     onTmdbTextInput (textInput) {
@@ -58,17 +63,6 @@ export default {
       // TMDB 예고편 정보 확인
       this.searchTMDB('movie', `${movie.id}/videos`)
         .then( () => {
-          // let trailerUrl = ''
-          // try {
-          //   trailerUrl = `https://www.youtube.com/embed/${res.data.results[0].key}`
-          // }
-          // catch (err) {
-          //   console.log(err)
-          // }
-          // this.selectedMovie = {
-          //   ...movie,
-          //   trailerUrl
-          // }
           this.selectedMovie = movie
         })
         .catch( err => {

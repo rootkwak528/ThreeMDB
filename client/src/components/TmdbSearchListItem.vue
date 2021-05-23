@@ -1,12 +1,22 @@
 <template>
-  <li @click="onClickItem" class="item">
-    <img  
-      v-if="poster_path"
-      :src="poster_path"
-      alt="movie_poster"
-    >
-    {{ movie.title }}
-  </li>
+  <div class="col">
+    <div @click="onClickItem" class="card mb-3 item">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img  
+            v-if="poster_path"
+            :src="poster_path"
+            alt="movie_poster"
+          >
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h3 class="card-title">{{ movie.title }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

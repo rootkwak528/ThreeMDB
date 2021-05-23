@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div class="mx-3">
     <input 
       type="text" 
       @input="onInputText" 
       @keyup.enter="onResetText"
     >
     <hr>
+    
   </div>
 </template>
 
