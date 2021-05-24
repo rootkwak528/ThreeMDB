@@ -43,6 +43,15 @@ import * as THREE from 'three'
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
 import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils'
 
+// post-processing
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { BloomPass } from 'three/examples/jsm/postprocessing/BloomPass.js';
+
+import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js';
+import { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader.js';
+
 // import results from '@/data/movies' // this is for test
 import axios from 'axios'
 
@@ -53,6 +62,7 @@ let container
 let camera, controls, scene, renderer
 let pickingTexture, pickingScene
 let highlightBox
+let composerZizizik, composerPick // post-processing
 
 // 마우스 가리키는 카드 판별 변수
 const pickingData = []
@@ -182,6 +192,35 @@ export default {
       renderer.setPixelRatio( window.devicePixelRatio );
       renderer.setSize( window.innerWidth, window.innerHeight );
       container.appendChild( renderer.domElement );
+
+      // post-process #1 디테일 페이지 뒤에 지직 거리는 효과
+      {
+        composerZizizik = new EffectComposer( renderer );
+        composerZizizik.addPass( new RenderPass( scene, camera ) );
+
+        const effect1 = new ShaderPass( DotScreenShader );
+        effect1.uniforms[ 'scale' ].value = 20;
+        composerZizizik.addPass( effect1 );
+
+        const effect2 = new ShaderPass( RGBShiftShader );
+        effect2.uniforms[ 'amount' ].value = 0.003;
+        composerZizizik.addPass( effect2 );
+      }
+
+      // post-proces #2 마우스 픽한 카드만 돋보이는 효과
+      {
+        composerPick = new EffectComposer( renderer )
+        composerPick.addPass( new RenderPass( scene, camera ) );
+
+        const effect1 = new BloomPass( 
+          1,  // 강도
+          25, // 커널(kernel) 크기
+          4,  // 시그마
+          256 // 해상도
+        )
+        composerPick.addPass( effect1 )
+        // console.log(composerPick)
+      }
 
       // 컨트롤러 추가
       this.activateEventsAndControls()
@@ -656,8 +695,18 @@ export default {
       this.pick();
       this.choice()
 
-      renderer.setRenderTarget( null );
-      renderer.render( scene, camera );
+      if ( !this.isDetail ) {
+
+        renderer.setRenderTarget( null );
+        renderer.render( scene, camera );
+        // composerPick.render( scene, camera );
+        
+      } else {
+
+        composerZizizik.render()
+        
+      }
+
 
     },
 
