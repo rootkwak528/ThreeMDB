@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">TMDB</router-link> |
+      <router-link to="/movies">TMDB</router-link> |
       <span v-if="isLogin">
         <router-link @click.native="logout" to="#">Logout</router-link>
       </span>

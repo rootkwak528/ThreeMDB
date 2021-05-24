@@ -1,15 +1,24 @@
 <template>
   <div id="detail">
-    <h1>detail</h1>
-    <h2>{{ movie.id }}</h2>
-    <h2>{{ movie.title }}</h2>
-    <p>{{ movie.overview }}</p>
-    {{movie}}
-    <button @click="close">x</button>
+    <div class="col">
+      <img  
+        v-if="poster_path"
+        :src="poster_path"
+        alt="movie_poster"
+      >
+      <button class="position-absolute top-0 start-100" @click="close">x</button>
+    </div>
+    <div>
+      <h4>{{ movie.title }}</h4>
+      <p>{{ movie.overview }}</p>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
 export default {
   name: 'DetailCard',
   props: {
@@ -19,20 +28,50 @@ export default {
     }
   },
   methods: {
+    setToken () {
+      const token = localStorage.getItem('jwt')
+
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     close () {
       this.$emit('close-detail')
     }
   },
+  computed: {
+    poster_path () {
+      if (this.movie.poster_path) {
+        return `https://www.themoviedb.org/t/p/w300${this.movie.poster_path}`
+      } else {
+        return ''
+      }
+    }
+  },
+  created () {
+    axios({
+      url: `${SERVER_URL}/movies/`,
+      method: 'post',
+      data: this.movie,
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 }
 </script>
 
 <style>
 #detail {
   position: absolute;
-  top: 40vh;
-  left: 40vw;
-  height: 30vh;
-  width: 30vw;
+  top: 30vh;
+  left: 20vw;
+  /* height: 50vh; */
+  width: 60vw;
   background-color: aquamarine;
 }
 </style>

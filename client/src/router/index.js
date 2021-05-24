@@ -1,24 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Tmdb from '@/views/Tmdb'
+import Tmdb from '@/views/movies/Tmdb'
 import Signup from '@/views/accounts/Signup'
 import Login from '@/views/accounts/Login'
-import MovieList from '@/views/movies/MovieList'
 import MovieRecommend from '@/views/movies/MovieRecommend'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/movies/',
     name: 'Tmdb',
     component: Tmdb
-  },
-  {
-    path: '/movies',
-    name: 'MovieList',
-    component: MovieList,
   },
   {
     path: '/accounts/signup',

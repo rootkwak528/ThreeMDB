@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Movie
-from ..community.serializers import ReviewSerializer
+from community.serializers import ReviewSerializer
 
 class MovieListSerializer(serializers.ModelSerializer):
 
@@ -16,6 +16,6 @@ class MovieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ('id', 'title', 'overview', 'release_date', 'poster_path', 'review_count', 'reviews')
+        fields = ('id', 'movie_id', 'title', 'overview', 'release_date', 'poster_path', 'review_count', 'reviews')
 
 
