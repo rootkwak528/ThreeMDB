@@ -67,13 +67,17 @@ export default {
     const likedMoviesJson = localStorage.getItem('likedMovies')
     this.likedMovies = JSON.parse(likedMoviesJson)
 
-    console.log(this.likedMovies)
+    // console.log(this.likedMovies)
 
     // three.js
     const navbar = document.getElementById( 'nav' )
     navbarHeight = navbar.offsetHeight
 
     this.main()
+
+    this.likedMovies.forEach( movie => {
+      this.getRecommendations( movie.id )
+    })
 
   },
 
@@ -528,7 +532,7 @@ export default {
 
             this.selectedMovie = this.movieObject[ pointedCardId ]
             this.isDetail = true
-            this.deactivateEventsAndControls()
+            this.deactivateEventsAndControls( pointedCardId )
 
           }
         }
@@ -539,11 +543,11 @@ export default {
 
     },
 
-    getRecommendations () {
+    getRecommendations ( movieId ) {
 
       axios({
 
-        url: `https://api.themoviedb.org/3/movie/${pointedCardId}/recommendations?api_key=${TMDB_API_KEY}&language=ko-KR&page=1`,
+        url: `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${TMDB_API_KEY}&language=ko-KR&page=1`,
         method: 'get',
 
       })
