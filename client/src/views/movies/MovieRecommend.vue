@@ -81,6 +81,10 @@ let ctrlDown = false
 // Fly Controls 변수
 const clock = new THREE.Clock()
 
+// style
+// const navbarDOM = document.querySelector('#nav')
+// const infoDOM = document.querySelector('#info')
+
 export default {
   name: 'MovieRecommend',
   components: {
@@ -144,6 +148,7 @@ export default {
       // 씬 초기화
       scene = new THREE.Scene();
       scene.background = new THREE.Color( 0xffffff );
+      // scene.background.setStyle( "rgba(100, 98, 98, 0.5)" )
 
       // 마우스 가리키는 씬
       pickingScene = new THREE.Scene();
@@ -199,11 +204,11 @@ export default {
         composerZizizik.addPass( new RenderPass( scene, camera ) );
 
         const effect1 = new ShaderPass( DotScreenShader );
-        effect1.uniforms[ 'scale' ].value = 20;
+        effect1.uniforms[ 'scale' ].value = 100;
         composerZizizik.addPass( effect1 );
 
         const effect2 = new ShaderPass( RGBShiftShader );
-        effect2.uniforms[ 'amount' ].value = 0.003;
+        effect2.uniforms[ 'amount' ].value = 0.001;
         composerZizizik.addPass( effect2 );
       }
 
@@ -517,7 +522,7 @@ export default {
       document.removeEventListener( 'keyup', this.onKeyUp ) // 키보드 up 
 
       // 컨트롤러 비활성화
-      controls.rollSpeed = 0.02
+      controls.rollSpeed = 0.01
       controls.movementSpeed = 0
       controls.dragToLook = false
       
@@ -635,12 +640,14 @@ export default {
 
         if ( pointedCardId ) {
 
+          // recommend
           if ( shiftDown ) {
 
             console.log( 'shift +', pointedCardId )
             this.getRecommendations( pointedCardId,
                                      pickingData[ pointedCardId ].position )
 
+          // detail
           } else if ( ctrlDown ) {
 
             console.log( 'ctrl +', pointedCardId )
@@ -649,6 +656,13 @@ export default {
             this.selectedMovie = this.movieObject[ pointedCardId ]
             this.isDetail = true
             this.deactivateEventsAndControls( pointedCardId )
+
+            scene.background = new THREE.Color( 0x000000 );
+
+            const navbarDOM = document.querySelector('#nav')
+            const infoDOM = document.querySelector('#info')
+            navbarDOM.style.display = 'none'
+            infoDOM.style.display = 'none'
 
           }
         }
@@ -703,6 +717,8 @@ export default {
         
       } else {
 
+        // renderer.setRenderTarget( null );
+        // renderer.render( scene, camera );
         composerZizizik.render()
         
       }
@@ -715,6 +731,17 @@ export default {
       this.isDetail = false
       this.activateEventsAndControls()
 
+      clicked = false
+      shiftDown = false
+      ctrlDown = false
+
+      scene.background = new THREE.Color( 0xffffff );
+
+      const navbarDOM = document.querySelector('#nav')
+      const infoDOM = document.querySelector('#info')
+      navbarDOM.style.display = 'block'
+      infoDOM.style.display = 'block'
+
     }
   }
 }
@@ -724,6 +751,10 @@ export default {
 b {
   color: orange
 }
+
+/* #info span {
+  color: rgba( 255, 255, 255, 0.6 )
+} */
 
 #blocker {
   position: absolute;
@@ -752,12 +783,21 @@ b {
   width: 100%;
   position: absolute;
   text-align: center;
-  background-color: rgba(255,255,255,0.7);
+  /* background-color: rgba( 255, 255, 255, 0.8 ); */
+  backdrop-filter: blur(3px);
+  box-shadow: 0 0 0.15rem 0 rgba(0, 0, 0, .1);
 }
 
 #nav {
   width: 100%;
   position: absolute;
-  background-color: rgba(255,255,255,0.7);
+  /* background-color: rgba( 255, 255, 255, 0.8 ); */
+  backdrop-filter: blur(3px);
+  box-shadow: 0 0 0.15rem 0 rgba(0, 0, 0, .1);
 }
+
+/* #app canvas {
+  background: rgb(3,0,57);
+  background: linear-gradient(40deg, rgba(3,0,57,1) 0%, rgba(9,9,121,1) 31%, rgba(82,6,140,1) 63%, rgba(0,165,199,1) 100%);
+} */
 </style>

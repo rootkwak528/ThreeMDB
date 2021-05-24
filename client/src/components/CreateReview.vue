@@ -9,7 +9,7 @@
         <label for="content" class="form-label">Content</label>
         <input type="text" v-model.trim="content" class="form-control" id="content">
       </div>
-      <button @click="createReview" class="btn btn-primary">Submit</button>
+      <button @click="createReview" class="detail-button">Submit</button>
     </form>
   </div>
 </template>
@@ -67,5 +67,15 @@ export default {
 </script>
 
 <style>
-
+.detail-button {
+  align-items: center;
+  background: linear-gradient(-45deg, rgba(0,0,0,0.22), rgba(255,255,255,0.25));
+  border-radius: 50px;
+  height: 200px;
+  justify-content: center;
+  width: 100%;
+  box-shadow: 
+    12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+    -8px -8px 12px 0 rgba(255, 255, 255, 0.3);
+}
 </style>

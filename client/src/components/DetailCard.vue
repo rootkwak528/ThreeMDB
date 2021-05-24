@@ -1,5 +1,5 @@
 <template>
-  <div id="detail">
+  <div id="detail-window">
     <div class="col">
       <img  
         v-if="poster_path"
@@ -8,7 +8,7 @@
       >
       <button class="position-absolute top-0 start-100" @click="close">x</button>
     </div>
-    <div>
+    <div id="detail-text">
       <h4>{{ movie.title }}</h4>
       <p>{{ movie.overview }}</p>
     </div>
@@ -78,14 +78,26 @@ export default {
 </script>
 
 <style>
-#detail {
+#detail-window {
   position: absolute;
   top: 30vh;
   left: 20vw;
   /* height: 50vh; */
   width: 60vw;
-  background-color: rgba(255,255,255,0.7);
+  /* background-color: rgba(255,255,255,0.7);
   backdrop-filter: blur(3px);
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); */
+
+  background: rgba( 255, 255, 255, 0.20 );
+  box-shadow: 10px 10px 20px rgba( 31, 38, 135, 0.2 );
+  backdrop-filter: blur( 20.0px );
+  -webkit-backdrop-filter: blur( 20.0px );
+  border-radius: 20px;
+  border-top: 1px solid rgba( 255, 255, 255, 0.7 );
+  border-left: 1px solid rgba( 255, 255, 255, 0.7 );
+}
+
+#detail-text {
+  color: rgba( 255, 255, 255, 0.6 );
 }
 </style>
