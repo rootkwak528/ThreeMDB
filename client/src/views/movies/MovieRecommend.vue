@@ -36,6 +36,7 @@ const pointer = new THREE.Vector2()
 let pointedCardId = null
 let clicked = false
 let shiftDown = false
+let ctrlDown = false
 
 // Fly Controls
 const clock = new THREE.Clock()
@@ -445,12 +446,14 @@ export default {
     onKeyDown ( e ) {
       
       shiftDown = e.shiftKey
+      ctrlDown  = e.ctrlKey
 
     },
 
     onKeyUp ( e ) {
 
       shiftDown = e.shiftKey
+      ctrlDown  = e.ctrlKey
 
     },
 
@@ -532,9 +535,9 @@ export default {
             this.getRecommendations( pointedCardId,
                                      pickingData[ pointedCardId ].position )
 
-          } else {
+          } else if ( ctrlDown ) {
 
-            console.log( pointedCardId )
+            console.log( 'ctrl +', pointedCardId )
             // this.exportScene() // 굉장히 비싼 작업
 
             this.selectedMovie = this.movieObject[ pointedCardId ]
