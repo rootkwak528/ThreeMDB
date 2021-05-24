@@ -12,15 +12,27 @@
       <h4>{{ movie.title }}</h4>
       <p>{{ movie.overview }}</p>
     </div>
+    <CreateReview 
+      :movieData="movieData"
+    />
   </div>
 </template>
 
 <script>
+import CreateReview from '@/components/CreateReview'
 import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
   name: 'DetailCard',
+  data () {
+    return {
+      movieData: '',
+    }
+  },
+  components: {
+    CreateReview,
+  },
   props: {
     movie: {
       type: [Object,],
@@ -56,7 +68,7 @@ export default {
       data: this.movie,
     })
     .then((res) => {
-      console.log(res)
+      this.movieData = res
     })
     .catch((err) => {
       console.log(err)
