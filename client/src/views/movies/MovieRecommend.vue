@@ -1,5 +1,32 @@
 <template>
   <div id="container">
+
+    <!-- <div id="blocker">
+			<div id="instructions">
+				<span style="font-size:36px">Click to play</span>
+				<br /><br />
+        <b>이동</b><br/>
+				기본이동: WASD<br/>
+				기본회전: DRAG<br/>
+				상하이동: RF<br/>
+				좌우회전: QE<br/><br/>
+        <b>선택</b><br/>
+				세부정보: Ctrl + CLICK<br/>
+				영화추천: Shift + CLICK<br/>
+			</div>
+		</div> -->
+
+    <div id="info">
+      <span>
+        <b>WASD</b> move, 
+        <b>R|F</b> up | down, 
+        <b>Q|E</b> roll, 
+        <b>DRAG</b> pitch&yaw, 
+        <b>Ctrl + CLICK</b> detail,  
+        <b>Shift + CLICK</b> recommend
+      </span>
+		</div>
+
     <div v-if="isDetail">
       <DetailCard
         :movie="selectedMovie"
@@ -21,24 +48,27 @@ import axios from 'axios'
 
 const TMDB_API_KEY = process.env.VUE_APP_TMDB_API_KEY
 
+// scene 변수
 let container
 let camera, controls, scene, renderer
 let pickingTexture, pickingScene
 let highlightBox
-let navbarHeight
 
-// 마우스 가리키는 카드 판별 목적
+// 마우스 가리키는 카드 판별 변수
 const pickingData = []
-
 const pointer = new THREE.Vector2()
 // const offset = new THREE.Vector3( 10, 10, 10 )
 
+// data 변수
 let pointedCardId = null
 let clicked = false
 let shiftDown = false
 let ctrlDown = false
 
-// Fly Controls
+// instruction 변수
+// let blocker, instructions
+
+// Fly Controls 변수
 const clock = new THREE.Clock()
 
 export default {
@@ -70,10 +100,11 @@ export default {
 
     // console.log(this.likedMovies)
 
-    // three.js
-    const navbar = document.getElementById( 'nav' )
-    navbarHeight = navbar.offsetHeight
+    const infobar = document.getElementById( 'info' )
+    const infobarHeight = infobar.offsetHeight
+    infobar.style.top = `${window.innerHeight - infobarHeight}px`
 
+    // three.js
     this.main()
 
     console.log(this.likedMovies)
@@ -139,16 +170,39 @@ export default {
 
       // 카메라
       camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-      // camera.position.x
+      camera.rotation.x = 0.1367464081048994
+      camera.rotation.y = -0.07590929642410132
+      camera.rotation.z = 0.013967953561495515
+      camera.position.x = -50.64439864745512
+      camera.position.y = -89.17068354000168
+      camera.position.z = 97.64381447381723
 
       // 렌더러 화면에 추가
       renderer = new THREE.WebGLRenderer( { antialias: true } );
       renderer.setPixelRatio( window.devicePixelRatio );
-      renderer.setSize( window.innerWidth, window.innerHeight - navbarHeight );
+      renderer.setSize( window.innerWidth, window.innerHeight );
       container.appendChild( renderer.domElement );
 
-      // 이벤트리스너 & 컨트롤러 추가
+      // 컨트롤러 추가
       this.activateEventsAndControls()
+      // controls.rollSpeed = 0
+      // controls.movementSpeed = 0
+
+      // // instructions 변수 할당
+      // blocker = document.getElementById( 'blocker' );
+      // instructions = document.getElementById( 'instructions' );
+
+      // // 마우스 클릭하면, instructions 화면에서 제거
+      // instructions.addEventListener( 'click', function () {
+        
+      //   instructions.style.display = 'none';
+      //   blocker.style.display = 'none';
+
+      //   // 컨트롤 속도 업
+      //   controls.movementSpeed = 1000
+      //   controls.rollSpeed = Math.PI / 5
+
+      // } );
 
     },
 
@@ -455,6 +509,19 @@ export default {
       shiftDown = e.shiftKey
       ctrlDown  = e.ctrlKey
 
+      // if (e.key == "Escape") {
+
+      //   blocker.style.display = 'block';
+      //   instructions.style.display = '';
+
+      //   controls.rollSpeed = 0
+      //   controls.movementSpeed = 0
+
+      //   console.log(camera.rotation)
+      //   console.log(camera.position)
+
+      // }
+
     },
 
     animate () {
@@ -475,8 +542,8 @@ export default {
       camera.setViewOffset( renderer.domElement.width,
                             renderer.domElement.height, 
                             pointer.x * window.devicePixelRatio | 0, 
-                            // pointer.y * window.devicePixelRatio | 0, 
-                            (pointer.y - navbarHeight) * window.devicePixelRatio | 0, // navbar 사이즈만큼 위치 조절
+                            pointer.y * window.devicePixelRatio | 0, 
+                            // (pointer.y - navbarHeight) * window.devicePixelRatio | 0, // navbar 사이즈만큼 위치 조절
                             1, 
                             1 );
 
@@ -605,5 +672,43 @@ export default {
 </script>
 
 <style>
+b {
+  color: orange
+}
 
+#blocker {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 100;
+}
+
+#instructions {
+  width: 100%;
+  height: 100%;
+
+  margin-top: 30vh;
+
+  color: #ffffff;
+  text-align: center;
+  font-family: Arial;
+  font-size: 14px;
+  line-height: 24px;
+
+  cursor: pointer;
+}
+
+#info {
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  background-color: rgba(255,255,255,0.7);
+}
+
+#nav {
+  width: 100%;
+  position: absolute;
+  background-color: rgba(255,255,255,0.7);
+}
 </style>
