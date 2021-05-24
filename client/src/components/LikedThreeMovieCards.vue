@@ -73,6 +73,7 @@ export default {
     },
     onClick () {
       const likedMoviesJson = JSON.stringify(this.likedMovies)
+      localStorage.clear()
       localStorage.setItem('likedMovies', likedMoviesJson)
       this.$router.push('movies/recommend')
     }
