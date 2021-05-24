@@ -23,6 +23,7 @@
           <div class="card-header">
             Movie 2
           </div>
+          <!-- <div v-if="likedMovies.length >= 2"></div> -->
           <div v-if="movieCnt">
             <img src="#" class="card-img-top" alt="poster-image">
           </div>
