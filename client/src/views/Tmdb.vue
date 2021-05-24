@@ -34,6 +34,7 @@ export default {
     return {
       selectedMovie: '',
       movieList: ''
+      
     }
   },
   components: {
