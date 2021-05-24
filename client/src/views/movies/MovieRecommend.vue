@@ -75,9 +75,11 @@ export default {
 
     this.main()
 
-    this.likedMovies.forEach( movie => {
-      this.getRecommendations( movie.id )
-    })
+    console.log(this.likedMovies)
+
+    this.getRecommendations( this.likedMovies[0].id, new THREE.Vector3( -1800, 0, -1000 ) )
+    this.getRecommendations( this.likedMovies[1].id, new THREE.Vector3(     0, 0, -1000 ) )
+    this.getRecommendations( this.likedMovies[2].id, new THREE.Vector3(  1800, 0, -1000 ) )
 
   },
 
@@ -121,7 +123,9 @@ export default {
 
       // 포스터 카드 geometry 추가
       // this.updateGeometriesToScene( movies )
-      this.updateGeometriesToScene( this.likedMovies )
+      this.updateGeometriesToScene( this.likedMovies.slice( 0, 1 ), new THREE.Vector3( -400, 0, 0 ), new THREE.Vector3( 0, 0, 0 ) )
+      this.updateGeometriesToScene( this.likedMovies.slice( 1, 2 ), new THREE.Vector3(    0, 0, 0 ), new THREE.Vector3( 0, 0, 0 ) )
+      this.updateGeometriesToScene( this.likedMovies.slice( 2, 3 ), new THREE.Vector3(  400, 0, 0 ), new THREE.Vector3( 0, 0, 0 ) )
 
       // 포인터 가르키는 박스에 씌울 하이라이트 박스도 Scene에 추가
       highlightBox = new THREE.Mesh(
@@ -134,12 +138,12 @@ export default {
 
       // 카메라
       camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-      camera.position.z = 1000;
+      // camera.position.x
 
       // 렌더러 화면에 추가
       renderer = new THREE.WebGLRenderer( { antialias: true } );
       renderer.setPixelRatio( window.devicePixelRatio );
-      renderer.setSize( window.innerWidth, window.innerHeight );
+      renderer.setSize( window.innerWidth, window.innerHeight - navbarHeight );
       container.appendChild( renderer.domElement );
 
       // 이벤트리스너 & 컨트롤러 추가
@@ -207,7 +211,9 @@ export default {
 
     // },
 
-    updateGeometriesToScene ( movies ) {
+    updateGeometriesToScene ( movies, 
+                              POS   = new THREE.Vector3( 0, 0, -1000 ), 
+                              DIST  = new THREE.Vector3( 1500, 1000, 500 ) ) {
 
       // pickingScene 의 재질
       const pickingMaterial = new THREE.MeshBasicMaterial( { vertexColors: true } );
@@ -222,7 +228,7 @@ export default {
       const quaternion = new THREE.Quaternion();
       const color = new THREE.Color();
 
-      movies.forEach(movie => {
+      movies.forEach( movie => {
 
         // 포스터 없으면 continue
         if (!movie.poster_path) {
@@ -255,9 +261,9 @@ export default {
         
         // 위치 설정
         const position = new THREE.Vector3();
-        position.x = Math.random() * 10000 - 5000;
-        position.y = Math.random() * 6000 - 3000;
-        position.z = Math.random() * 8000 - 4000;
+        position.x = POS.x + DIST.x * ( 1 - 2 * Math.random() );
+        position.y = POS.y + DIST.y * ( 1 - 2 * Math.random() );
+        position.z = POS.z + DIST.z * ( - Math.random() ) - 500;
 
         // 방향 설정
         const rotation = new THREE.Euler();
@@ -523,7 +529,8 @@ export default {
           if ( shiftDown ) {
 
             console.log( 'shift +', pointedCardId )
-            this.getRecommendations()
+            this.getRecommendations( pointedCardId,
+                                     pickingData[ pointedCardId ].position )
 
           } else {
 
@@ -543,7 +550,7 @@ export default {
 
     },
 
-    getRecommendations ( movieId ) {
+    getRecommendations ( movieId, position ) {
 
       axios({
 
@@ -557,7 +564,7 @@ export default {
           if (res.data.results) {
 
             const movies = res.data.results
-            this.updateGeometriesToScene( movies )
+            this.updateGeometriesToScene( movies, position )
 
           }
           
