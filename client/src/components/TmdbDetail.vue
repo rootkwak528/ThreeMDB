@@ -25,11 +25,11 @@ export default {
   },
   methods: {
     addLikedMovie () {
+      // +버튼 누른 영화
       const likedMovie = this.selectedMovie
-      console.log(likedMovie)
 
       // 검색 리스트 & 검색창을 초기화
-      this.$emit('initialize')
+      this.$emit('initialize', likedMovie)
     }
   },
   computed: {

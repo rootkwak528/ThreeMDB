@@ -5,6 +5,7 @@ import Tmdb from '@/views/Tmdb'
 import Signup from '@/views/accounts/Signup'
 import Login from '@/views/accounts/Login'
 import MovieList from '@/views/movies/MovieList'
+import MovieRecommend from '@/views/movies/MovieRecommend'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/accounts/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/movies/recommend',
+    name: 'MovieRecommend',
+    component: MovieRecommend
   },
 ]
 

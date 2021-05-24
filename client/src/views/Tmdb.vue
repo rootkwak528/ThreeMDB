@@ -7,8 +7,9 @@
       @textResetComplete="onTextResetComplete"
     />
     <LikedThreeMovieCards 
-    
+      :likedMovies="likedMovies"
     />
+    <hr>
     <TmdbDetail
       :selectedMovie="selectedMovie"
       @initialize="initSearchBoxAndList"
@@ -38,6 +39,7 @@ export default {
       selectedMovie: '',
       movieList: '',
       searchInit: false,
+      likedMovies: [],
     }
   },
   components: {
@@ -47,7 +49,8 @@ export default {
     LikedThreeMovieCards,
   },
   methods: {
-    initSearchBoxAndList () {
+    initSearchBoxAndList (likedMovie) {
+      this.likedMovies.push(likedMovie)
       this.movieList = ''
       this.selectedMovie = ''
       this.searchInit = true
