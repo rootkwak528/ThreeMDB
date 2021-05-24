@@ -2,9 +2,14 @@
   <div class="mx-3">
     <input 
       type="text" 
-      @input="onInputText" 
-      @keyup.enter="onResetText"
+      @input="onInputText"
+      id="input-box"
     >
+    <!-- <button
+      @click="onResetText"
+    >
+      reset
+    </button> -->
     <hr>
     
   </div>
@@ -13,6 +18,9 @@
 <script>
 export default {
   name: 'TmdbSearchBox',
+  props: {
+    searchInit: Boolean
+  },
   methods: {
     onInputText (event) {
       const searchKeyword = event.target.value.trim()
@@ -20,8 +28,17 @@ export default {
         this.$emit('tmdb-text-input', searchKeyword)
       }
     },
-    onResetText (event) {
-      event.target.value = ''
+    onResetText () {
+      const inputBox = document.querySelector('#input-box')
+      inputBox.value = ''
+    }
+  },
+  watch: {
+    searchInit (val) {
+      if (val) {
+        this.onResetText()
+        this.$emit('textResetComplete')
+      }
     }
   }
 }

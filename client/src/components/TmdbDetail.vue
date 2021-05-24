@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedMovie">
+  <div v-if="selectedMovie" id="detail-div">
     <img :src="poster_path">
     <span class="mx-2">
       <h2>
@@ -27,6 +27,9 @@ export default {
     addLikedMovie () {
       const likedMovie = this.selectedMovie
       console.log(likedMovie)
+
+      // 검색 리스트 & 검색창을 초기화
+      this.$emit('initialize')
     }
   },
   computed: {

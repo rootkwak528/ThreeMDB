@@ -3,12 +3,15 @@
     <!-- <TmdbLikedMovies/> -->
     <TmdbSearchBox
       @tmdb-text-input="onTmdbTextInput"
+      :searchInit="searchInit"
+      @textResetComplete="onTextResetComplete"
     />
     <LikedThreeMovieCards 
     
     />
     <TmdbDetail
       :selectedMovie="selectedMovie"
+      @initialize="initSearchBoxAndList"
     />
     <TmdbSearchList
       :movieList="movieList"
@@ -33,8 +36,8 @@ export default {
   data () {
     return {
       selectedMovie: '',
-      movieList: ''
-      
+      movieList: '',
+      searchInit: false,
     }
   },
   components: {
@@ -44,6 +47,14 @@ export default {
     LikedThreeMovieCards,
   },
   methods: {
+    initSearchBoxAndList () {
+      this.movieList = ''
+      this.selectedMovie = ''
+      this.searchInit = true
+    },
+    onTextResetComplete () {
+      this.searchInit = false
+    },
     onTmdbTextInput (textInput) {
       const params = {
         region: 'KR',
