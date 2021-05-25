@@ -14,7 +14,7 @@
     </div>
     <ReviewList />
     <CreateReview 
-      :movieData="movieData"
+      :movie="movie"
     />
   </div>
 </template>
@@ -27,11 +27,6 @@ const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
   name: 'DetailCard',
-  data () {
-    return {
-      movieData: '',
-    }
-  },
   components: {
     CreateReview,
     ReviewList,
@@ -71,7 +66,11 @@ export default {
       data: this.movie,
     })
     .then((res) => {
-      this.movieData = res
+      console.log('res:', res)
+      this.movie = {
+        ...this.movie,
+        pk: res.data.id,
+      }
     })
     .catch((err) => {
       console.log(err)

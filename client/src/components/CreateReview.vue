@@ -32,7 +32,7 @@ export default {
     }
   },
   props: {
-    movieData: Object
+    movie: Object,
   },
   methods: {
     setToken () {
@@ -49,8 +49,12 @@ export default {
       if (reviewData.title && reviewData.content && reviewData.rate) {
         console.log(Date.now(), 'client request')
         console.log(reviewData)
+        console.log(this.movie)
+        console.log('movie:', this.movie.pk)
+        console.log(`${SERVER_URL}/community/${this.movie.pk}/review/`)
+        console.log(headers)
         axios({
-          url: `${SERVER_URL}/community/${this.movieData.data.id}/review/`,
+          url: `${SERVER_URL}/community/${this.movie.pk}/review/`,
           method: 'post',
           data: reviewData,
           headers,
