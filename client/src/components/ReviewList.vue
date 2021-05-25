@@ -7,6 +7,21 @@
         <h4>제목 : {{ review.title }}</h4>
         <p>내용 : {{ review.content }}</p>
         <button @click="deleteReview(review)">삭제하기</button>
+        <button @click="onUpdatePage">수정하기</button>
+        <h4>댓글 작성</h4>
+        <CreateComment 
+          :review="review"
+          :movie="movie"
+        />
+        <CommentList 
+          :review="review"
+        />
+        <div v-if="isUpdateBtnClicked">
+          <UpdateReview 
+            :review="review"
+            :movie="movie"
+          />
+        </div>
         <hr>
       </div>
     </ul>
@@ -14,17 +29,31 @@
 </template>
 
 <script>
+import CreateComment from '@/components/CreateComment'
+import CommentList from '@/components/CommentList'
+import UpdateReview from '@/components/UpdateReview'
+
 import axios from 'axios'
 
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
   name: 'ReviewList',
+  data () {
+    return {
+      isUpdateBtnClicked: false,
+    }
+  },
+  components: {
+    UpdateReview,
+    CommentList,
+    CreateComment,
+  },
   props: {
     movie: Object,
   },
   methods: {
-    setToken: function () {
+    setToken () {
       const token = localStorage.getItem('jwt')
 
       const config = {
@@ -36,7 +65,7 @@ export default {
       const headers = this.setToken()
 
       axios({
-        url: `${SERVER_URL}/community/${this.movie.id}/review/${review.id}/delete/`,
+        url: `${SERVER_URL}/community/${this.movie.id}/review/${review.id}/`,
         method: 'delete',
         headers,
       })
@@ -47,6 +76,9 @@ export default {
       .catch((err) => {
         console.log(err)
       })
+    },
+    onUpdatePage () {
+      this.isUpdateBtnClicked = true
     }
   }
 }
