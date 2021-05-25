@@ -46,7 +46,9 @@ export default {
     createReview (reviewData) {
       const headers = this.setToken()
       
-      if (reviewData.title && reviewData.content && reviewData.rank) {
+      if (reviewData.title && reviewData.content && reviewData.rate) {
+        console.log(Date.now(), 'client request')
+        console.log(reviewData)
         axios({
           url: `${SERVER_URL}/community/${this.movieData.data.id}/review/`,
           method: 'post',
