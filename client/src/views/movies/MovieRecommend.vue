@@ -24,6 +24,7 @@
         <b>DRAG</b> pitch&yaw, 
         <b>Ctrl + CLICK</b> detail,  
         <b>Shift + CLICK</b> recommend
+        <b>Spacebar</b> Home
       </span>
 		</div>
 
@@ -185,12 +186,13 @@ export default {
 
       // 카메라
       camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-      camera.rotation.x = 0.1367464081048994
-      camera.rotation.y = -0.07590929642410132
-      camera.rotation.z = 0.013967953561495515
-      camera.position.x = -50.64439864745512
-      camera.position.y = -89.17068354000168
-      camera.position.z = 97.64381447381723
+      camera.rotation.x = 0.0367464081048994
+      // camera.rotation.x = 0.1367464081048994
+      // camera.rotation.y = -0.07590929642410132
+      // camera.rotation.z = 0.013967953561495515
+      // camera.position.x = -50.64439864745512
+      // camera.position.y = -89.17068354000168
+      // camera.position.z = 97.64381447381723
 
       // 렌더러 화면에 추가
       renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -552,6 +554,18 @@ export default {
 
       shiftDown = e.shiftKey
       ctrlDown  = e.ctrlKey
+
+      if (e.key == " " || e.key == "Spacebar") {
+
+        camera.rotation.x = 0.0367464081048994
+        // camera.rotation.x = 0.1367464081048994
+        // camera.rotation.y = -0.07590929642410132
+        // camera.rotation.z = 0.013967953561495515
+        // camera.position.x = -50.64439864745512
+        // camera.position.y = -89.17068354000168
+        // camera.position.z = 97.64381447381723
+
+      }
 
       // if (e.key == "Escape") {
 
