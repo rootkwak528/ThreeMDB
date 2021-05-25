@@ -12,8 +12,9 @@
       <h4>{{ movie.title }}</h4>
       <p>{{ movie.overview }}</p>
     </div>
-    {{ movie.reviews }}
-    <ReviewList />
+    <ReviewList 
+      :movie="movie"
+    />
     <CreateReview 
       :movie="movie"
     />
@@ -49,7 +50,7 @@ export default {
     },
     close () {
       this.$emit('close-detail')
-    }
+    },
   },
   computed: {
     poster_path () {
