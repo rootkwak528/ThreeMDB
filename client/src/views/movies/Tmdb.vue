@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="tmdb-window">
     <!-- <TmdbLikedMovies/> -->
     <TmdbSearchBox
       @tmdb-text-input="onTmdbTextInput"
@@ -102,5 +102,7 @@ export default {
 </script>
 
 <style>
-
+#tmdb-window {
+  padding-top: 100px;
+}
 </style>

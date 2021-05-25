@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="signup-window">
     <h1>Signup</h1>
     <div>
       <label for="username">사용자 이름: </label>
@@ -49,3 +49,9 @@ export default {
   }
 }
 </script>
+
+<style>
+#signup-window {
+  padding-top: 100px;
+}
+</style>

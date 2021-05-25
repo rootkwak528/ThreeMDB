@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="login-window">
     <h1>Login</h1>
     <div>
       <label for="username">사용자 이름: </label>
@@ -46,3 +46,9 @@ export default {
   }
 }
 </script>
+
+<style>
+#login-window {
+  padding-top: 100px;
+}
+</style>
