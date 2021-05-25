@@ -1,23 +1,29 @@
 <template>
   <div id="tmdb-window">
-    <!-- <TmdbLikedMovies/> -->
-    <TmdbSearchBox
-      @tmdb-text-input="onTmdbTextInput"
-      :searchInit="searchInit"
-      @textResetComplete="onTextResetComplete"
-    />
-    <LikedThreeMovieCards 
-      :likedMovies="likedMovies"
-    />
-    <hr>
-    <TmdbDetail
-      :selectedMovie="selectedMovie"
-      @initialize="initSearchBoxAndList"
-    />
-    <TmdbSearchList
-      :movieList="movieList"
-      @on-click-item="onClickItem"
-    />
+
+    <div>
+      <LikedThreeMovieCards 
+        :likedMovies="likedMovies"
+      />
+    </div>
+
+    <div>
+      <!-- <TmdbLikedMovies/> -->
+      <TmdbSearchBox
+        @tmdb-text-input="onTmdbTextInput"
+        :searchInit="searchInit"
+        @textResetComplete="onTextResetComplete"
+      />
+      <TmdbDetail
+        :selectedMovie="selectedMovie"
+        @initialize="initSearchBoxAndList"
+      />
+      <TmdbSearchList
+        :movieList="movieList"
+        @on-click-item="onClickItem"
+      />
+    </div>
+
   </div>
 </template>
 
@@ -37,7 +43,7 @@ export default {
   data () {
     return {
       selectedMovie: '',
-      movieList: '',
+      movieList: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ],
       searchInit: false,
       likedMovies: [],
     }
@@ -68,7 +74,16 @@ export default {
       // TMDB 검색
       this.searchTMDB('search', 'movie', params)
         .then( res => {
-          this.movieList = res.data.results
+          // console.log(res)
+          const results = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
+          let idx = 0
+          res.data.results.forEach(movie => {
+            if (movie.poster_path) {
+              results[idx] = movie
+              idx += 1
+            }
+          })
+          this.movieList = results
         })
         .catch( err => {
           console.log(err)

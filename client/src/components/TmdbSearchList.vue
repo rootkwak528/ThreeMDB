@@ -1,11 +1,12 @@
 <template>
   <div
-    id="list-div" 
-    class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mx-5"
+    id="card-list" 
+    class="d-flex justify-content-center row g-4 mx-5"
   >
     <TmdbSearchListItem
       v-for="(movie, idx) in movieList"
       :movie=movie
+      :item_id=idx
       :key=idx
       @on-click-item="onClickItem"
     />
@@ -31,5 +32,7 @@ export default {
 </script>
 
 <style>
-
+#card-list {
+  margin-top: 2rem;
+}
 </style>

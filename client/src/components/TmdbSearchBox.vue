@@ -1,17 +1,13 @@
 <template>
   <div class="mx-3">
+
     <input 
       type="text" 
       @input="onInputText"
       id="input-box"
+      placeholder="좋아하는 영화 제목을 입력해주세요."
     >
-    <!-- <button
-      @click="onResetText"
-    >
-      reset
-    </button> -->
-    <hr>
-    
+
   </div>
 </template>
 
@@ -45,5 +41,22 @@ export default {
 </script>
 
 <style>
+#input-box {
+  text-align: center;
+  
+  width: 546px;
+  height: 2.4rem;
+  margin-top: 3rem;
 
+  border-style: solid;
+  border-radius: 8px;
+  border-color: #e7e7e7;
+  background: #f7f7f7;
+  /* box-shadow: inset 7px 7px 18px #e3e3e3,
+              inset -7px -7px 18px #ffffff; */
+}
+
+::placeholder {
+  font-size: 0.8em;
+}
 </style>
