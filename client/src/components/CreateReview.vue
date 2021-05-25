@@ -1,16 +1,18 @@
 <template>
   <div>
-    <form>
-      <div class="mb-3">
-        <label for="review-title" class="form-label">Title</label>
-        <input type="text" v-model.trim="title" class="form-control" id="review-title">
-      </div>
-      <div class="mb-3">
-        <label for="content" class="form-label">Content</label>
-        <input type="text" v-model.trim="content" class="form-control" id="content">
-      </div>
-      <button @click="createReview" class="detail-button">Submit</button>
-    </form>
+    <div class="mb-3">
+      <label for="review-title">Title</label>
+      <input type="text" v-model.trim="reviewData.title" id="review-title">
+    </div>
+    <div class="mb-3">
+      <label for="review-content">Content</label>
+      <input type="text" v-model.trim="reviewData.content" id="review-content">
+    </div>
+    <div class="mb-3">
+      <label for="review-rate">Rate</label>
+      <input type="number" v-model.trim="reviewData.rate" id="review-rate">
+    </div>
+    <button @click="createReview(reviewData)" class="detail-button">Submit</button>
   </div>
 </template>
 
@@ -22,8 +24,11 @@ export default {
   name: 'CreateReview',
   data () {
     return {
-      title: '',
-      content: '',
+      reviewData: {
+        title: '',
+        content: '',
+        rate: 0,
+      }
     }
   },
   props: {
@@ -38,18 +43,14 @@ export default {
       }
       return config
     },
-    createReview () {
+    createReview (reviewData) {
       const headers = this.setToken()
-
-      const ReviewItem = {
-        title: this.title,
-        content: this.content
-      }
-      if (ReviewItem.title && ReviewItem.content) {
+      
+      if (reviewData.title && reviewData.content && reviewData.rank) {
         axios({
           url: `${SERVER_URL}/community/${this.movieData.data.id}/review/`,
           method: 'post',
-          data: ReviewItem,
+          data: reviewData,
           headers,
         })
         .then((res) => {
@@ -59,8 +60,9 @@ export default {
           console.log(err)
         })
       }
-      this.title = ''
-      this.content = ''
+      this.reviewData.title = ''
+      this.reviewData.content = ''
+      this.reviewData.rate = 0
     }
   }
 }

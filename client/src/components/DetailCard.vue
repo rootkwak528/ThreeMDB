@@ -72,7 +72,6 @@ export default {
     })
     .then((res) => {
       this.movieData = res
-      console.log(this.movieData)
     })
     .catch((err) => {
       console.log(err)
