@@ -20,10 +20,11 @@ def review_create(request, movie_pk):
         serializer = ReviewSerializer(request.user.todos, many=True)
         return Response(serializer.data)
     else:
-        movie = get_object_or_404(Movie, pk=movie_pk)
+        try:
+            movie = Movie.objects.prefetch_related('reviews').filter(pk=movie_pk)[0]
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = ReviewSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(movie=movie, user=request.user)
-            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

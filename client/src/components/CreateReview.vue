@@ -50,11 +50,11 @@ export default {
         console.log(Date.now(), 'client request')
         console.log(reviewData)
         console.log(this.movie)
-        console.log('movie:', this.movie.pk)
-        console.log(`${SERVER_URL}/community/${this.movie.pk}/review/`)
+        console.log('movie:', this.movie.id)
+        console.log(`${SERVER_URL}/community/${this.movie.id}/review/`)
         console.log(headers)
         axios({
-          url: `${SERVER_URL}/community/${this.movie.pk}/review/`,
+          url: `${SERVER_URL}/community/${this.movie.id}/review/`,
           method: 'post',
           data: reviewData,
           headers,

@@ -12,6 +12,7 @@
       <h4>{{ movie.title }}</h4>
       <p>{{ movie.overview }}</p>
     </div>
+    {{ movie.reviews }}
     <ReviewList />
     <CreateReview 
       :movie="movie"
@@ -67,10 +68,7 @@ export default {
     })
     .then((res) => {
       console.log('res:', res)
-      this.movie = {
-        ...this.movie,
-        pk: res.data.id,
-      }
+      this.movie = res.data
     })
     .catch((err) => {
       console.log(err)
