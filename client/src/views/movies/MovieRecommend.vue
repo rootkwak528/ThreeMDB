@@ -1,21 +1,6 @@
 <template>
   <div id="container">
 
-    <!-- <div id="blocker">
-			<div id="instructions">
-				<span style="font-size:36px">Click to play</span>
-				<br /><br />
-        <b>이동</b><br/>
-				기본이동: WASD<br/>
-				기본회전: DRAG<br/>
-				상하이동: RF<br/>
-				좌우회전: QE<br/><br/>
-        <b>선택</b><br/>
-				세부정보: Ctrl + CLICK<br/>
-				영화추천: Shift + CLICK<br/>
-			</div>
-		</div> -->
-
     <div id="info">
       <span>
         <b>WASD</b> move, 
@@ -48,7 +33,6 @@ import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtil
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { BloomPass } from 'three/examples/jsm/postprocessing/BloomPass.js';
 
 import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js';
 import { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader.js';
@@ -63,21 +47,16 @@ let container
 let camera, controls, scene, renderer
 let pickingTexture, pickingScene
 let highlightBox
-let composerZizizik, composerPick // post-processing
-// let movieObjects
+let composerZizizik // post-processing
 
 // 마우스 가리키는 카드 판별 변수
 let pickingData, pointer
-// const offset = new THREE.Vector3( 10, 10, 10 )
 
 // data 변수
 let pointedCardId = null
 let clicked = false
 let shiftDown = false
 let ctrlDown = false
-
-// instruction 변수
-// let blocker, instructions
 
 // Fly Controls 변수
 const clock = new THREE.Clock()
@@ -203,11 +182,7 @@ export default {
       camera.layers.enable(1)
 
       // 렌더러 화면에 추가
-      renderer = new THREE.WebGLRenderer( { antialias: true } );
-
-      // renderer.autoClear = false;
-      // renderer.setClearColor( 0xffffff );
-      
+      renderer = new THREE.WebGLRenderer( { antialias: true } );      
       renderer.setPixelRatio( window.devicePixelRatio );
       renderer.setSize( window.innerWidth, window.innerHeight );
       container.appendChild( renderer.domElement );
@@ -225,104 +200,11 @@ export default {
         effect2.uniforms[ 'amount' ].value = 0.001;
         composerZizizik.addPass( effect2 );
       }
-
-      // post-proces #2 마우스 픽한 카드만 돋보이는 효과
-      {
-        composerPick = new EffectComposer( renderer )
-        composerPick.addPass( new RenderPass( scene, camera ) );
-
-        const effect1 = new BloomPass( 
-          1,  // 강도
-          25, // 커널(kernel) 크기
-          4,  // 시그마
-          256 // 해상도
-        )
-        composerPick.addPass( effect1 )
-        // console.log(composerPick)
-      }
-
+      
       // 컨트롤러 추가
       this.activateEventsAndControls()
-      // controls.rollSpeed = 0
-      // controls.movementSpeed = 0
-
-      // // instructions 변수 할당
-      // blocker = document.getElementById( 'blocker' );
-      // instructions = document.getElementById( 'instructions' );
-
-      // // 마우스 클릭하면, instructions 화면에서 제거
-      // instructions.addEventListener( 'click', function () {
-        
-      //   instructions.style.display = 'none';
-      //   blocker.style.display = 'none';
-
-      //   // 컨트롤 속도 업
-      //   controls.movementSpeed = 1000
-      //   controls.rollSpeed = Math.PI / 5
-
-      // } );
 
     },
-
-    // initScene () {
-
-    //   const sceneJson = localStorage.getItem( 'scene' )
-    //   if ( sceneJson ) {
-
-    //     const loadedScene = JSON.parse( sceneJson )
-    //     const objectLoader = new THREE.ObjectLoader()
-
-    //     scene = objectLoader.parse( loadedScene )
-
-    //   } else {
-
-    //     // 씬 초기화
-    //     scene = new THREE.Scene();
-    //     scene.background = new THREE.Color( 0xffffff );
-
-    //     // 마우스 가리키는 씬
-    //     pickingScene = new THREE.Scene();
-    //     pickingTexture = new THREE.WebGLRenderTarget( 1, 1 );
-
-    //     // 재질 로더
-    //     // loader = new THREE.TextureLoader()
-
-    //     // 조명 1
-    //     scene.add( new THREE.AmbientLight( 0x555555 ) );
-
-    //     // 조명 2
-    //     const light = new THREE.SpotLight( 0xffffff, 1.5 );
-    //     light.position.set( 0, 500, 2000 );
-    //     scene.add( light );
-
-    //     // 영화 데이터 확인
-    //     const movies = results.results
-
-    //     // 포스터 카드 geometry 추가
-    //     this.updateGeometriesToScene( movies )
-
-    //     // 포인터 가르키는 박스에 씌울 하이라이트 박스도 Scene에 추가
-    //     highlightBox = new THREE.Mesh(
-
-    //       this.getHighlightGeometry(),
-    //       new THREE.MeshBasicMaterial( { color: 0xffff00 }
-
-    //       ) );
-    //     scene.add( highlightBox );
-        
-    //   }
-
-    // },
-
-    // exportScene () {
-      
-    //   const sceneJson = JSON.stringify( scene.toJSON() )
-    //   console.log(sceneJson.length)
-    //   localStorage.clear()
-    //   localStorage.setItem( 'scene', sceneJson )
-    //   localStorage.setItem( 'test', JSON.stringify( 'test' ) )
-
-    // },
 
     updateGeometriesToScene ( movies, 
                               POS   = new THREE.Vector3( 0, 0, -1000 ), 
@@ -394,15 +276,6 @@ export default {
         quaternion.setFromEuler( rotation );
         matrix.compose( position, quaternion, scale );
         geometry.applyMatrix4( matrix );
-
-        // case: 카드가 카메라 바라보게 하려면
-        // matrix.compose( position, camera.quaternion, scale );
-
-        // 컬러 적용
-        // this.applyVertexColors( geometry, color.setHex( Math.random() * 0xffffff ) );
-
-        // geometry를 geometry 배열에 추가
-        // geometriesDrawn.push( geometry );
 
         // geometry를 마우스 가리키는 씬에 사용할 geometry 배열에 추가
         // 단, 컬러를 "id" (movie.id) 값으로 설정한다.
@@ -585,19 +458,6 @@ export default {
 
       }
 
-      // if (e.key == "Escape") {
-
-      //   blocker.style.display = 'block';
-      //   instructions.style.display = '';
-
-      //   controls.rollSpeed = 0
-      //   controls.movementSpeed = 0
-
-      //   console.log(camera.rotation)
-      //   console.log(camera.position)
-
-      // }
-
     },
 
     pick () {
@@ -745,25 +605,10 @@ export default {
       if ( !this.isDetail ) {
 
         renderer.setRenderTarget( null );
-
-        // renderer.clearDepth();
-        // camera.layers.set(1)
-        // composerZizizik.render();
-
-        // camera.layers.set(1)
-        // renderer.render( scene, camera );
-
-        // renderer.clearDepth();
-        // camera.layers.set(0)
         renderer.render( scene, camera );
-
-        // renderer.clearDepth();
-        // composerPick.render( scene, camera );
         
       } else {
 
-        // renderer.setRenderTarget( null );
-        // renderer.render( scene, camera );
         composerZizizik.render()
         
       }
@@ -800,29 +645,6 @@ b {
   color: rgba( 255, 255, 255, 0.6 )
 } */
 
-#blocker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.7);
-  z-index: 100;
-}
-
-#instructions {
-  width: 100%;
-  height: 100%;
-
-  margin-top: 30vh;
-
-  color: #ffffff;
-  text-align: center;
-  font-family: Arial;
-  font-size: 14px;
-  line-height: 24px;
-
-  cursor: pointer;
-}
-
 #info {
   width: 100%;
   position: absolute;
@@ -840,8 +662,4 @@ b {
   box-shadow: 0 0 0.15rem 0 rgba(0, 0, 0, .1);
 }
 
-/* #app canvas {
-  background: rgb(3,0,57);
-  background: linear-gradient(40deg, rgba(3,0,57,1) 0%, rgba(9,9,121,1) 31%, rgba(82,6,140,1) 63%, rgba(0,165,199,1) 100%);
-} */
 </style>
