@@ -558,6 +558,11 @@ export default {
       if (e.key == " " || e.key == "Spacebar") {
 
         camera.rotation.x = 0.0367464081048994
+        camera.rotation.y = 0
+        camera.rotation.z = 0
+        camera.position.x = 0
+        camera.position.y = 0
+        camera.position.z = 0
         // camera.rotation.x = 0.1367464081048994
         // camera.rotation.y = -0.07590929642410132
         // camera.rotation.z = 0.013967953561495515
