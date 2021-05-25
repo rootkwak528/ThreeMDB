@@ -23,8 +23,8 @@
         <b>Q|E</b> roll, 
         <b>DRAG</b> pitch&yaw, 
         <b>Ctrl + CLICK</b> detail,  
-        <b>Shift + CLICK</b> recommend
-        <b>Spacebar</b> Home
+        <b>Shift + CLICK</b> recommend,
+        <b>Spacebar</b> home
       </span>
 		</div>
 
@@ -64,6 +64,7 @@ let camera, controls, scene, renderer
 let pickingTexture, pickingScene
 let highlightBox
 let composerZizizik, composerPick // post-processing
+// let movieObjects
 
 // 마우스 가리키는 카드 판별 변수
 let pickingData, pointer
@@ -170,6 +171,7 @@ export default {
 
       // 영화 확인 전 피킹 데이터 초기화
       pickingData = []
+      // movieObjects = {}
       pointer = new THREE.Vector2()
 
       // 포스터 카드 geometry 추가
@@ -182,9 +184,10 @@ export default {
       highlightBox = new THREE.Mesh(
 
         this.getHighlightGeometry(),
-        new THREE.MeshBasicMaterial( { color: 0xffff00 }
+        new THREE.MeshBasicMaterial( { color: 0xffff00, depthTest: false }
 
         ) );
+      highlightBox.renderOrder = 1
       scene.add( highlightBox );
 
       // 카메라
@@ -197,8 +200,14 @@ export default {
       // camera.position.y = -89.17068354000168
       // camera.position.z = 97.64381447381723
 
+      camera.layers.enable(1)
+
       // 렌더러 화면에 추가
       renderer = new THREE.WebGLRenderer( { antialias: true } );
+
+      // renderer.autoClear = false;
+      // renderer.setClearColor( 0xffffff );
+      
       renderer.setPixelRatio( window.devicePixelRatio );
       renderer.setSize( window.innerWidth, window.innerHeight );
       container.appendChild( renderer.domElement );
@@ -321,7 +330,6 @@ export default {
 
       // pickingScene 의 재질
       const pickingMaterial = new THREE.MeshBasicMaterial( { vertexColors: true } );
-      // const posterMaterials = []
 
       // geometry 배열
       // const geometriesDrawn = [];
@@ -359,6 +367,7 @@ export default {
 
         const posterTexture = loader.load(`https://www.themoviedb.org/t/p/w500${movie.poster_path}`)
         const posterMaterial = new THREE.MeshBasicMaterial({ map: posterTexture })
+        const highlightMaterial = new THREE.MeshBasicMaterial({ map: posterTexture, depthTest: false })
 
         posterTexture.minFilter = THREE.LinearMipMapLinearFilter
         posterTexture.magFilter = THREE.LinearFilter
@@ -397,22 +406,21 @@ export default {
 
         // geometry를 마우스 가리키는 씬에 사용할 geometry 배열에 추가
         // 단, 컬러를 "id" (movie.id) 값으로 설정한다.
-        geometry = geometry.clone();
-        this.applyVertexColors( geometry, color.setHex( movie.id ) );
-        geometriesPicking.push( geometry );
+        const pickingGeometry = geometry.clone();
+        this.applyVertexColors( pickingGeometry, color.setHex( movie.id ) );
+        geometriesPicking.push( pickingGeometry );
 
         // 각 카드 별 데이터 저장
         pickingData[ movie.id ] = {
 
-          position: position,
-          rotation: rotation,
-          scale: scale,
+          position,
+          rotation,
+          scale,
+          highlightMaterial,
 
         };
 
         loadManager.onLoad = () => {
-
-          // posterMaterials.push( posterMaterial )
           
           // Scene에 포스터 카드 추가
           const object = new THREE.Mesh( 
@@ -422,6 +430,8 @@ export default {
             posterMaterial,
 
             );
+
+
           scene.add( object );
 
         };
@@ -453,7 +463,7 @@ export default {
 
     getHighlightGeometry () {
 
-      return this.getCubeGeometry(2.2, 3.3, 0.001);
+      return this.getCubeGeometry(2.3, 3.45, 0.001);
 
     },
 
@@ -590,15 +600,6 @@ export default {
 
     },
 
-    animate () {
-
-      // 비동기 함수
-      requestAnimationFrame( this.animate );
-
-      this.render();
-
-    },
-
     pick () {
 
       //render the picking scene off-screen
@@ -644,6 +645,7 @@ export default {
           highlightBox.position.copy( data.position );
           highlightBox.rotation.copy( data.rotation );
           highlightBox.scale.copy( data.scale );
+          highlightBox.material.copy( data.highlightMaterial );
           highlightBox.visible = true;
 
         } 
@@ -723,6 +725,15 @@ export default {
 
     },
 
+    animate () {
+
+      // 비동기 함수
+      requestAnimationFrame( this.animate );
+
+      this.render();
+
+    },
+
     render () {
 
       // Fly Controls
@@ -734,7 +745,19 @@ export default {
       if ( !this.isDetail ) {
 
         renderer.setRenderTarget( null );
+
+        // renderer.clearDepth();
+        // camera.layers.set(1)
+        // composerZizizik.render();
+
+        // camera.layers.set(1)
+        // renderer.render( scene, camera );
+
+        // renderer.clearDepth();
+        // camera.layers.set(0)
         renderer.render( scene, camera );
+
+        // renderer.clearDepth();
         // composerPick.render( scene, camera );
         
       } else {
@@ -744,7 +767,6 @@ export default {
         composerZizizik.render()
         
       }
-
 
     },
 
