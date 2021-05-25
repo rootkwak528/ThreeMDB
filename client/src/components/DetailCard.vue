@@ -12,6 +12,7 @@
       <h4>{{ movie.title }}</h4>
       <p>{{ movie.overview }}</p>
     </div>
+    <ReviewList />
     <CreateReview 
       :movieData="movieData"
     />
@@ -20,6 +21,7 @@
 
 <script>
 import CreateReview from '@/components/CreateReview'
+import ReviewList from '@/components/ReviewList'
 import axios from 'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
@@ -32,6 +34,7 @@ export default {
   },
   components: {
     CreateReview,
+    ReviewList,
   },
   props: {
     movie: {
@@ -69,6 +72,7 @@ export default {
     })
     .then((res) => {
       this.movieData = res
+      console.log(this.movieData)
     })
     .catch((err) => {
       console.log(err)
