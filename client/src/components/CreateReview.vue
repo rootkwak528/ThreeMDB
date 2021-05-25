@@ -60,7 +60,7 @@ export default {
           headers,
         })
         .then((res) => {
-          console.log(res)
+          this.movie.reviews.push(res)
         })
         .catch((err) => {
           console.log(err)
