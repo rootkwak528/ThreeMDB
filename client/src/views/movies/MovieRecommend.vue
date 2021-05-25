@@ -330,13 +330,13 @@ export default {
 
     getPosterGeometry () {
 
-      return this.getCubeGeometry(2, 3, 0.02);
+      return this.getCubeGeometry(2, 3, 0.03);
 
     },
 
     getHighlightGeometry () {
 
-      return this.getCubeGeometry(2.3, 3.45, 0.001);
+      return this.getCubeGeometry(2.3, 3.45, 0.0345);
 
     },
 
