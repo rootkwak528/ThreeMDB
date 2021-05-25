@@ -66,8 +66,7 @@ let highlightBox
 let composerZizizik, composerPick // post-processing
 
 // 마우스 가리키는 카드 판별 변수
-const pickingData = []
-const pointer = new THREE.Vector2()
+let pickingData, pointer
 // const offset = new THREE.Vector3( 10, 10, 10 )
 
 // data 변수
@@ -122,10 +121,10 @@ export default {
     // three.js
     this.main()
 
-    console.log(this.likedMovies)
+    // console.log(this.likedMovies)
 
-    this.getRecommendations( this.likedMovies[0].id, new THREE.Vector3( -1800, 0, -1000 ) )
     this.getRecommendations( this.likedMovies[1].id, new THREE.Vector3(     0, 0, -1000 ) )
+    this.getRecommendations( this.likedMovies[0].id, new THREE.Vector3( -1800, 0, -1000 ) )
     this.getRecommendations( this.likedMovies[2].id, new THREE.Vector3(  1800, 0, -1000 ) )
 
   },
@@ -168,6 +167,10 @@ export default {
 
       // 영화 데이터 확인
       // const movies = results.results // this is for test
+
+      // 영화 확인 전 피킹 데이터 초기화
+      pickingData = []
+      pointer = new THREE.Vector2()
 
       // 포스터 카드 geometry 추가
       // this.updateGeometriesToScene( movies )
