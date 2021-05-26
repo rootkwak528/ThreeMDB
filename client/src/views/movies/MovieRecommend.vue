@@ -528,6 +528,8 @@ export default {
     async choice () {
 
       if ( clicked ) {
+        
+        clicked = false
 
         if ( pointedCardId ) {
 
@@ -544,6 +546,7 @@ export default {
             console.log( 'ctrl +', pointedCardId )
             // this.exportScene() // 굉장히 비싼 작업
             
+            // 디테일 창을 띄우기 전에 서버로부터 데이터 가져오기
             await axios({
               url: `${SERVER_URL}/movies/`,
               method: 'post',
@@ -552,7 +555,6 @@ export default {
               .then((res) => {
                 this.selectedMovie = res.data
                 // console.log('res.data:', res.data)
-                // console.log('res.data.reviews:', res.data.reviews)
               })
               .catch((err) => {
                 console.log(err)
@@ -570,11 +572,7 @@ export default {
 
           }
         }
-        
-        clicked = false
-
       }
-
     },
 
     getRecommendations ( movieId, position ) {

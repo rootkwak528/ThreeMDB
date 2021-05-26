@@ -1,6 +1,10 @@
-from .serializers import MovieSerializer
-from django.shortcuts import render, get_object_or_404
+from community.serializers import ReviewSerializer
 from .models import Movie
+from .serializers import MovieSerializer
+from community.models import Review, Comment
+
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Prefetch
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -27,7 +31,15 @@ def movie_create(request):
 
     else:
         try:
-            movie = Movie.objects.prefetch_related('reviews').filter(pk=db_movie[0].pk)[0]
+
+            reviews = Review.objects.select_related('user')
+            comments = Comment.objects.select_related('user')
+
+            movie = Movie.objects.prefetch_related(
+                Prefetch('reviews', queryset=reviews),
+                Prefetch('reviews__comments', queryset=comments)
+                ).get(pk=db_movie[0].pk)
+
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
