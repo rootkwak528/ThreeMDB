@@ -6,11 +6,11 @@
     class="d-flex justify-content-center row g-4 mx-5"
 
   >
-    <TmdbSearchListItem
+    <TmdbSearchItem
 
       v-for     ="(movie, idx) in movieList"
       :movie    =movie
-      :item_idx =idx
+      :itemIdx  =idx
       :key      =idx
       @clickCard="clickCard"
 
@@ -20,20 +20,23 @@
 </template>
 
 <script>
-import TmdbSearchListItem from '@/components/TmdbSearchListItem'
+import TmdbSearchItem from '@/components/TmdbSearchItem'
+
 export default {
   name: 'TmdbSearchList',
   components: {
-    TmdbSearchListItem
+    TmdbSearchItem
   },
+
   props: {
     movieList: [String, Array]
   },
+
   methods: {
-    clickCard (movie) {
-      console.log('mid recieve')
+    clickCard ( movie ) {
+      // console.log('mid recieve')
       this.$emit('clickCard', movie)
-    }
+    },
   }
 }
 </script>

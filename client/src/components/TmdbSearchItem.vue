@@ -2,7 +2,7 @@
 
   <div 
 
-    :id   ="card_id"
+    :id   ="cardId"
     :class="{ card: movie === '', 
               cardImage: movie !== '' }"
     class ="d-flex justify-content-center"
@@ -16,15 +16,15 @@
 
 <script>
 export default {
-  name: 'TmdbSearchListItem',
+  name: 'TmdbSearchItem',
   props: {
     movie: [String, Object],
-    item_idx: Number,
+    itemIdx: Number,
   },
 
   updated () {
-    const card = document.querySelector(`#${ this.card_id }`)
-    card.style.backgroundImage = this.poster_path ? `url(${ this.poster_path })` : 'none'
+    const card = document.querySelector(`#${ this.cardId }`)
+    card.style.backgroundImage = this.posterPath ? `url(${ this.posterPath })` : 'none'
   },
 
   methods: {
@@ -35,12 +35,12 @@ export default {
   },
 
   computed: {
-    poster_path () {
+    posterPath () {
       return this.movie.poster_path ? `https://www.themoviedb.org/t/p/w185${ this.movie.poster_path }` : ''
     },
 
-    card_id () {
-      return `card${ this.item_idx }`
+    cardId () {
+      return `card${ this.itemIdx }`
     }
   },
 }
@@ -51,6 +51,8 @@ export default {
   width: 150px;
   height: 225px;
   margin: 1rem 1rem;
+
+  font-size: 0.5rem;
 
   border-style: none;
   border-radius: 8px;

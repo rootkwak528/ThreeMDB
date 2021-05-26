@@ -2,6 +2,13 @@
   <div id="tmdb-window">
 
     <div>
+      <TmdbLikedList 
+        :likedMovies="likedMovies"
+        @clickLikedCard="clickLikedCard"
+      />
+    </div>
+
+    <div>
       <LikedThreeMovieCards 
         :likedMovies="likedMovies"
       />
@@ -34,6 +41,7 @@ import axios from 'axios'
 import TmdbDetail from '@/components/TmdbDetail'
 import TmdbSearchBox from '@/components/TmdbSearchBox'
 import TmdbSearchList from '@/components/TmdbSearchList'
+import TmdbLikedList from '@/components/TmdbLikedList'
 import LikedThreeMovieCards from '@/components/LikedThreeMovieCards'
 
 const API_URL = 'https://api.themoviedb.org/3'
@@ -46,26 +54,56 @@ export default {
       selectedMovie: '',
       movieList: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ],
       searchInit: false,
-      likedMovies: [],
+      likedMovies: ['', '', '',],
     }
   },
   components: {
     TmdbDetail,
     TmdbSearchBox,
     TmdbSearchList,
+    TmdbLikedList,
     LikedThreeMovieCards,
   },
   methods: {
     initSearchBoxAndList (likedMovie) {
-      this.likedMovies.push(likedMovie)
-      console.log('receive', this.likedMovies)
+      let newLikedMovies = ['', '', '',]
+      for (let i=0; i<3; i++) {
+        if (!this.likedMovies[i]) {
+          newLikedMovies[i] = likedMovie
+          break
+        } else if (this.likedMovies[i].title === likedMovie.title) {
+          newLikedMovies = this.likedMovies
+          break
+        } else {
+          newLikedMovies[i] = this.likedMovies[i]
+        }
+      }
+      this.likedMovies = newLikedMovies
+
       this.movieList = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ],
       this.selectedMovie = ''
       this.searchInit = true
     },
+
+    clickLikedCard ( likedMovie ) {
+      const newLikedMovies = ['', '', '',]
+      let i = 0, j = 0
+      while (i < 3) {
+        if (this.likedMovies[i] && this.likedMovies[i] !== likedMovie) {
+          newLikedMovies[j] = this.likedMovies[i]
+          i++
+          j++
+        } else {
+          i++
+        }
+      }
+      this.likedMovies = newLikedMovies
+    },
+
     onTextResetComplete () {
       this.searchInit = false
     },
+    
     onTmdbTextInput (textInput) {
       const params = {
         region: 'KR',
