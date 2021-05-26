@@ -7,7 +7,7 @@
         <h4>제목 : {{ review.title }}</h4>
         <p>내용 : {{ review.content }}</p>
         <button @click="deleteReview(review)">삭제하기</button>
-        <button @click="onUpdatePage">수정하기</button>
+        <button @click="onUpdateReview">수정하기</button>
         <h4>댓글 작성</h4>
         <CreateComment 
           :review="review"
@@ -15,11 +15,13 @@
         />
         <CommentList 
           :review="review"
+          :movie="movie"
         />
-        <div v-if="isUpdateBtnClicked">
+        <div v-if="isUpdateReviewBtnClicked">
           <UpdateReview 
             :review="review"
             :movie="movie"
+            :isUpdateReviewBtnClicked="isUpdateReviewBtnClicked"
           />
         </div>
         <hr>
@@ -41,7 +43,7 @@ export default {
   name: 'ReviewList',
   data () {
     return {
-      isUpdateBtnClicked: false,
+      isUpdateReviewBtnClicked: false,
     }
   },
   components: {
@@ -77,8 +79,8 @@ export default {
         console.log(err)
       })
     },
-    onUpdatePage () {
-      this.isUpdateBtnClicked = true
+    onUpdateReview () {
+      this.isUpdateReviewBtnClicked = true
     }
   }
 }

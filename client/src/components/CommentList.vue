@@ -5,20 +5,40 @@
       <li v-for="(comment, idx) in review.comments" :key="idx">
         <span>{{ comment.content }}</span>
         <button @click="deleteComment(comment)">X</button>
+        <button @click="onUpdateComment">수정</button>
+        <div v-if="isUpdateCommentBtnClicked">
+          <UpdateComment 
+            :comment="comment"
+            :review="review"
+            :movie="movie"
+            :isUpdateCommentBtnClicked="isUpdateCommentBtnClicked"
+          />
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import UpdateComment from '@/components/UpdateComment'
+
 import axios from 'axios'
 
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
   name: 'CommentList',
+  data () {
+    return {
+      isUpdateCommentBtnClicked: false,
+    }
+  },
+  components: {
+    UpdateComment,
+  },
   props: {
     review: Object,
+    movie: Object,
   },
   methods: {
     setToken () {
@@ -31,9 +51,8 @@ export default {
     },
     deleteComment (comment) {
       const headers = this.setToken()
-
       axios({
-        url: `${SERVER_URL}/community/${this.movie.id}/review/${this.review.id}/comment/${comment.id}`,
+        url: `${SERVER_URL}/community/${this.movie.id}/review/${this.review.id}/comment/${comment.id}/`,
         method: 'delete',
         headers,
       })
@@ -45,6 +64,9 @@ export default {
         console.log(err)
       })
     },
+    onUpdateComment () {
+      this.isUpdateCommentBtnClicked = true
+    }
   }
 }
 </script>

@@ -34,7 +34,8 @@ export default {
   },
   props: {
     review: Object,
-    movie: Object
+    movie: Object,
+    isUpdateReviewBtnClicked: Boolean
   },
   methods: {
     setToken () {
@@ -57,6 +58,7 @@ export default {
         })
         .then((res) => {
           this.movie.reviews.push(res)
+          this.isUpdateReviewBtnClicked = false
         })
         .catch((err) => {
           console.log(err)
