@@ -9,12 +9,6 @@
     </div>
 
     <div>
-      <LikedThreeMovieCards 
-        :likedMovies="likedMovies"
-      />
-    </div>
-
-    <div>
       <!-- <TmdbLikedMovies/> -->
       <TmdbSearchBox
         @tmdb-text-input="onTmdbTextInput"
@@ -42,7 +36,6 @@ import TmdbDetail from '@/components/TmdbDetail'
 import TmdbSearchBox from '@/components/TmdbSearchBox'
 import TmdbSearchList from '@/components/TmdbSearchList'
 import TmdbLikedList from '@/components/TmdbLikedList'
-import LikedThreeMovieCards from '@/components/LikedThreeMovieCards'
 
 const API_URL = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY
@@ -62,7 +55,6 @@ export default {
     TmdbSearchBox,
     TmdbSearchList,
     TmdbLikedList,
-    LikedThreeMovieCards,
   },
   methods: {
     initSearchBoxAndList (likedMovie) {
