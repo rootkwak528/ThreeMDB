@@ -1,61 +1,47 @@
 <template>
   <div>
-    <input type="text" v-model.trim="content" @keypress.enter="createComment">
-    <button @click="createComment">댓글 입력</button>
+    <label class="comment-form-label" for="comment-content">Content: </label>
+    <input 
+      name="comment-content"
+      type="text"
+      v-model.trim="commentData.content"
+      @keyup.enter="commentPost(commentData)"
+    >
+    <button @click="commentPost(commentData)">댓글 입력</button>
   </div>
 </template>
 
 <script>
-import axios from'axios'
-
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
-
 export default {
   name: 'CommentForm',
   data () {
     return {
-      content: '',
+      commentData: {
+        content: '',
+      },
     }
   },
-  props: {
-    movie: Object,
-    review: Object,
-  },
+  
   methods: {
-    setToken () {
-      const token = localStorage.getItem('jwt')
+    commentPost ( commentData ) {
+      console.log(commentData)
+      // Django DB POST
+      if ( commentData.content ) {
+        // DetailCard.vue 까지 emit events
+        this.$emit('commentPost', commentData)
+      }
 
-      const config = {
-        Authorization: `JWT ${token}`
+      // initialize
+      this.commentData= {
+        content: '',
       }
-      return config
-    },
-    createComment () {
-      const headers = this.setToken()
-
-      const commentItem = {
-        content: this.content,
-      }
-      if (commentItem.content) {
-        axios({
-          url: `${SERVER_URL}/community/${this.movie.id}/review/${this.review.id}/comment/`,
-          method: 'post',
-          data: commentItem,
-          headers,
-        })
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-      }
-      this.content = ''
     }
   }
 }
 </script>
 
 <style>
-
+.comment-form-label {
+  color: rgba( 255, 255, 255, 0.6 );
+}
 </style>

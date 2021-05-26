@@ -4,13 +4,14 @@
     <div v-if="!isUpdate">
       <span class="review-title">{{ review.title }}</span> <br>
 
-      <span class="review-user">{{ review.user }}</span>
+      <span class="review-user">{{ review.user.username }} / </span>
       <span class="review-rate">{{ review.rate }}</span> <br>
 
       <span class="review-content">{{ review.content }}</span> <br>
 
-      <button @click="reviewDelete">삭제하기</button>
-      <button @click="toggle">수정</button> <br>
+      <button @click="toggleCommentForm">댓글달기</button>
+      <button @click="toggle">수정</button>
+      <button @click="reviewDelete">삭제하기</button> <br>
     </div>
 
     <div v-else>
@@ -39,14 +40,35 @@
       <button @click="toggle">취소</button> <br>
     </div>
 
+    <div v-if="isCommentForm">
+      <CommentForm
+        @commentPost="commentPost"
+      />
+      <button @click="toggleCommentForm">취소</button> <br>
+    </div>
+
+    <CommentList
+      :comments     ="review.comments"
+      @commentDelete="commentDelete"
+      @commentPut   ="commentPut"
+    />
+
     <hr>
 
   </div>
 </template>
 
 <script>
+import CommentForm from '@/components/Comment/CommentForm'
+import CommentList from '@/components/Comment/CommentList'
+
 export default {
-  name: 'ReviewItem',  
+  name: 'ReviewItem',
+  components: {
+    CommentForm,
+    CommentList,
+  },
+
   data () {
     return {
       reviewData: {
@@ -55,6 +77,7 @@ export default {
         rate: 0,
       },
       isUpdate: false,
+      isCommentForm: false
     }
   },
 
@@ -76,10 +99,33 @@ export default {
       }
     },
 
+    commentPost ( commentData ) {
+      // DetailCard.vue 까지 emit events
+      commentData = {
+        ...commentData,
+        review: this.review.id
+      }
+      this.$emit( 'commentPost', commentData )
+    },
+
+    commentDelete ( commentData ) {
+      // DetailCard.vue 까지 emit events
+      this.$emit( 'commentDelete', commentData )
+    },
+
+    commentPut ( commentData ) {
+      // DetailCard.vue 까지 emit events
+      this.$emit( 'commentPut', commentData )
+    },
+
     toggle () {
       this.reviewData = { ...this.review }
       this.isUpdate = !this.isUpdate
-    }
+    },
+
+    toggleCommentForm () {
+      this.isCommentForm = !this.isCommentForm
+    },
   }
 }
 </script>

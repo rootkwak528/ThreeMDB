@@ -10,14 +10,20 @@
       <button class="position-absolute top-0 start-100" @click="close">x</button>
     </div>
 
+    <br><br>movie: {{movie}}<br><br>
+
     <ReviewForm 
       @reviewPost="reviewPost"
     />
 
     <ReviewList 
-      :movie="movie"
+      :reviews     ="movie.reviews"
       @reviewDelete="reviewDelete"
-      @reviewPut="reviewPut"
+      @reviewPut   ="reviewPut"
+
+      @commentPost  ="commentPost"
+      @commentDelete="commentDelete"
+      @commentPut   ="commentPut"
     />
 
   </div>
@@ -47,7 +53,7 @@ export default {
 
   methods: {
     reviewPost ( reviewData ) {
-
+      
       const headers = this.setToken()
 
       axios({
@@ -72,7 +78,7 @@ export default {
       const headers = this.setToken()
 
       axios({
-        url: `${SERVER_URL}/community/${this.movie.id}/review/${reviewData.id}/`,
+        url: `${SERVER_URL}/community/review/${reviewData.id}/`,
         method: 'delete',
         headers,
       })
@@ -93,7 +99,7 @@ export default {
       const headers = this.setToken()
 
       axios({
-        url: `${SERVER_URL}/community/${this.movie.id}/review/${reviewData.id}/`,
+        url: `${SERVER_URL}/community/review/${reviewData.id}/`,
         method: 'put',
         data: reviewData,
         headers,
@@ -104,6 +110,32 @@ export default {
             return review.id === reviewData.id ? reviewData : review
           })
           this.movie = newMovie
+        })
+        .catch( err => {
+          console.log( err )
+        })
+
+    },
+
+    commentPost ( commentData ) {
+
+      const headers = this.setToken()
+
+      axios({
+        url: `${SERVER_URL}/community/review/${commentData.review}/comment/`,
+        method: 'post',
+        data: commentData,
+        headers,
+      })
+        .then( res => {
+          const newMovie = { ...this.movie }
+          newMovie.reviews = newMovie.reviews.map( review => {
+            if ( review.id === commentData.review ) {
+              review.comments.push(res.data)
+            }
+          })
+          this.movie = newMovie
+          console.log('comment post updated')
         })
         .catch( err => {
           console.log( err )
@@ -135,6 +167,8 @@ export default {
 
 <style>
 #detail-window {
+  color: rgba( 255, 255, 255, 0.6 );
+
   position: absolute;
   left: 10vw;
   /* height: 50vh; */

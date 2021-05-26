@@ -1,16 +1,19 @@
 <template>
   <div class="review-list">
-
-    <br><br>movie: {{movie}}<br><br>
     
     <ReviewItem
-      v-for        ="(review, idx) in movie.reviews"
-      :review      ="review"
-      :key         ="idx"
+      v-for  ="(review, idx) in reviews"
+      :review="review"
+      :key   ="idx"
+
       @reviewDelete="reviewDelete"
       @reviewPut   ="reviewPut"
-    />
 
+      @commentPost  ="commentPost"
+      @commentDelete="commentDelete"
+      @commentPut   ="commentPut"
+    />
+    
   </div>
 </template>
 
@@ -23,15 +26,8 @@ export default {
     ReviewItem
   },
 
-  data () {
-    return {
-      isUpdateReviewBtnClicked: false,
-      idx_num_review: 0,
-    }
-  },
-
   props: {
-    movie: Object,
+    reviews: Array,
   },
 
   methods: {
@@ -52,6 +48,21 @@ export default {
     reviewPut ( reviewData ) {
       // DetailCard.vue 까지 emit events
       this.$emit( 'reviewPut', reviewData )
+    },
+
+    commentPost ( commentData ) {
+      // DetailCard.vue 까지 emit events
+      this.$emit( 'commentPost', commentData )
+    },
+
+    commentDelete ( commentData ) {
+      // DetailCard.vue 까지 emit events
+      this.$emit( 'commentDelete', commentData )
+    },
+
+    commentPut ( commentData ) {
+      // DetailCard.vue 까지 emit events
+      this.$emit( 'commentPut', commentData )
     },
   }
 }
