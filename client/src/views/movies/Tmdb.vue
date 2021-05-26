@@ -21,6 +21,7 @@
       <TmdbSearchList
         :movieList="movieList"
         @on-click-item="onClickItem"
+        @clickCard="initSearchBoxAndList"
       />
     </div>
 
@@ -57,7 +58,8 @@ export default {
   methods: {
     initSearchBoxAndList (likedMovie) {
       this.likedMovies.push(likedMovie)
-      this.movieList = ''
+      console.log('receive', this.likedMovies)
+      this.movieList = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ],
       this.selectedMovie = ''
       this.searchInit = true
     },

@@ -1,7 +1,8 @@
 <template>
   <div :id="card_id"
     :class="{ card: movie === '', 
-              cardImage: movie !== '' }">
+              cardImage: movie !== '' }"
+    @click="clickCard">
     
   </div>
 </template>
@@ -13,15 +14,23 @@ export default {
     movie: [String, Object],
     item_id: Number,
   },
+
   methods: {
     onClickItem () {
       this.$emit('on-click-item', this.movie)
     },
+
     change_background_image () {
       const card = document.querySelector(`#${ this.card_id }`)
       card.style.backgroundImage = `url(${ this.poster_path })`
-    }
+    },
+
+    clickCard () {
+      console.log('click', this.movie)
+      this.$emit('clickCard', this.movie)
+    },
   },
+
   computed: {
     poster_path () {
       if (this.movie.poster_path) {
@@ -30,10 +39,12 @@ export default {
         return ''
       }
     },
+
     card_id () {
       return `card${ this.item_id }`
     }
   },
+
   watch: {
     poster_path (val) {
       if (val) {

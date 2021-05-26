@@ -8,7 +8,7 @@
       :movie=movie
       :item_id=idx
       :key=idx
-      @on-click-item="onClickItem"
+      @clickCard="clickCard"
     />
   </div>
 </template>
@@ -24,8 +24,9 @@ export default {
     movieList: [String, Array]
   },
   methods: {
-    onClickItem (movie) {
-      this.$emit('on-click-item', movie)
+    clickCard (movie) {
+      console.log('mid recieve')
+      this.$emit('clickCard', movie)
     }
   }
 }
