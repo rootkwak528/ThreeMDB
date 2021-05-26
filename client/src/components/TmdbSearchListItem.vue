@@ -17,11 +17,7 @@ export default {
 
   updated () {
     const card = document.querySelector(`#${ this.card_id }`)
-    if ( this.poster_path ) {
-      card.style.backgroundImage = `url(${ this.poster_path })`
-    } else {
-      card.style.backgroundImage = 'none'
-    }
+    card.style.backgroundImage = this.poster_path ? `url(${ this.poster_path })` : 'none'
   },
 
   methods: {
@@ -33,11 +29,7 @@ export default {
 
   computed: {
     poster_path () {
-      if (this.movie.poster_path) {
-        return `https://www.themoviedb.org/t/p/w185${ this.movie.poster_path }`
-      } else {
-        return ''
-      }
+      return this.movie.poster_path ? `https://www.themoviedb.org/t/p/w185${ this.movie.poster_path }` : ''
     },
 
     card_id () {
@@ -70,10 +62,7 @@ export default {
   border-radius: 8px;
   background: #ffffff;
   background-size: 150px 225px;
-  box-shadow: 0px 0px 0px #ffffff,
-               0px 0px 0px #ffffff;
-  /* box-shadow:  7px 7px 14px #a7a7a7,
-              -7px -7px 14px #ffffff; */
+  box-shadow: none;
 }
 
 .cardImage:hover {
