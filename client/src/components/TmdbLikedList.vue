@@ -1,5 +1,4 @@
 <template>
-
   <div id="index-head" class="d-flex flex-column align-items-center">
 
     <span id="index-title">
@@ -18,18 +17,9 @@
         @clickLikedCard="clickLikedCard"
 
       />
-
     </div>
 
-    <button 
-      @click="clickRecommend" 
-      v-if="likedMovies[2] !== ''"
-    >
-      추천 페이지로!
-    </button>
-
   </div>
-
 </template>
 
 <script>
@@ -45,18 +35,8 @@ export default {
   },
 
   methods: {
-    onClickPoster () {
-      console.log('add liked movie!')
-    },
-
     clickLikedCard ( likedMovie ) {
       this.$emit('clickLikedCard', likedMovie)
-    },
-
-    clickRecommend () {
-      const likedMoviesJson = JSON.stringify(this.likedMovies)
-      localStorage.setItem('likedMovies', likedMoviesJson)
-      this.$router.push('movies/recommend')
     },
   },
 }

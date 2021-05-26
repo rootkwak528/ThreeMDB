@@ -8,21 +8,23 @@
       />
     </div>
 
-    <div>
+    <div v-if="likedMovies[2] === ''">
       <!-- <TmdbLikedMovies/> -->
       <TmdbSearchBox
         @tmdb-text-input="onTmdbTextInput"
         :searchInit="searchInit"
         @textResetComplete="onTextResetComplete"
       />
-      <TmdbDetail
-        :selectedMovie="selectedMovie"
-        @initialize="initSearchBoxAndList"
-      />
       <TmdbSearchList
         :movieList="movieList"
         @on-click-item="onClickItem"
         @clickCard="initSearchBoxAndList"
+      />
+    </div>
+
+    <div v-else>
+      <TmdbSubmitButton
+        @clickSubmit="clickSubmit"
       />
     </div>
 
@@ -32,10 +34,10 @@
 <script>
 import axios from 'axios'
 
-import TmdbDetail from '@/components/TmdbDetail'
+import TmdbLikedList from '@/components/TmdbLikedList'
 import TmdbSearchBox from '@/components/TmdbSearchBox'
 import TmdbSearchList from '@/components/TmdbSearchList'
-import TmdbLikedList from '@/components/TmdbLikedList'
+import TmdbSubmitButton from '@/components/TmdbSubmitButton'
 
 const API_URL = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY
@@ -51,10 +53,10 @@ export default {
     }
   },
   components: {
-    TmdbDetail,
     TmdbSearchBox,
     TmdbSearchList,
     TmdbLikedList,
+    TmdbSubmitButton,
   },
   methods: {
     initSearchBoxAndList (likedMovie) {
@@ -90,6 +92,12 @@ export default {
         }
       }
       this.likedMovies = newLikedMovies
+    },
+
+    clickSubmit () {
+      const likedMoviesJson = JSON.stringify(this.likedMovies)
+      localStorage.setItem('likedMovies', likedMoviesJson)
+      this.$router.push('movies/recommend')
     },
 
     onTextResetComplete () {
