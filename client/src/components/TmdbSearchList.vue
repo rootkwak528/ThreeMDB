@@ -5,9 +5,9 @@
   >
     <TmdbSearchListItem
       v-for="(movie, idx) in movieList"
-      :movie=movie
-      :item_id=idx
-      :key=idx
+      :movie   =movie
+      :item_idx=idx
+      :key     =idx
       @clickCard="clickCard"
     />
   </div>

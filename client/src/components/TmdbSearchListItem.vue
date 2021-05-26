@@ -1,10 +1,10 @@
 <template>
-  <div :id="card_id"
+  <div 
+    :id="card_id"
     :class="{ card: movie === '', 
               cardImage: movie !== '' }"
-    @click="clickCard">
-    
-  </div>
+    @click="clickCard"
+  > </div>
 </template>
 
 <script>
@@ -12,21 +12,21 @@ export default {
   name: 'TmdbSearchListItem',
   props: {
     movie: [String, Object],
-    item_id: Number,
+    item_idx: Number,
+  },
+
+  updated () {
+    const card = document.querySelector(`#${ this.card_id }`)
+    if ( this.poster_path ) {
+      card.style.backgroundImage = `url(${ this.poster_path })`
+    } else {
+      card.style.backgroundImage = 'none'
+    }
   },
 
   methods: {
-    onClickItem () {
-      this.$emit('on-click-item', this.movie)
-    },
-
-    change_background_image () {
-      const card = document.querySelector(`#${ this.card_id }`)
-      card.style.backgroundImage = `url(${ this.poster_path })`
-    },
-
     clickCard () {
-      console.log('click', this.movie)
+      // console.log('click', this.movie)
       this.$emit('clickCard', this.movie)
     },
   },
@@ -41,18 +41,7 @@ export default {
     },
 
     card_id () {
-      return `card${ this.item_id }`
-    }
-  },
-
-  watch: {
-    poster_path (val) {
-      if (val) {
-        setTimeout( this.change_background_image, 0 )
-      } else {
-        const card = document.querySelector(`#${ this.card_id }`)
-        card.style.backgroundImage = 'none'
-      }
+      return `card${ this.item_idx }`
     }
   },
 }
