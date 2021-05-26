@@ -24,7 +24,9 @@
 <script>
 import CreateReview from '@/components/CreateReview'
 import ReviewList from '@/components/ReviewList'
+
 import axios from 'axios'
+
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
@@ -68,8 +70,7 @@ export default {
       data: this.movie,
     })
     .then((res) => {
-      console.log('res:', res)
-      this.movie = res.data
+      console.log('res:', res.data.reviews)
     })
     .catch((err) => {
       console.log(err)
