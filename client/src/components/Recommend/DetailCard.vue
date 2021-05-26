@@ -15,11 +15,11 @@
       <p>{{ movie.overview }}</p>
     </div>
 
-    <ReviewList 
-      :movie="movie"
+    <ReviewForm 
+      @reviewPost="reviewPost"
     />
 
-    <ReviewForm 
+    <ReviewList 
       :movie="movie"
     />
 
@@ -30,9 +30,9 @@
 import ReviewForm from '@/components/Review/ReviewForm'
 import ReviewList from '@/components/Review/ReviewList'
 
-// import axios from 'axios'
+import axios from 'axios'
 
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
   name: 'DetailCard',
@@ -40,13 +40,37 @@ export default {
     ReviewForm,
     ReviewList,
   },
+
   props: {
     movie: {
       type: [Object,],
       default: null,
     }
   },
+
   methods: {
+    reviewPost ( reviewData ) {
+
+      const headers = this.setToken()
+
+      axios({
+        url: `${SERVER_URL}/community/${this.movie.id}/review/`,
+        method: 'post',
+        data: reviewData,
+        headers,
+      })
+        .then( res => {
+          const newMovie = { ...this.movie }
+          newMovie.reviews.push( res.data )
+          this.movie = newMovie
+          // this.movie.reviews.push(res)
+        })
+        .catch( err => {
+          console.log( err )
+        })
+
+    },
+
     setToken () {
       const token = localStorage.getItem('jwt')
 
@@ -55,10 +79,12 @@ export default {
       }
       return config
     },
+
     close () {
       this.$emit('close-detail')
     },
   },
+
   computed: {
     poster_path () {
       if (this.movie.poster_path) {
@@ -68,20 +94,6 @@ export default {
       }
     }
   },
-  // created () {
-  //   axios({
-  //     url: `${SERVER_URL}/movies/`,
-  //     method: 'post',
-  //     data: this.movie,
-  //   })
-  //   .then((res) => {
-  //     this.movie = res.data
-  //     console.log('res:', res.data.reviews)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //   })
-  // }
 }
 </script>
 

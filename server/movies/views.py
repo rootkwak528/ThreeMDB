@@ -1,7 +1,7 @@
-from community.serializers import ReviewSerializer
 from .models import Movie
 from .serializers import MovieSerializer
 from community.models import Review, Comment
+from community.serializers import ReviewSerializer
 
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Prefetch
@@ -13,9 +13,10 @@ from rest_framework.decorators import api_view
 
 @api_view(['POST'])
 def movie_create(request):
+
     db_movie = Movie.objects.filter(movie_id=request.data.get('id'))
 
-    if not len(db_movie):
+    if not db_movie.exists():
         movie = {
             'movie_id': request.data.get('id'),
             'title': request.data.get('title'),
@@ -30,8 +31,8 @@ def movie_create(request):
             return Response(serializer.data)
 
     else:
-        try:
 
+        try:
             reviews = Review.objects.select_related('user')
             comments = Comment.objects.select_related('user')
 

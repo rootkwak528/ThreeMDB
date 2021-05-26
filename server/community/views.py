@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
 from .models import Movie, Review, Comment
 from .serializers import ReviewSerializer, CommentSerializer
+
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Prefetch
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -11,27 +13,18 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-@api_view(['GET', 'POST'])
+
+@api_view(['POST'])
 @authentication_classes([JSONWebTokenAuthentication]) # JWT가 유효한지 여부를 판단
 @permission_classes([IsAuthenticated]) # 인증 여부를 확인
 def review_create(request, movie_pk):
-    print('server recieve 1')
-    if request.method == 'GET':
-        serializer = ReviewSerializer(request.user.user_reviews.filter(movie_id=movie_pk), many=True)
-        return Response(serializer.data)
-    else:
-        print('server recieve 2')
-        try:
-            movie = Movie.objects.prefetch_related('reviews').filter(movie_id=movie_pk)[0]
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        print('server recieve 3')
-        serializer = ReviewSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(movie=movie, user=request.user)
-            print(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    db_movie = Movie.objects.filter(pk=movie_pk)[0]
+    serializer = ReviewSerializer(data=request.data)
+
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(movie=db_movie, user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['PUT', 'DELETE'])
