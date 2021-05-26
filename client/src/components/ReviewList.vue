@@ -7,7 +7,7 @@
         <h4>제목 : {{ review.title }}</h4>
         <p>내용 : {{ review.content }}</p>
         <button @click="deleteReview(review)">삭제하기</button>
-        <button @click="onUpdatePage">수정하기</button>
+        <button @click="onUpdateReview(idx)">수정하기</button>
         <h4>댓글 작성</h4>
         <CreateComment 
           :review="review"
@@ -15,11 +15,15 @@
         />
         <CommentList 
           :review="review"
+          :movie="movie"
         />
-        <div v-if="isUpdateBtnClicked">
+        <!-- 모든 idx에서 켜지는 현상 발생 -->
+        <!-- idx 조건 추가 -->
+        <div v-if="isUpdateReviewBtnClicked && idx_num_review===idx">
           <UpdateReview 
             :review="review"
             :movie="movie"
+            :isUpdateReviewBtnClicked="isUpdateReviewBtnClicked"
           />
         </div>
         <hr>
@@ -41,7 +45,8 @@ export default {
   name: 'ReviewList',
   data () {
     return {
-      isUpdateBtnClicked: false,
+      isUpdateReviewBtnClicked: false,
+      idx_num_review: 0,
     }
   },
   components: {
@@ -71,14 +76,16 @@ export default {
       })
       .then((res) => {
         // 얘도 새로고침 기능 필요
-        console.log('여기',res)
+        console.log(res)
       })
       .catch((err) => {
         console.log(err)
       })
     },
-    onUpdatePage () {
-      this.isUpdateBtnClicked = true
+    // 리뷰 수정 모달 스위치
+    onUpdateReview (idx) {
+      this.isUpdateReviewBtnClicked = true
+      this.idx_num_review = idx
     }
   }
 }

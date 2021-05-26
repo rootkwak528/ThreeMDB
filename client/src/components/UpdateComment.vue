@@ -1,7 +1,9 @@
 <template>
   <div>
-    <input type="text" v-model.trim="content" @keypress.enter="createComment">
-    <button @click="createComment">댓글 입력</button>
+    <div>
+      <input type="text" v-model.trim="content" @keypress.enter="updateComment">
+      <button @click="updateComment">댓글 수정</button>
+    </div>
   </div>
 </template>
 
@@ -11,15 +13,17 @@ import axios from'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
-  name: 'CreateComment',
+  name: 'UpdateComment',
   data () {
     return {
       content: '',
     }
   },
   props: {
-    movie: Object,
+    comment: Object,
     review: Object,
+    movie: Object,
+    isUpdateCommentBtnClicked: Boolean
   },
   methods: {
     setToken () {
@@ -30,7 +34,7 @@ export default {
       }
       return config
     },
-    createComment () {
+    updateComment () {
       const headers = this.setToken()
 
       const commentItem = {
@@ -38,8 +42,8 @@ export default {
       }
       if (commentItem.content) {
         axios({
-          url: `${SERVER_URL}/community/${this.movie.id}/review/${this.review.id}/comment/`,
-          method: 'post',
+          url: `${SERVER_URL}/community/${this.movie.id}/review/${this.review.id}/comment/${this.comment.id}/`,
+          method: 'put',
           data: commentItem,
           headers,
         })
