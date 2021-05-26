@@ -59,4 +59,14 @@ export default {
 ::placeholder {
   font-size: 0.8em;
 }
+
+#input-box:focus {
+  outline: none;
+  /* background-color: black; */
+  border-style: solid;
+  border-radius: 8px;
+  border-color: #aaaaaa;
+  box-shadow: 0px 0px 0px #ffffff,
+              0px 0px 0px #ffffff;
+}
 </style>
