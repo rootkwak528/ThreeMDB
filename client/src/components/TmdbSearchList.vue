@@ -1,16 +1,22 @@
 <template>
+
   <div
-    id="card-list" 
+
+    id   ="card-list" 
     class="d-flex justify-content-center row g-4 mx-5"
+
   >
     <TmdbSearchListItem
-      v-for="(movie, idx) in movieList"
-      :movie   =movie
-      :item_idx=idx
-      :key     =idx
+
+      v-for     ="(movie, idx) in movieList"
+      :movie    =movie
+      :item_idx =idx
+      :key      =idx
       @clickCard="clickCard"
+
     />
   </div>
+
 </template>
 
 <script>

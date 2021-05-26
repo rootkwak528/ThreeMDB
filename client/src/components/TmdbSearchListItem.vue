@@ -1,10 +1,17 @@
 <template>
+
   <div 
-    :id="card_id"
+
+    :id   ="card_id"
     :class="{ card: movie === '', 
               cardImage: movie !== '' }"
+    class ="d-flex justify-content-center"
     @click="clickCard"
-  > </div>
+
+  > 
+    <span class="tooltip-text"><b>{{ movie.title }}</b></span>
+  </div>
+
 </template>
 
 <script>
@@ -66,6 +73,29 @@ export default {
 }
 
 .cardImage:hover {
+  position: relative;
   box-shadow: inset 8px 8px 20px #000000;
+}
+
+/* Tooltip text */
+.cardImage .tooltip-text {
+  display: inline-block;
+  font-size: 0.8rem;
+  visibility: hidden;
+  background-color: beige;
+  box-shadow: 4px 4px 8px #000000;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 10;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.cardImage:hover .tooltip-text {
+  visibility: visible;
+  bottom: 105%;
 }
 </style>

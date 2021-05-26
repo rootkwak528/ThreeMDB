@@ -637,7 +637,7 @@ export default {
 </script>
 
 <style>
-b {
+#info b {
   color: orange
 }
 
