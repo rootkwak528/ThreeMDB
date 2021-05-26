@@ -65,10 +65,17 @@ def comment_create(request, review_pk):
 @api_view(['PUT', 'DELETE'])
 @authentication_classes([JSONWebTokenAuthentication]) # JWT가 유효한지 여부를 판단
 @permission_classes([IsAuthenticated]) # 인증 여부를 확인
-def comment_delete_update(request, movie_pk, review_pk, comment_pk):
-    comment = get_object_or_404(Comment, pk=comment_pk)
+def comment_delete_update(request, review_pk, comment_pk):
+    
     if not request.user.user_comments.filter(pk=comment_pk).exists():
         return Response({'detail': '수정/삭제 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+    
+    comment = get_object_or_404(Comment, pk=comment_pk)
+
+    if request.method == 'DELETE':
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     try:
         review = Review.objects.prefetch_related('comments').filter(pk=review_pk)[0]
     except:

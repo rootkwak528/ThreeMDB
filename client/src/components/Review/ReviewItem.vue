@@ -100,20 +100,28 @@ export default {
     },
 
     commentPost ( commentData ) {
-      // DetailCard.vue 까지 emit events
       commentData = {
         ...commentData,
         review: this.review.id
       }
+      // DetailCard.vue 까지 emit events
       this.$emit( 'commentPost', commentData )
     },
 
     commentDelete ( commentData ) {
+      commentData = {
+        ...commentData,
+        review: this.review.id
+      }
       // DetailCard.vue 까지 emit events
       this.$emit( 'commentDelete', commentData )
     },
 
     commentPut ( commentData ) {
+      commentData = {
+        ...commentData,
+        review: this.review.id
+      }
       // DetailCard.vue 까지 emit events
       this.$emit( 'commentPut', commentData )
     },

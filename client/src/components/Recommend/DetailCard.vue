@@ -130,12 +130,62 @@ export default {
         .then( res => {
           const newMovie = { ...this.movie }
           newMovie.reviews = newMovie.reviews.map( review => {
+
             if ( review.id === commentData.review ) {
-              review.comments.push(res.data)
+
+              const newReview = { ...review }
+              newReview.comments.push(res.data)
+              return newReview
+
+            } else {
+              return review
             }
+
           })
           this.movie = newMovie
           console.log('comment post updated')
+        })
+        .catch( err => {
+          console.log( err )
+        })
+
+    },
+
+    commentDelete ( commentData ) {
+
+      const headers = this.setToken()
+
+      axios({
+        url: `${SERVER_URL}/community/review/${commentData.review}/comment/${commentData.id}`,
+        method: 'delete',
+        headers,
+      })
+        .then( () => {
+          const newMovie = { ...this.movie }
+          newMovie.reviews = newMovie.reviews.map( review => {
+
+            if ( review.id === commentData.review ) {
+
+              const newReview = { ...review }
+              newReview.comments = newReview.comments.filter( comment => {
+                return comment.id !== commentData.id
+              })
+              return newReview
+
+            } else {
+              return review
+            }
+
+          })
+          this.movie = newMovie
+          // const newMovie = { ...this.movie }
+          // newMovie.reviews = newMovie.reviews.map( review => {
+          //   if ( review.id === commentData.review ) {
+          //     review.comments.push(res.data)
+          //   }
+          // })
+          // this.movie = newMovie
+          // console.log('comment post updated')
         })
         .catch( err => {
           console.log( err )
