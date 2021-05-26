@@ -1,15 +1,43 @@
 <template>  
   <div class="review-item">
 
-    <span class="review-title">{{ review.title }}</span> <br>
+    <div v-if="!isUpdate">
+      <span class="review-title">{{ review.title }}</span> <br>
 
-    <span class="review-user">{{ review.user }}</span>
-    <span class="review-rate">{{ review.rate }}</span> <br>
+      <span class="review-user">{{ review.user }}</span>
+      <span class="review-rate">{{ review.rate }}</span> <br>
 
-    <span class="review-content">{{ review.content }}</span> <br>
+      <span class="review-content">{{ review.content }}</span> <br>
 
-    <button @click="reviewDelete">삭제하기</button>
-    <button @click="reviewUpdate">수정하기</button> <br>
+      <button @click="reviewDelete">삭제하기</button>
+      <button @click="toggle">수정</button> <br>
+    </div>
+
+    <div v-else>
+      <label class="review-form-label" for="review-title">Title: </label>
+      <input 
+        name="review-title"
+        type="number" 
+        v-model.trim="reviewData.title" 
+      > <br>
+
+      <label class="review-form-label" for="review-rate">Rate: </label>
+      <input 
+        name="review-rate"
+        type="number" 
+        v-model.trim="reviewData.rate"
+      > <br>
+
+      <label class="review-form-label" for="review-content">Content: </label>
+      <input 
+        name="review-content"
+        type="number" 
+        v-model.trim="reviewData.content"
+      > <br>
+
+      <button @click="reviewPut(reviewData)">수정</button>
+      <button @click="toggle">취소</button> <br>
+    </div>
 
     <hr>
 
@@ -17,16 +45,17 @@
 </template>
 
 <script>
-// import CommentForm from '@/components/Comment/CommentForm'
-// import CommentList from '@/components/Comment/CommentList'
-// import UpdateReview from '@/components/Review/UpdateReview'
-
 export default {
-  name: 'ReviewItem',
-  components: {
-    // UpdateReview,
-    // CommentList,
-    // CommentForm,
+  name: 'ReviewItem',  
+  data () {
+    return {
+      reviewData: {
+        title: '',
+        content: '',
+        rate: 0,
+      },
+      isUpdate: false,
+    }
   },
 
   props: {
@@ -36,13 +65,21 @@ export default {
   methods: {
     reviewDelete () {
       // DetailCard.vue 까지 emit events
-      this.$emit('reviewDelete', this.review)
+      this.$emit( 'reviewDelete', this.review )
     },
 
-    reviewUpdate () {
+    reviewPut ( reviewData ) {
       // DetailCard.vue 까지 emit events
-      this.$emit('reviewUpdate', this.review)
+      if (reviewData.title && reviewData.content && 0<=reviewData.rate && reviewData.rate<=10) {
+        this.$emit( 'reviewPut', reviewData )
+        this.toggle()
+      }
     },
+
+    toggle () {
+      this.reviewData = { ...this.review }
+      this.isUpdate = !this.isUpdate
+    }
   }
 }
 </script>

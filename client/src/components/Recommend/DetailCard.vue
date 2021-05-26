@@ -17,7 +17,7 @@
     <ReviewList 
       :movie="movie"
       @reviewDelete="reviewDelete"
-      @reviewUpdate="reviewUpdate"
+      @reviewPut="reviewPut"
     />
 
   </div>
@@ -86,6 +86,29 @@ export default {
         .catch( err => {
           console.log( err )
         })
+    },
+
+    reviewPut ( reviewData ) {
+
+      const headers = this.setToken()
+
+      axios({
+        url: `${SERVER_URL}/community/${this.movie.id}/review/${reviewData.id}/`,
+        method: 'put',
+        data: reviewData,
+        headers,
+      })
+        .then( () => {
+          const newMovie = { ...this.movie }
+          newMovie.reviews = newMovie.reviews.map( review => {
+            return review.id === reviewData.id ? reviewData : review
+          })
+          this.movie = newMovie
+        })
+        .catch( err => {
+          console.log( err )
+        })
+
     },
 
     setToken () {

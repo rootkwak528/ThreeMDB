@@ -1,33 +1,29 @@
 <template>
   <div>
 
-    <div class="mb-3">
-      <label class="review-form-label" for="review-rate">Rate</label>
-      <input 
-        name="review-rate"
-        type="number" 
-        v-model.trim="reviewData.rate" 
-      >
+    <label class="review-form-label" for="review-title">Title: </label>
+    <input 
+      name="review-title"
+      type="number" 
+      v-model.trim="reviewData.title" 
+    > <br>
 
-      <label class="review-form-label" for="review-title">Title</label>
-      <input 
-        name="review-title"
-        type="number" 
-        v-model.trim="reviewData.title" 
-      >
-    </div>
+    <label class="review-form-label" for="review-rate">Rate: </label>
+    <input 
+      name="review-rate"
+      type="number" 
+      v-model.trim="reviewData.rate" 
+    > <br>
 
-    <div class="mb-3">
-      <label class="review-form-label" for="review-content">Content</label>
-      <input 
-        name="review-content"
-        type="number" 
-        v-model.trim="reviewData.content" 
-      >
+    <label class="review-form-label" for="review-content">Content: </label>
+    <input 
+      name="review-content"
+      type="number" 
+      v-model.trim="reviewData.content" 
+    > <br>
 
-      <button @click="reviewPost(reviewData)" class="detail-button">Submit</button>
-    </div>
-
+    <button @click="reviewPost(reviewData)" class="detail-button">Submit</button>
+    
   </div>
 </template>
 
@@ -51,7 +47,7 @@ export default {
   methods: {
     reviewPost (reviewData) {
       // Django DB POST
-      if (reviewData.title && reviewData.content && 0<=reviewData.rate<=10) {
+      if (reviewData.title && reviewData.content && 0<=reviewData.rate && reviewData.rate<=10) {
         // DetailCard.vue 까지 emit events
         this.$emit('reviewPost', reviewData)
       }

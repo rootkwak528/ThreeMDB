@@ -19,11 +19,11 @@ from rest_framework.permissions import IsAuthenticated
 @permission_classes([IsAuthenticated]) # 인증 여부를 확인
 def review_create(request, movie_pk):
 
-    db_movie = Movie.objects.filter(pk=movie_pk)[0]
+    movie = Movie.objects.filter(pk=movie_pk)[0]
     serializer = ReviewSerializer(data=request.data)
 
     if serializer.is_valid(raise_exception=True):
-        serializer.save(movie=db_movie, user=request.user)
+        serializer.save(movie=movie, user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -41,19 +41,12 @@ def review_delete_update(request, movie_pk, review_pk):
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    try:
-        movie = Movie.objects.prefetch_related('reviews').filter(pk=movie_pk)[0]
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         serializer = ReviewSerializer(review, data=request.data)
+
         if serializer.is_valid(raise_exception=True):
-            serializer.save(movie=movie, user=request.user)
-            return Response(serializer.data)
-    else:
-        review.delete()
-        return Response({ 'id': review_pk }, status=status.HTTP_204_NO_CONTENT)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
 
 @api_view(['GET', 'POST'])
