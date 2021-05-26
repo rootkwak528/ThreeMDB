@@ -5,8 +5,10 @@
       <li v-for="(comment, idx) in review.comments" :key="idx">
         <span>{{ comment.content }}</span>
         <button @click="deleteComment(comment)">X</button>
-        <button @click="onUpdateComment">수정</button>
-        <div v-if="isUpdateCommentBtnClicked">
+        <button @click="onUpdateComment(idx)">수정</button>
+        <!-- 모든 idx에서 켜지는 현상 발생 -->
+        <!-- idx 조건 추가 -->
+        <div v-if="isUpdateCommentBtnClicked && idx_num_comment===idx">
           <UpdateComment 
             :comment="comment"
             :review="review"
@@ -31,6 +33,7 @@ export default {
   data () {
     return {
       isUpdateCommentBtnClicked: false,
+      idx_num_comment: 0,
     }
   },
   components: {
@@ -64,8 +67,10 @@ export default {
         console.log(err)
       })
     },
-    onUpdateComment () {
+    // 댓글 수정 모달 스위치
+    onUpdateComment (idx) {
       this.isUpdateCommentBtnClicked = true
+      this.idx_num_comment = idx
     }
   }
 }
