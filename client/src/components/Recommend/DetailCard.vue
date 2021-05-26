@@ -43,12 +43,24 @@ export default {
     ReviewForm,
     ReviewList,
   },
+  
+  data () {
+    return {
+      movie: {},
+    }
+  },
 
   props: {
-    movie: {
+    selectedMovie: {
       type: [Object,],
       default: null,
-    }
+    },
+  },
+
+  mounted () {
+    // this.movie 는 vuejs 에서만 바뀌는 데이터로, DB 를 **미믹한다.**
+    // 미믹 없이 바로 prop 을 수정하면, Vue warn 이 발생한다.
+    this.movie = { ...this.selectedMovie }
   },
 
   methods: {

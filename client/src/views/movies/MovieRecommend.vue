@@ -15,7 +15,7 @@
 
     <div v-if="isDetail">
       <DetailCard
-        :movie="selectedMovie"
+        :selectedMovie="selectedMovie"
         @close-detail="closeDetail"
       />
     </div>

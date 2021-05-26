@@ -18,7 +18,7 @@
       <label class="review-form-label" for="review-title">Title: </label>
       <input 
         name="review-title"
-        type="number" 
+        type="text" 
         v-model.trim="reviewData.title" 
       > <br>
 
@@ -32,7 +32,7 @@
       <label class="review-form-label" for="review-content">Content: </label>
       <input 
         name="review-content"
-        type="number" 
+        type="text" 
         v-model.trim="reviewData.content"
       > <br>
 
