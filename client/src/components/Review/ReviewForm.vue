@@ -21,7 +21,7 @@ import axios from'axios'
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
-  name: 'CreateReview',
+  name: 'ReviewForm',
   data () {
     return {
       reviewData: {

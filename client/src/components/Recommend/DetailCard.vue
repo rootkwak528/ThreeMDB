@@ -1,5 +1,6 @@
 <template>
   <div id="detail-window">
+    
     <div class="col">
       <img  
         v-if="poster_path"
@@ -8,31 +9,35 @@
       >
       <button class="position-absolute top-0 start-100" @click="close">x</button>
     </div>
+
     <div id="detail-text">
       <h4>{{ movie.title }}</h4>
       <p>{{ movie.overview }}</p>
     </div>
+
     <ReviewList 
       :movie="movie"
     />
-    <CreateReview 
+
+    <ReviewForm 
       :movie="movie"
     />
+
   </div>
 </template>
 
 <script>
-import CreateReview from '@/components/CreateReview'
-import ReviewList from '@/components/ReviewList'
+import ReviewForm from '@/components/Review/ReviewForm'
+import ReviewList from '@/components/Review/ReviewList'
 
-import axios from 'axios'
+// import axios from 'axios'
 
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 export default {
   name: 'DetailCard',
   components: {
-    CreateReview,
+    ReviewForm,
     ReviewList,
   },
   props: {
@@ -63,19 +68,20 @@ export default {
       }
     }
   },
-  created () {
-    axios({
-      url: `${SERVER_URL}/movies/`,
-      method: 'post',
-      data: this.movie,
-    })
-    .then((res) => {
-      console.log('res:', res.data.reviews)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  }
+  // created () {
+  //   axios({
+  //     url: `${SERVER_URL}/movies/`,
+  //     method: 'post',
+  //     data: this.movie,
+  //   })
+  //   .then((res) => {
+  //     this.movie = res.data
+  //     console.log('res:', res.data.reviews)
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
+  // }
 }
 </script>
 

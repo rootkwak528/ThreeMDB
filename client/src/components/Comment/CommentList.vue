@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import UpdateComment from '@/components/UpdateComment'
+import UpdateComment from '@/components/Comment/UpdateComment'
 
 import axios from 'axios'
 

@@ -19,11 +19,12 @@
         @close-detail="closeDetail"
       />
     </div>
+
   </div>
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import DetailCard from '@/components/Recommend/DetailCard'
 
 import * as THREE from 'three'
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
@@ -41,6 +42,7 @@ import { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader.js';
 import axios from 'axios'
 
 const TMDB_API_KEY = process.env.VUE_APP_TMDB_API_KEY
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 // scene 변수
 let container
@@ -150,7 +152,6 @@ export default {
 
       // 영화 확인 전 피킹 데이터 초기화
       pickingData = []
-      // movieObjects = {}
       pointer = new THREE.Vector2()
 
       // 포스터 카드 geometry 추가
@@ -236,6 +237,12 @@ export default {
 
         // movieObject에 데이터 저장
         this.movieObject[ movie.id ] = movie
+        // this.movieObject[ movie.id ] = {
+        //   ...movie,
+        //   movie_id: movie.id,
+        // }
+        // delete this.movieObject[ movie.id ].id
+
 
         // movieLength 추가
         this.movieLength += 1
@@ -410,7 +417,7 @@ export default {
       document.removeEventListener( 'keyup', this.onKeyUp ) // 키보드 up 
 
       // 컨트롤러 비활성화
-      controls.rollSpeed = 0.01
+      controls.rollSpeed = 0.001
       controls.movementSpeed = 0
       controls.dragToLook = false
       
@@ -518,7 +525,7 @@ export default {
 
     },
 
-    choice () {
+    async choice () {
 
       if ( clicked ) {
 
@@ -536,8 +543,21 @@ export default {
 
             console.log( 'ctrl +', pointedCardId )
             // this.exportScene() // 굉장히 비싼 작업
+            
+            await axios({
+              url: `${SERVER_URL}/movies/`,
+              method: 'post',
+              data: this.movieObject[ pointedCardId ],
+            })
+              .then((res) => {
+                this.selectedMovie = res.data
+                // console.log('res.data:', res.data)
+                // console.log('res.data.reviews:', res.data.reviews)
+              })
+              .catch((err) => {
+                console.log(err)
+              })
 
-            this.selectedMovie = this.movieObject[ pointedCardId ]
             this.isDetail = true
             this.deactivateEventsAndControls( pointedCardId )
 

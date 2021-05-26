@@ -34,10 +34,10 @@
 <script>
 import axios from 'axios'
 
-import TmdbLikedList from '@/components/TmdbLikedList'
-import TmdbSearchBox from '@/components/TmdbSearchBox'
-import TmdbSearchList from '@/components/TmdbSearchList'
-import TmdbSubmitButton from '@/components/TmdbSubmitButton'
+import TmdbLikedList from '@/components/Tmdb/TmdbLikedList'
+import TmdbSearchBox from '@/components/Tmdb/TmdbSearchBox'
+import TmdbSearchList from '@/components/Tmdb/TmdbSearchList'
+import TmdbSubmitButton from '@/components/Tmdb/TmdbSubmitButton'
 
 const API_URL = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY

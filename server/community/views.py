@@ -15,18 +15,22 @@ from rest_framework.permissions import IsAuthenticated
 @authentication_classes([JSONWebTokenAuthentication]) # JWT가 유효한지 여부를 판단
 @permission_classes([IsAuthenticated]) # 인증 여부를 확인
 def review_create(request, movie_pk):
-    print('server recieve')
+    print('server recieve 1')
     if request.method == 'GET':
         serializer = ReviewSerializer(request.user.user_reviews.filter(movie_id=movie_pk), many=True)
         return Response(serializer.data)
     else:
+        print('server recieve 2')
         try:
-            movie = Movie.objects.prefetch_related('reviews').filter(pk=movie_pk)[0]
+            movie = Movie.objects.prefetch_related('reviews').filter(movie_id=movie_pk)[0]
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+        print('server recieve 3')
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(movie=movie, user=request.user)
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

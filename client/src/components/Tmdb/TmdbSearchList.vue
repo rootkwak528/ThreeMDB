@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import TmdbSearchItem from '@/components/TmdbSearchItem'
+import TmdbSearchItem from '@/components/Tmdb/TmdbSearchItem'
 
 export default {
   name: 'TmdbSearchList',
