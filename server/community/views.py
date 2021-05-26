@@ -31,9 +31,16 @@ def review_create(request, movie_pk):
 @authentication_classes([JSONWebTokenAuthentication]) # JWT가 유효한지 여부를 판단
 @permission_classes([IsAuthenticated]) # 인증 여부를 확인
 def review_delete_update(request, movie_pk, review_pk):
-    review = get_object_or_404(Review, pk=review_pk)
+
     if not request.user.user_reviews.filter(pk=review_pk).exists():
-        return Response({'detail': '수정/삭제 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        return Response({ 'detail': '수정/삭제 권한이 없습니다.' }, status=status.HTTP_403_FORBIDDEN)
+
+    review = get_object_or_404(Review, pk=review_pk)
+
+    if request.method == 'DELETE':
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     try:
         movie = Movie.objects.prefetch_related('reviews').filter(pk=movie_pk)[0]
     except:

@@ -1,11 +1,14 @@
 <template>
-  <div>
-    movie: {{movie}}<br><br>
-    reivew: {{movie.reviews}}
+  <div class="review-list">
+
+    <br><br>movie: {{movie}}<br><br>
+    
     <ReviewItem
-      v-for="(review, idx) in movie.reviews"
-      :review="review"
-      :key="idx"
+      v-for        ="(review, idx) in movie.reviews"
+      :review      ="review"
+      :key         ="idx"
+      @reviewDelete="reviewDelete"
+      @reviewUpdate="reviewUpdate"
     />
 
   </div>
@@ -22,15 +25,18 @@ export default {
   components: {
     ReviewItem
   },
+
   data () {
     return {
       isUpdateReviewBtnClicked: false,
       idx_num_review: 0,
     }
   },
+
   props: {
     movie: Object,
   },
+
   methods: {
     setToken () {
       const token = localStorage.getItem('jwt')
@@ -40,7 +46,18 @@ export default {
       }
       return config
     },
-    deleteReview (review) {
+
+    reviewDelete ( reviewData ) {
+      // DetailCard.vue 까지 emit events
+      this.$emit( 'reviewDelete', reviewData )
+    },
+
+    reviewUpdate ( reviewData ) {
+      // DetailCard.vue 까지 emit events
+      this.$emit( 'reviewUpdate', reviewData )
+    },
+
+    reviewDelete2 (review) {
       const headers = this.setToken()
 
       axios({
@@ -56,6 +73,7 @@ export default {
         console.log(err)
       })
     },
+
     // 리뷰 수정 모달 스위치
     onUpdateReview (idx) {
       this.isUpdateReviewBtnClicked = true
@@ -66,5 +84,7 @@ export default {
 </script>
 
 <style>
-
+.review-list {
+  color: rgba( 255, 255, 255, 0.6 );
+}
 </style>

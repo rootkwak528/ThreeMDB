@@ -1,39 +1,19 @@
-<template>
-  
-  <div>
-    <h3>게시글 {{ idx + 1 }}</h3>
-    <h4>평점 : {{ review.rate }}</h4>
-    <h4>제목 : {{ review.title }}</h4>
-    <p>작성자 : {{ review.user }}</p>
-    <p>내용 : {{ review.content }}</p>
-    <button @click="deleteReview(review)">삭제하기</button>
-    <button @click="onUpdateReview(idx)">수정하기</button>
-    <h4>댓글 작성</h4>
+<template>  
+  <div class="review-item">
 
-    <!-- <CreateComment 
-      :review="review"
-      :movie="movie"
-    />
+    <span class="review-title">{{ review.title }}</span> <br>
 
-    <CommentList 
-      :review="review"
-      :movie="movie"
-    /> -->
-    
-    <!-- 모든 idx에서 켜지는 현상 발생 -->
-    <!-- idx 조건 추가 -->
+    <span class="review-user">{{ review.user }}</span>
+    <span class="review-rate">{{ review.rate }}</span> <br>
 
-    <!-- <div v-if="isUpdateReviewBtnClicked && idx_num_review===idx">
-      <UpdateReview 
-        :review="review"
-        :movie="movie"
-        :isUpdateReviewBtnClicked="isUpdateReviewBtnClicked"
-      />
-    </div> -->
+    <span class="review-content">{{ review.content }}</span> <br>
+
+    <button @click="reviewDelete">삭제하기</button>
+    <button @click="reviewUpdate">수정하기</button> <br>
 
     <hr>
-  </div>
 
+  </div>
 </template>
 
 <script>
@@ -48,13 +28,27 @@ export default {
     // CommentList,
     // CommentForm,
   },
+
   props: {
     review: Object,
-  }
+  },
 
+  methods: {
+    reviewDelete () {
+      // DetailCard.vue 까지 emit events
+      this.$emit('reviewDelete', this.review)
+    },
+
+    reviewUpdate () {
+      // DetailCard.vue 까지 emit events
+      this.$emit('reviewUpdate', this.review)
+    },
+  }
 }
 </script>
 
 <style>
-
+.review-item {
+  color: rgba( 255, 255, 255, 0.6 );
+}
 </style>
