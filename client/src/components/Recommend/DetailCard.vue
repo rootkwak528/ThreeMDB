@@ -140,10 +140,9 @@ export default {
             } else {
               return review
             }
-
           })
           this.movie = newMovie
-          console.log('comment post updated')
+          
         })
         .catch( err => {
           console.log( err )
@@ -156,7 +155,7 @@ export default {
       const headers = this.setToken()
 
       axios({
-        url: `${SERVER_URL}/community/review/${commentData.review}/comment/${commentData.id}`,
+        url: `${SERVER_URL}/community/review/${commentData.review}/comment/${commentData.id}/`,
         method: 'delete',
         headers,
       })
@@ -175,17 +174,44 @@ export default {
             } else {
               return review
             }
-
           })
           this.movie = newMovie
-          // const newMovie = { ...this.movie }
-          // newMovie.reviews = newMovie.reviews.map( review => {
-          //   if ( review.id === commentData.review ) {
-          //     review.comments.push(res.data)
-          //   }
-          // })
-          // this.movie = newMovie
-          // console.log('comment post updated')
+          
+        })
+        .catch( err => {
+          console.log( err )
+        })
+
+    },
+
+    commentPut ( commentData ) {
+
+      const headers = this.setToken()
+
+      axios({
+        url: `${SERVER_URL}/community/review/${commentData.review}/comment/${commentData.id}/`,
+        method: 'put',
+        data: commentData,
+        headers,
+      })
+        .then( () => {
+          const newMovie = { ...this.movie }
+          newMovie.reviews = newMovie.reviews.map( review => {
+
+            if ( review.id === commentData.review ) {
+
+              const newReview = { ...review }
+              newReview.comments = newReview.comments.map( comment => {
+                return comment.id === commentData.id ? commentData : comment
+              })
+              return newReview
+
+            } else {
+              return review
+            }
+          })
+          this.movie = newMovie
+          
         })
         .catch( err => {
           console.log( err )

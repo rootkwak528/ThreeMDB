@@ -5,15 +5,15 @@
       <span class="comment-user">{{ comment.user.username }}: </span>
       <span class="comment-content">{{ comment.content }}</span> <br>
 
-      <button @click="commentDelete">삭제하기</button>
-      <button @click="toggle">수정</button> <br>
+      <button @click="toggle">수정</button>
+      <button @click="commentDelete">삭제</button> <br>
     </div>
 
     <div v-else>
       <label class="comment-form-label" for="comment-content">Content: </label>
       <input 
         name="comment-content"
-        type="number" 
+        type="text" 
         v-model.trim="commentData.content"
       > <br>
 

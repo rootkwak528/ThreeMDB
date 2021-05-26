@@ -11,7 +11,7 @@
 
       <button @click="toggleCommentForm">댓글달기</button>
       <button @click="toggle">수정</button>
-      <button @click="reviewDelete">삭제하기</button> <br>
+      <button @click="reviewDelete">삭제</button> <br>
     </div>
 
     <div v-else>

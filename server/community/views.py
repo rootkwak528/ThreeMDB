@@ -76,16 +76,9 @@ def comment_delete_update(request, review_pk, comment_pk):
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    try:
-        review = Review.objects.prefetch_related('comments').filter(pk=review_pk)[0]
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         serializer = CommentSerializer(comment, data=request.data)
+
         if serializer.is_valid(raise_exception=True):
-            serializer.save(review=review, user=request.user)
-            return Response(serializer.data)
-    else:
-        comment.delete()
-        return Response({ 'id': review_pk }, status=status.HTTP_204_NO_CONTENT)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
