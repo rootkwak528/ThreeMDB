@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/movies">TMDB</router-link> |
+      <router-link :to="{ name: 'Tmdb' }">TMDB</router-link> |
       <span v-if="isLogin">
         <router-link @click.native="logout" to="#">Logout</router-link>
       </span>
@@ -33,7 +33,7 @@ export default {
   },
   created: function () {
     const token = localStorage.getItem('jwt')
-    if (token) {
+    if ( token ) {
       this.isLogin = true
     }
   }

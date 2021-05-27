@@ -3,7 +3,7 @@
   <div
 
     id   ="card-list" 
-    class="d-flex justify-content-center row g-4 mx-5"
+    class="d-flex justify-content-center row g-4 mx-5 pb-5"
 
   >
     <TmdbSearchItem

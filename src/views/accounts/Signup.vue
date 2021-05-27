@@ -1,19 +1,28 @@
 <template>
   <div id="signup-window">
-    <h1>Signup</h1>
-    <div>
-      <label for="username">사용자 이름: </label>
-      <input type="text" id="username" v-model="credentials.username">
+
+    <div class="signup-form">
+
+      <h1 class="mb-3">Signup</h1>
+
+      <div class="form-group mb-3">
+        <label for="username">사용자 이름: </label>
+        <input class="form-control" type="text" id="username" v-model="credentials.username">
+      </div>
+      
+      <div class="form-group mb-3">
+        <label for="password">비밀번호: </label>
+        <input class="form-control" type="password" id="password" v-model="credentials.password">
+      </div>
+      
+      <div class="form-group mb-3">
+        <label for="passwordConfirmation">비밀번호 확인: </label>
+        <input class="form-control" type="password" id="passwordConfirmation" v-model="credentials.passwordConfirmation">
+      </div>
+
+      <button class="btn btn-outline-secondary" @click="signup(credentials)">회원가입</button>
+
     </div>
-    <div>
-      <label for="password">비밀번호: </label>
-      <input type="password" id="password" v-model="credentials.password">
-    </div>
-    <div>
-      <label for="passwordConfirmation">비밀번호 확인: </label>
-      <input type="password" id="passwordConfirmation" v-model="credentials.passwordConfirmation">
-    </div>
-    <button @click="signup(credentials)">회원가입</button>
   </div>
 </template>
 
@@ -55,5 +64,22 @@ export default {
 <style>
 #signup-window {
   padding-top: 100px;
+  background-color: white;
+  height: 100vh;
+  text-align: left;
+}
+
+.signup-form {
+  position: absolute;
+  top: 20vh;
+  left: 35vw;
+}
+
+#signup-window label {
+  width: 200px;
+}
+
+#signup-window input, button {
+  width: 400px;
 }
 </style>
