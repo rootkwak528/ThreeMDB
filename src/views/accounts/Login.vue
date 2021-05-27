@@ -16,6 +16,8 @@
 <script>
 import axios from 'axios'
 
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
+
 export default {
   name: 'Login',
   data: function () {
@@ -30,7 +32,7 @@ export default {
     login: function () {
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:8000/accounts/api-token-auth/',
+        url: `${SERVER_URL}/accounts/api-token-auth/`,
         data: this.credentials,
       })
         .then(res => {

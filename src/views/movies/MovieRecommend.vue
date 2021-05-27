@@ -549,7 +549,7 @@ export default {
             
             // 디테일 창을 띄우기 전에 서버로부터 데이터 가져오기
             await axios({
-              url: `${SERVER_URL}movies/`,
+              url: `${SERVER_URL}/movies/`,
               method: 'post',
               data: this.movieObject[ pointedCardId ],
             })
