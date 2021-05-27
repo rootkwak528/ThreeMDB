@@ -1,31 +1,57 @@
 <template>
   <div id="detail-window">
-    
-    <div class="col">
-      <img  
-        v-if="poster_path"
-        :src="poster_path"
-        alt="movie_poster"
-      >
-      <button class="position-absolute top-0 start-100" @click="close">x</button>
+
+    <div class="container">
+      <div class="row">
+
+        <div class="col-6">
+
+          <iframe 
+            v-if ="youtube_trailer_url"
+            :src ="youtube_trailer_url" 
+            class="youtube-trailer"
+
+            @load="resizeIframe"
+            
+            title="YouTube video player" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            frameborder="0" 
+            allowfullscreen>
+          </iframe>
+
+          <img
+            v-else-if="poster_path"
+            :src="poster_path"
+            alt="movie_poster"
+          > <br>
+          
+          <span class="detail-title">{{ movie.title }}</span> <br>
+          <span class="detail-release_date">{{ movie.release_date }}</span> <br>
+          <span class="detail-overview">{{ movie.overview }}</span> <br>
+          <span class="detail-title">{{ movie.title }}</span> <br>
+          <button class="position-absolute top-0 start-100" @click="close">x</button>
+        </div>
+
+        <div class="col-6">
+          {{movie}}
+          <ReviewForm 
+            @reviewPost="reviewPost"
+          />
+
+          <ReviewList 
+            :reviews     ="movie.reviews"
+            @reviewDelete="reviewDelete"
+            @reviewPut   ="reviewPut"
+
+            @commentPost  ="commentPost"
+            @commentDelete="commentDelete"
+            @commentPut   ="commentPut"
+          />
+
+        </div>
+
+      </div>
     </div>
-
-    <br><br>movie: {{movie}}<br><br>
-
-    <ReviewForm 
-      @reviewPost="reviewPost"
-    />
-
-    <ReviewList 
-      :reviews     ="movie.reviews"
-      @reviewDelete="reviewDelete"
-      @reviewPut   ="reviewPut"
-
-      @commentPost  ="commentPost"
-      @commentDelete="commentDelete"
-      @commentPut   ="commentPut"
-    />
-
   </div>
 </template>
 
@@ -243,12 +269,20 @@ export default {
     close () {
       this.$emit('close-detail')
     },
+
+    resizeIframe () {
+      const youtubeTrailer = document.querySelector('.youtube-trailer')
+      youtubeTrailer.style.height = `${youtubeTrailer.clientWidth * 9 / 16}px`
+    },
   },
 
   computed: {
     poster_path () {
       return this.movie.poster_path ? `https://www.themoviedb.org/t/p/w300${this.movie.poster_path}` : ''
-    }
+    },
+    youtube_trailer_url () {
+      return this.movie.youtube_trailer_url ? `https://www.youtube.com/embed/${this.movie.youtube_trailer_url}` : ''
+    },
   },
 }
 </script>
@@ -258,12 +292,17 @@ export default {
   color: rgba( 255, 255, 255, 0.6 );
 
   position: absolute;
+  
+  top: 10vh;
+  height: 80vh;
+
   left: 10vw;
-  /* height: 50vh; */
   width: 80vw;
   /* background-color: rgba(255,255,255,0.7);
   backdrop-filter: blur(3px);
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); */
+
+  padding: 3rem;
 
   background: rgba( 255, 255, 255, 0.20 );
   box-shadow: 10px 10px 20px rgba( 31, 38, 135, 0.2 );
@@ -276,5 +315,9 @@ export default {
 
 #detail-text {
   color: rgba( 255, 255, 255, 0.6 );
+}
+
+.youtube-trailer {
+  width: 100%;
 }
 </style>
