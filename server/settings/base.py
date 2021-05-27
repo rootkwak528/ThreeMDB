@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_seed',
-    'django_heroku',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +135,3 @@ AUTH_USER_MODEL = 'accounts.User'
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
-
-import django_heroku
-django_heroku.settings(locals())
