@@ -19,6 +19,7 @@ TMDB_API_KEY = config('TMDB_API_KEY')
 
 @api_view(['POST'])
 def movie_create(request):
+    print('hello')
 
     movie_id = request.data.get('id')
     movie = Movie.objects.filter(movie_id=movie_id)
