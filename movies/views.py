@@ -38,6 +38,7 @@ def movie_create(request):
 
         print('hello3')
         serializer = MovieSerializer(data=movie_data)
+        print(serializer)
         if serializer.is_valid(raise_exception=True):
 
             print('hello4')
