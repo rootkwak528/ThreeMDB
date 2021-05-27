@@ -17,6 +17,10 @@
             <span class="detail-release-date">{{ movie.release_date }}</span> <br>
           </div>
 
+          <div class="detail-header">
+            <span class="detail-rate"><b><i class="fas fa-star"></i> {{ averageRate }}</b></span>
+          </div>
+
           <div class="detail-body text-start">
             <span class="detail-overview">{{ movie.overview }}</span> <br>
           </div>
@@ -281,6 +285,15 @@ export default {
       const decode = jwt_decode(this.authToken)
       return decode ? decode.username : 'anonymous_User'
     },
+
+    averageRate () {
+      let sumRate = 0, cntRate = 0
+      this.selectedMovie.reviews.forEach( review => {
+        sumRate += review.rate
+        cntRate += 1
+      })
+      return cntRate ? (sumRate / cntRate).toFixed(2) : 0
+    },
   },
 }
 </script>
@@ -323,6 +336,11 @@ export default {
 .detail-header {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+.detail-rate {
+  color: rgba(255, 215, 0, 0.8);
+  font-size: 1.2rem;
 }
 
 .detail-overview {
