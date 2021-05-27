@@ -1,33 +1,35 @@
 <template>
-  <div id="tmdb-window">
+  <div id="tmdb-outer-window">
+    <div id="tmdb-inner-window">
 
-    <div>
-      <TmdbLikedList 
-        :likedMovies="likedMovies"
-        @clickLikedCard="clickLikedCard"
-      />
+      <div>
+        <TmdbLikedList 
+          :likedMovies="likedMovies"
+          @clickLikedCard="clickLikedCard"
+        />
+      </div>
+
+      <div v-if="likedMovies[2] === ''">
+        <!-- <TmdbLikedMovies/> -->
+        <TmdbSearchBox
+          @tmdb-text-input="onTmdbTextInput"
+          :searchInit="searchInit"
+          @textResetComplete="onTextResetComplete"
+        />
+        <TmdbSearchList
+          :movieList="movieList"
+          @on-click-item="onClickItem"
+          @clickCard="initSearchBoxAndList"
+        />
+      </div>
+
+      <div v-else>
+        <TmdbSubmitButton
+          @clickSubmit="clickSubmit"
+        />
+      </div>
+
     </div>
-
-    <div v-if="likedMovies[2] === ''">
-      <!-- <TmdbLikedMovies/> -->
-      <TmdbSearchBox
-        @tmdb-text-input="onTmdbTextInput"
-        :searchInit="searchInit"
-        @textResetComplete="onTextResetComplete"
-      />
-      <TmdbSearchList
-        :movieList="movieList"
-        @on-click-item="onClickItem"
-        @clickCard="initSearchBoxAndList"
-      />
-    </div>
-
-    <div v-else>
-      <TmdbSubmitButton
-        @clickSubmit="clickSubmit"
-      />
-    </div>
-
   </div>
 </template>
 
@@ -52,12 +54,14 @@ export default {
       likedMovies: ['', '', '',],
     }
   },
+
   components: {
     TmdbSearchBox,
     TmdbSearchList,
     TmdbLikedList,
     TmdbSubmitButton,
   },
+
   methods: {
     initSearchBoxAndList (likedMovie) {
       let newLikedMovies = ['', '', '',]
@@ -129,6 +133,7 @@ export default {
           console.log(err)
         })
     },
+
     onClickItem (movie) {
       // TMDB 예고편 정보 확인
       this.searchTMDB('movie', `${movie.id}/videos`)
@@ -139,6 +144,7 @@ export default {
           console.log(err)
         })
     },
+    
     async searchTMDB (category, feature, params) {
       // url 확인
       let url = `${API_URL}/${category}/${feature}?api_key=${API_KEY}`
@@ -157,7 +163,14 @@ export default {
 </script>
 
 <style>
-#tmdb-window {
+#tmdb-outer-window {
   padding-top: 100px;
+  background-color: white;
+  height: 100vh;
+}
+
+#tmdb-inner-window {
+  padding-top: 100px;
+  background-color: white;
 }
 </style>

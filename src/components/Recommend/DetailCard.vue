@@ -20,12 +20,14 @@
         </div>
 
         <div class="col-6">
-          {{movie}}
+          
           <ReviewForm 
             @reviewPost="reviewPost"
           />
 
           <ReviewList 
+            :loginUsername="loginUsername"
+            
             :reviews     ="movie.reviews"
             @reviewDelete="reviewDelete"
             @reviewPut   ="reviewPut"
@@ -47,6 +49,7 @@ import ReviewForm from '@/components/Review/ReviewForm'
 import ReviewList from '@/components/Review/ReviewList'
 
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
@@ -261,6 +264,15 @@ export default {
   computed: {
     poster_path () {
       return this.movie.poster_path ? `https://www.themoviedb.org/t/p/w300${this.movie.poster_path}` : ''
+    },
+
+    authToken () {
+      return localStorage.getItem('jwt')
+    },
+
+    loginUsername () {
+      const decode = jwt_decode(this.authToken)
+      return decode ? decode.username : 'anonymous_User'
     },
   },
 }

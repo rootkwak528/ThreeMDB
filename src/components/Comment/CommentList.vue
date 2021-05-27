@@ -6,6 +6,8 @@
       :comment="comment"
       :key    ="idx"
 
+      :loginUsername="loginUsername"
+
       @commentDelete="commentDelete"
       @commentPut   ="commentPut"
     />
@@ -24,6 +26,7 @@ export default {
 
   props: {
     comments: Array,
+    loginUsername: String,
   },
 
   methods: {

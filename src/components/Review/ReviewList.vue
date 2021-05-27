@@ -6,6 +6,8 @@
       :review="review"
       :key   ="idx"
 
+      :loginUsername="loginUsername"
+
       @reviewDelete="reviewDelete"
       @reviewPut   ="reviewPut"
 
@@ -28,6 +30,7 @@ export default {
 
   props: {
     reviews: Array,
+    loginUsername: String,
   },
 
   methods: {

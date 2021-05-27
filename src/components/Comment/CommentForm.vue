@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <label class="comment-form-label" for="comment-content">Content: </label>
+  <div class="d-flex comment-form mb-1">
+
+    <i class="far fa-comment ms-1 me-2"></i>
     <input 
-      name="comment-content"
+      class="comment-input"
       type="text"
+      placeholder="댓글을 입력해주세요."
       v-model.trim="commentData.content"
       @keyup.enter="commentPost(commentData)"
     >
-    <button @click="commentPost(commentData)">댓글 입력</button>
+
   </div>
 </template>
 
@@ -41,7 +43,23 @@ export default {
 </script>
 
 <style>
-.comment-form-label {
-  color: rgba( 255, 255, 255, 0.6 );
+.comment-form {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0.4rem 0.5rem;
+  border-radius: 10px;
+  color: rgba(80, 80, 80, 0.65);
+}
+
+.comment-form:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.comment-input {
+  background: transparent;
+  border: none;
+  width: 100%;
+  height: 1rem;
+  font-size: 0.8rem;
+  color: rgba(80, 80, 80, 0.8);
 }
 </style>

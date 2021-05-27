@@ -1,60 +1,87 @@
 <template>  
-  <div class="review-item">
+  <div class="review-item text-start pt-1 pb-2">
 
-    <div v-if="!isUpdate">
-      <span class="review-title">{{ review.title }}</span> <br>
+    <div class="mb-2">
 
-      <span class="review-user">{{ review.user.username }} / </span>
-      <span class="review-rate">{{ review.rate }}</span> <br>
+      <!-- if read -->
+      <div v-if="!isUpdate">
+        <div class="d-flex justify-content-between align-items-end">
+          <div>
+            <span class="review-title"><b>{{ review.title }}</b></span>
+          </div>
 
-      <span class="review-content">{{ review.content }}</span> <br>
+          <span class="review-date">{{ review.created_at.slice( 0, 10 ) }}</span>
+        </div>
 
-      <button @click="toggleCommentForm">댓글달기</button>
-      <button @click="toggle">수정</button>
-      <button @click="reviewDelete">삭제</button> <br>
-    </div>
+        <div class="d-flex justify-content-between align-items-end">
+          <span class="review-rate">{{ review.rate }}</span> <br>
 
-    <div v-else>
-      <label class="review-form-label" for="review-title">Title: </label>
-      <input 
-        name="review-title"
-        type="text" 
-        v-model.trim="reviewData.title" 
-      > <br>
+          <span class="review-user">
+            by <b>{{ review.user.username }}</b>
+            
+            <span v-if="loginUsername === review.user.username">
+              <i @click="toggle" class="far fa-edit community-btn ms-1"></i>
+              <i @click="reviewDelete" class="far fa-trash-alt community-btn ms-1"></i> 
+            </span>
+          </span>
+        </div>
 
-      <label class="review-form-label" for="review-rate">Rate: </label>
-      <input 
-        name="review-rate"
-        type="number" 
-        v-model.trim="reviewData.rate"
-      > <br>
+        <span class="review-content">{{ review.content }}</span> <br>
 
-      <label class="review-form-label" for="review-content">Content: </label>
-      <input 
-        name="review-content"
-        type="text" 
-        v-model.trim="reviewData.content"
-      > <br>
+        <div>
+          <CommentForm
+            @commentPost="commentPost"
+          />
+        </div>
+      </div>
 
-      <button @click="reviewPut(reviewData)">수정</button>
-      <button @click="toggle">취소</button> <br>
-    </div>
+      <!-- else update -->
+      <div v-else>
+        <div class="d-flex justify-content-between align-items-end">
+          <div class="review-form">
+            <input 
+              type="text" 
+              class="review-input" 
+              v-model.trim="reviewData.title">
+          </div>
 
-    <div v-if="isCommentForm">
-      <CommentForm
-        @commentPost="commentPost"
-      />
-      <button @click="toggleCommentForm">취소</button> <br>
+          <span class="review-date">{{ review.created_at.slice( 0, 10 ) }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-end">
+          <div class="review-form">
+            <input 
+              type="number" 
+              class="review-input" 
+              v-model.trim="reviewData.rate">
+          </div>
+
+          <span class="review-user">
+            by {{ review.user.username }}
+            
+            <span v-if="loginUsername === review.user.username">
+              <i @click="reviewPut(reviewData)" class="far fa-edit community-btn ms-1"></i>
+            </span>
+          </span>
+        </div>
+
+        <div class="review-form">
+          <input 
+            type="text" 
+            class="review-input" 
+            v-model.trim="reviewData.content"> <br>
+        </div>
+      </div>
     </div>
 
     <CommentList
+      :loginUsername="loginUsername"
+
       :comments     ="review.comments"
       @commentDelete="commentDelete"
       @commentPut   ="commentPut"
     />
-
-    <hr>
-
+    
   </div>
 </template>
 
@@ -83,6 +110,7 @@ export default {
 
   props: {
     review: Object,
+    loginUsername: String,
   },
 
   methods: {
@@ -92,6 +120,7 @@ export default {
     },
 
     reviewPut ( reviewData ) {
+      console.log(reviewData)
       // DetailCard.vue 까지 emit events
       if (reviewData.title && reviewData.content && 0<=reviewData.rate && reviewData.rate<=10) {
         this.$emit( 'reviewPut', reviewData )
@@ -134,12 +163,83 @@ export default {
     toggleCommentForm () {
       this.isCommentForm = !this.isCommentForm
     },
-  }
+  },
 }
 </script>
 
 <style>
 .review-item {
   color: rgba( 255, 255, 255, 0.6 );
+  border-bottom: 1px solid rgba( 255, 255, 255, 0.4 );
+}
+
+.review-title {
+  padding: 0.2rem;
+  font-size: 1rem;
+  border-radius: 10px;
+}
+
+.review-date {
+  padding: 0.2rem;
+  font-size: 0.8rem;
+  border-radius: 10px;
+}
+
+.review-rate {
+  padding: 0.2rem;
+  font-size: 0.8rem;
+  border-radius: 10px;
+}
+.review-user {
+  padding: 0.2rem;
+  font-size: 0.8rem;
+  border-radius: 10px;
+}
+
+.review-content {
+  padding: 0.2rem;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.review-form {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0.4rem 0.5rem;
+  border-radius: 10px;
+  color: rgba(80, 80, 80, 0.65);
+}
+
+.review-form:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.review-input {
+  background: transparent;
+  border: none;
+  width: 100%;
+  height: 1rem;
+  font-size: 0.8rem;
+  color: rgba(80, 80, 80, 0.8);
+}
+/* 
+.review-form {
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  color: rgba(80, 80, 80, 0.8);
+  font-size: 0.8rem;
+  height: 40px;
+}
+
+.review-form:hover {
+  background: rgba(255, 255, 255, 0.8);
+} */
+
+.community-btn:hover {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 1);
 }
 </style>

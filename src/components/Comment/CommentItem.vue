@@ -1,12 +1,17 @@
 <template>  
-  <div class="comment-item">
+  <div class="comment-item ms-2">
 
     <div v-if="!isUpdate">
-      <span class="comment-user">{{ comment.user.username }}: </span>
-      <span class="comment-content">{{ comment.content }}</span> <br>
+      <span class="comment-user"><b>- {{ comment.user.username }}</b> : </span>
 
-      <button @click="toggle">수정</button>
-      <button @click="commentDelete">삭제</button> <br>
+      <span class="comment-content">
+        {{ comment.content }}
+
+        <span v-if="loginUsername === comment.user.username">
+          <i @click="toggle" class="far fa-edit community-btn ms-1"></i>
+          <i @click="commentDelete" class="far fa-trash-alt community-btn ms-1"></i> 
+        </span>
+      </span>
     </div>
 
     <div v-else>
@@ -20,8 +25,6 @@
       <button @click="commentPut(commentData)">수정</button>
       <button @click="toggle">취소</button> <br>
     </div>
-
-    <hr>
 
   </div>
 </template>
@@ -40,6 +43,7 @@ export default {
 
   props: {
     comment: Object,
+    loginUsername: String,
   },
 
   methods: {
@@ -67,5 +71,14 @@ export default {
 <style>
 .comment-item {
   color: rgba( 255, 255, 255, 0.6 );
+  height: 1.25rem;
+}
+
+.comment-user {
+  font-size: 0.7rem;
+}
+
+.comment-content {
+  font-size: 0.7rem;
 }
 </style>
