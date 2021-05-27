@@ -6,21 +6,8 @@
 
         <div class="col-6">
 
-          <iframe 
-            v-if ="youtube_trailer_url"
-            :src ="youtube_trailer_url" 
-            class="youtube-trailer"
-
-            @load="resizeIframe"
-            
-            title="YouTube video player" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            frameborder="0" 
-            allowfullscreen>
-          </iframe>
-
           <img
-            v-else-if="poster_path"
+            v-if="poster_path"
             :src="poster_path"
             alt="movie_poster"
           > <br>
@@ -269,19 +256,11 @@ export default {
     close () {
       this.$emit('close-detail')
     },
-
-    resizeIframe () {
-      const youtubeTrailer = document.querySelector('.youtube-trailer')
-      youtubeTrailer.style.height = `${youtubeTrailer.clientWidth * 9 / 16}px`
-    },
   },
 
   computed: {
     poster_path () {
       return this.movie.poster_path ? `https://www.themoviedb.org/t/p/w300${this.movie.poster_path}` : ''
-    },
-    youtube_trailer_url () {
-      return this.movie.youtube_trailer_url ? `https://www.youtube.com/embed/${this.movie.youtube_trailer_url}` : ''
     },
   },
 }
@@ -315,9 +294,5 @@ export default {
 
 #detail-text {
   color: rgba( 255, 255, 255, 0.6 );
-}
-
-.youtube-trailer {
-  width: 100%;
 }
 </style>
