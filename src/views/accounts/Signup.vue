@@ -72,7 +72,7 @@ export default {
 .signup-form {
   position: absolute;
   top: 20vh;
-  left: 35vw;
+  left: 40vw;
 }
 
 #signup-window label {
@@ -80,6 +80,6 @@ export default {
 }
 
 #signup-window input, button {
-  width: 400px;
+  width: 20vw;
 }
 </style>
