@@ -285,10 +285,11 @@ export default {
   position: absolute;
   
   top: 10vh;
-  height: 80vh;
 
   left: 10vw;
   width: 80vw;
+
+  margin-bottom: 10vh;
   /* background-color: rgba(255,255,255,0.7);
   backdrop-filter: blur(3px);
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); */

@@ -1,7 +1,6 @@
 <template>  
   <div class="review-item text-start pt-1 pb-2">
-
-    <div class="mb-2">
+    <div class="mb-1">
 
       <!-- if read -->
       <div v-if="!isUpdate">
@@ -10,13 +9,13 @@
             <span class="review-title"><b>{{ review.title }}</b></span>
           </div>
 
-          <span class="review-date">{{ review.created_at.slice( 0, 10 ) }}</span>
+          <span class="review-body review-date">{{ review.created_at.slice( 0, 10 ) }}</span>
         </div>
 
         <div class="d-flex justify-content-between align-items-end">
-          <span class="review-rate">{{ review.rate }}</span> <br>
+          <span class="review-body review-rate">{{ review.rate }}</span> <br>
 
-          <span class="review-user">
+          <span class="review-body review-user">
             by <b>{{ review.user.username }}</b>
             
             <span v-if="loginUsername === review.user.username">
@@ -26,7 +25,7 @@
           </span>
         </div>
 
-        <span class="review-content">{{ review.content }}</span> <br>
+        <span class="review-body review-content">{{ review.content }}</span> <br>
 
         <div>
           <CommentForm
@@ -37,27 +36,25 @@
 
       <!-- else update -->
       <div v-else>
-        <div class="d-flex justify-content-between align-items-end">
-          <div class="review-form">
-            <input 
-              type="text" 
-              class="review-input" 
-              v-model.trim="reviewData.title">
-          </div>
-
-          <span class="review-date">{{ review.created_at.slice( 0, 10 ) }}</span>
+        <div class="d-flex justify-content-between align-items-end mb-1">
+          <!-- <div class="review-form">
+          </div> -->
+          <input 
+            type="text" 
+            class="review-input review-title" 
+            v-model.trim="reviewData.title">
         </div>
 
-        <div class="d-flex justify-content-between align-items-end">
-          <div class="review-form">
+        <div class="d-flex justify-content-between align-items-start mb-1">
+          <!-- <div class="review-form">
+          </div> -->
             <input 
               type="number" 
               class="review-input" 
               v-model.trim="reviewData.rate">
-          </div>
 
-          <span class="review-user">
-            by {{ review.user.username }}
+          <span class="review-body review-user">
+            by <b>{{ review.user.username }}</b>
             
             <span v-if="loginUsername === review.user.username">
               <i @click="reviewPut(reviewData)" class="far fa-edit community-btn ms-1"></i>
@@ -65,12 +62,12 @@
           </span>
         </div>
 
-        <div class="review-form">
+        <!-- <div class="review-form">
+        </div> -->
           <input 
             type="text" 
-            class="review-input" 
+            class="review-input review-content" 
             v-model.trim="reviewData.content"> <br>
-        </div>
       </div>
     </div>
 
@@ -177,66 +174,32 @@ export default {
   padding: 0.2rem;
   font-size: 1rem;
   border-radius: 10px;
+  width: 100%;
 }
 
-.review-date {
-  padding: 0.2rem;
-  font-size: 0.8rem;
-  border-radius: 10px;
-}
-
-.review-rate {
-  padding: 0.2rem;
-  font-size: 0.8rem;
-  border-radius: 10px;
-}
-.review-user {
+.review-body  {
   padding: 0.2rem;
   font-size: 0.8rem;
   border-radius: 10px;
 }
 
 .review-content {
-  padding: 0.2rem;
-  font-size: 0.8rem;
-  border-radius: 10px;
   width: 100%;
-}
-
-.review-form {
-  background: rgba(255, 255, 255, 0.6);
-  padding: 0.4rem 0.5rem;
-  border-radius: 10px;
-  color: rgba(80, 80, 80, 0.65);
-}
-
-.review-form:hover {
-  background: rgba(255, 255, 255, 0.8);
 }
 
 .review-input {
-  background: transparent;
-  border: none;
-  width: 100%;
-  height: 1rem;
-  font-size: 0.8rem;
-  color: rgba(80, 80, 80, 0.8);
-}
-/* 
-.review-form {
-  background: transparent;
-  border: none;
-  padding: 0.4rem 0.5rem;
-  border-radius: 10px;
   background: rgba(255, 255, 255, 0.6);
-  color: rgba(80, 80, 80, 0.8);
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 0.5rem;
+  height: 43.2px;
   font-size: 0.8rem;
-  height: 40px;
+  color: rgba(80, 80, 80, 0.8);
 }
 
-.review-form:hover {
+.review-input:hover {
   background: rgba(255, 255, 255, 0.8);
-} */
+}
 
 .community-btn:hover {
   cursor: pointer;

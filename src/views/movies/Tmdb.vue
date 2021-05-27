@@ -170,7 +170,6 @@ export default {
 }
 
 #tmdb-inner-window {
-  padding-top: 100px;
   background-color: white;
 }
 </style>

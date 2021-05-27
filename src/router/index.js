@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/movies/',
+    path: '/',
     name: 'Tmdb',
     component: Tmdb
   },

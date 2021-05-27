@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex comment-form mb-1">
+  <div class="d-flex comment-form mt-2">
 
     <i class="far fa-comment ms-1 me-2"></i>
     <input 
