@@ -11,7 +11,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-import requests
 from decouple import config
 
 
@@ -31,8 +30,6 @@ def movie_create(request):
             'overview': request.data.get('overview'),
             'release_date': request.data.get('release_date'),
             'poster_path': request.data.get('poster_path'),
-
-            'youtube_trailer_url': get_trailer_path(movie_id),
         }
         
         serializer = MovieSerializer(data=movie_data)
@@ -56,14 +53,3 @@ def movie_create(request):
 
         serializer = MovieSerializer(movie)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-def get_trailer_path(movie_id):
-    # TMDB API request
-    url = f'https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key={TMDB_API_KEY}'
-    response = requests.get(url).json().get('results')
-
-    for res in response:
-        if res.get('type') == 'Trailer':
-            return res.get('key')
-    return ''
