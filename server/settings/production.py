@@ -5,6 +5,6 @@ from decouple import config
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['ssafy5-seoul5-group5-final-pjt.herokuapp.com']
