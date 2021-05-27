@@ -13,7 +13,7 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-end">
-          <span class="review-body review-rate">{{ review.rate }}</span> <br>
+          <span class="review-body review-rate"><b><i class="fas fa-star"></i> {{ review.rate }}</b></span> <br>
 
           <span class="review-body review-user">
             by <b>{{ review.user.username }}</b>
@@ -36,22 +36,28 @@
 
       <!-- else update -->
       <div v-else>
-        <div class="d-flex justify-content-between align-items-end mb-1">
-          <!-- <div class="review-form">
-          </div> -->
-          <input 
-            type="text" 
-            class="review-input review-title" 
-            v-model.trim="reviewData.title">
-        </div>
+        <!-- <div class="review-form">
+        </div> -->
+        <input 
+          type="text" 
+          class="review-input review-title mb-1 mt-3" 
+          maxlength="40"
+          v-model.trim="reviewData.title">
 
-        <div class="d-flex justify-content-between align-items-start mb-1">
-          <!-- <div class="review-form">
-          </div> -->
-            <input 
-              type="number" 
-              class="review-input" 
-              v-model.trim="reviewData.rate">
+        <!-- <div class="review-form">
+        </div> -->
+        <textarea 
+          class="review-input-content review-content mb-1"
+          v-model.trim="reviewData.content" 
+        ></textarea>
+
+        <div class="d-flex justify-content-between align-items-end">
+          <input 
+            type="number" 
+            min="0"
+            max="10"
+            class="review-input" 
+            v-model.trim="reviewData.rate">
 
           <span class="review-body review-user">
             by <b>{{ review.user.username }}</b>
@@ -61,13 +67,7 @@
             </span>
           </span>
         </div>
-
-        <!-- <div class="review-form">
-        </div> -->
-          <input 
-            type="text" 
-            class="review-input review-content" 
-            v-model.trim="reviewData.content"> <br>
+        
       </div>
     </div>
 
@@ -185,6 +185,10 @@ export default {
 
 .review-content {
   width: 100%;
+}
+
+.review-rate {
+  color: rgba(255, 215, 0, 0.8);
 }
 
 .review-input {

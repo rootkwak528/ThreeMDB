@@ -12,14 +12,21 @@
             alt="movie_poster"
           > <br>
           
-          <span class="detail-title">{{ movie.title }}</span> <br>
-          <span class="detail-release_date">{{ movie.release_date }}</span> <br>
-          <span class="detail-overview">{{ movie.overview }}</span> <br>
-          <span class="detail-title">{{ movie.title }}</span> <br>
-          <button class="position-absolute top-0 start-100" @click="close">x</button>
+          <div class="detail-header">
+            <span class="detail-title"><b>{{ movie.title }}</b></span> <br>
+            <span class="detail-release-date">{{ movie.release_date }}</span> <br>
+          </div>
+
+          <div class="detail-body text-start">
+            <span class="detail-overview">{{ movie.overview }}</span> <br>
+          </div>
         </div>
 
         <div class="col-6">
+          
+          <div class="d-flex justify-content-end">
+            <span class="community-btn" id="close-btn" @click="close"><i class="fas fa-times"></i></span>
+          </div>
           
           <ReviewForm 
             @reviewPost="reviewPost"
@@ -307,5 +314,25 @@ export default {
 
 #detail-text {
   color: rgba( 255, 255, 255, 0.6 );
+}
+
+.detail-title {
+  font-size: 1.5rem;
+}
+
+.detail-header {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.detail-overview {
+  font-size: 0.8rem;
+}
+
+#close-btn {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 1rem;
+  font-size: 2rem;
 }
 </style>
