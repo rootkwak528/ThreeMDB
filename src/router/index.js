@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/movies/',
+    path: '/',
     name: 'Tmdb',
     component: Tmdb
   },
@@ -20,7 +20,7 @@ const routes = [
     component: Signup,
   },
   {
-    path: '/',
+    path: '/accounts/login',
     name: 'Login',
     component: Login,
   },
