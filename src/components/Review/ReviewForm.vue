@@ -1,28 +1,30 @@
 <template>
-  <div>
+  <div class="review-form pb-2">
 
-    <label class="review-form-label" for="review-title">Title: </label>
     <input 
-      name="review-title"
-      type="text" 
+      class="review-input review-title mb-1"
+      type="text"
+      placeholder="새로운 게시글 제목을 입력해주세요."
       v-model.trim="reviewData.title" 
-    > <br>
+    >
 
-    <label class="review-form-label" for="review-rate">Rate: </label>
-    <input 
-      name="review-rate"
-      type="number" 
-      v-model.trim="reviewData.rate" 
-    > <br>
-
-    <label class="review-form-label" for="review-content">Content: </label>
-    <input 
-      name="review-content"
-      type="text" 
+    <textarea 
+      class="review-input-content review-content mb-1"
+      placeholder="새로운 게시글 내용을 입력해주세요."
       v-model.trim="reviewData.content" 
-    > <br>
+    ></textarea>
 
-    <button @click="reviewPost(reviewData)" class="detail-button">Submit</button>
+    <div class="d-flex justify-content-between mb-1">
+      <input 
+        class="review-input"
+        type="number"
+        value="10"
+        v-model.trim="reviewData.rate">
+
+      <span 
+        @click="reviewPost(reviewData)" 
+        class="review-form-button px-3"> 게시글 등록 </span>
+    </div>
     
   </div>
 </template>
@@ -60,7 +62,46 @@ export default {
 </script>
 
 <style>
-.review-form-label {
-  color: rgba( 255, 255, 255, 0.6 );
+.review-form {
+  background: rgba(255, 255, 255, 0.6);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-title {
+  padding: 0.2rem;
+  font-size: 1rem;
+}
+
+.review-input-content {
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 0.5rem;
+  height: 4rem;
+  color: rgba(80, 80, 80, 0.8);
+  font-size: 0.8rem
+}
+
+.review-input-content:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.review-form-button {
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 0.5rem;
+  height: 43.2px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.review-form-button:hover {
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.6);
 }
 </style>
