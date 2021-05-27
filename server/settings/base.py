@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_seed',
+    'django_heroku',
 ]
 
 MIDDLEWARE = [
@@ -137,4 +138,4 @@ JWT_AUTH = {
 }
 
 import django_heroku
-django_heroku(settings(locals()))
+django_heroku.settings(locals())
