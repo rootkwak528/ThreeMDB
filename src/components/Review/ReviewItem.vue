@@ -36,16 +36,13 @@
 
       <!-- else update -->
       <div v-else>
-        <!-- <div class="review-form">
-        </div> -->
+        
         <input 
           type="text" 
           class="review-input review-title mb-1 mt-3" 
           maxlength="40"
           v-model.trim="reviewData.title">
-
-        <!-- <div class="review-form">
-        </div> -->
+          
         <textarea 
           class="review-input-content review-content mb-1"
           v-model.trim="reviewData.content" 
