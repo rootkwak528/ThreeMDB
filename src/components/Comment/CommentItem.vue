@@ -15,15 +15,17 @@
     </div>
 
     <div v-else>
-      <label class="comment-form-label" for="comment-content">Content: </label>
+      <span class="comment-user"><b>- {{ comment.user.username }}</b> :</span>
+
       <input 
         name="comment-content"
         type="text" 
+        class="comment-update-input mb-1 ms-2" 
+        maxlength="100"
         v-model.trim="commentData.content"
+        @keyup.enter="commentPut(commentData)"
+        @keyup.esc="toggle"
       > <br>
-
-      <button @click="commentPut(commentData)">수정</button>
-      <button @click="toggle">취소</button> <br>
     </div>
 
   </div>
@@ -80,5 +82,20 @@ export default {
 
 .comment-content {
   font-size: 0.7rem;
+}
+
+.comment-update-input {
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 0.5rem;
+  height: 39px;
+  width: 75%;
+  font-size: 0.7rem;
+  color: rgba(80, 80, 80, 0.8);
+}
+
+.comment-update-input:hover {
+  background: rgba(255, 255, 255, 0.8);
 }
 </style>
