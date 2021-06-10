@@ -27,7 +27,7 @@ def signup(request):
     if password != password_confirmation:
         return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
     
-    if len(password) <= 8:
+    if len(password) < 8:
         return Response({'error': '비밀번호는 8자 이상이어야 합니다.'}, status=status.HTTP_400_BAD_REQUEST)
 		
     serializer = UserSerializer(data=request.data)
