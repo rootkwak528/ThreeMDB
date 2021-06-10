@@ -20,7 +20,7 @@
       <input 
         name="comment-content"
         type="text" 
-        class="comment-update-input mb-1 ms-2" 
+        class="comment-item comment-update-input mb-1 ms-2" 
         maxlength="100"
         v-model.trim="commentData.content"
         @keyup.enter="commentPut(commentData)"
@@ -66,7 +66,13 @@ export default {
       this.commentData = { ...this.comment }
       this.isUpdate = !this.isUpdate
     }
-  }
+  },
+
+  updated () {
+    if ( this.isUpdate ) {
+      document.querySelector('.comment-update-input').focus()
+    }
+  },
 }
 </script>
 
@@ -85,17 +91,14 @@ export default {
 }
 
 .comment-update-input {
-  background: rgba(255, 255, 255, 0.6);
+  background-color: transparent;
   border: none;
-  border-radius: 10px;
-  padding: 0.4rem 0.5rem;
-  height: 39px;
-  width: 75%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  /* width: 75%; */
   font-size: 0.7rem;
-  color: rgba(80, 80, 80, 0.8);
 }
 
 .comment-update-input:hover {
-  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
 }
 </style>
