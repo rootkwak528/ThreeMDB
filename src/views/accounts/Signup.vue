@@ -15,12 +15,16 @@
         <input class="form-control" type="password" id="password" v-model="credentials.password">
       </div>
       
-      <div class="form-group mb-3">
+      <div class="form-group mb-4">
         <label for="passwordConfirmation">비밀번호 확인: </label>
         <input class="form-control" type="password" id="passwordConfirmation" v-model="credentials.passwordConfirmation">
       </div>
 
       <button class="btn btn-outline-secondary" @click="signup(credentials)">회원가입</button>
+
+      <div v-if="errors" class="fade-in">
+        <span>{{ errors }}</span>
+      </div>
 
     </div>
   </div>
@@ -39,11 +43,14 @@ export default {
         username: null,
         password: null,
         passwordConfirmation: null,
-      }
+      },
+      errors: null,
     }
   },
   methods: {
     signup: function () {
+      this.errors = null
+
       axios({
         method: 'post',
         url: `${SERVER_URL}/accounts/signup/`,
@@ -55,6 +62,7 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          this.errors = err.response.data.error
         })
     }
   }

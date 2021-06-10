@@ -12,10 +12,14 @@
 
       <div class="form-group mb-4">
         <label for="password">비밀번호: </label>
-        <input class="form-control" type="password" id="password" v-model="credentials.password">
+        <input class="form-control" type="password" id="password" v-model="credentials.password" @keyup.enter="login">
       </div>
 
       <button class="btn btn-outline-secondary" @click="login">로그인</button>
+
+      <div v-if="errors" class="fade-in">
+        <span>{{ errors }}</span>
+      </div>
 
     </div>
     
@@ -34,11 +38,14 @@ export default {
       credentials: {
         username: null,
         password: null,
-      }
+      },
+      errors: null,
     }
   },
   methods: {
     login: function () {
+      this.errors = null
+      
       axios({
         method: 'post',
         url: `${SERVER_URL}/accounts/api-token-auth/`,
@@ -52,6 +59,7 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          this.errors = 'ID와 비밀번호를 확인해주세요.'
         })
     }
   }
@@ -78,5 +86,21 @@ export default {
 
 #login-window input, button {
   width: 20vw;
+}
+
+.fade-in {
+  animation: fadeIn ease 1s;
+  color: crimson;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+@keyframes fadeIn{
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
 }
 </style>
