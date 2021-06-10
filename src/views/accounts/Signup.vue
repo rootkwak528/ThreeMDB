@@ -17,7 +17,9 @@
       
       <div class="form-group mb-4">
         <label for="passwordConfirmation">비밀번호 확인: </label>
-        <input class="form-control" type="password" id="passwordConfirmation" v-model="credentials.passwordConfirmation">
+        <input class="form-control" type="password" id="passwordConfirmation" 
+          v-model="credentials.passwordConfirmation" 
+          @keyup.enter="signup(credentials)">
       </div>
 
       <button class="btn btn-outline-secondary" @click="signup(credentials)">회원가입</button>
@@ -62,7 +64,11 @@ export default {
         })
         .catch(err => {
           console.log(err)
-          this.errors = err.response.data.error
+          if (err.response.data.error) {
+            this.errors = err.response.data.error
+          } else if (err.response.data.username) {
+            this.errors = err.response.data.username[0]
+          }
         })
     }
   }
