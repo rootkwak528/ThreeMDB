@@ -9,7 +9,7 @@ const store = new Vuex.Store({
     createPersistedState(),
   ],
   state: {
-
+    movieDetail: null,
   },
   mutations: {
 
