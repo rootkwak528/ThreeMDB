@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Signup',
@@ -56,12 +56,12 @@ export default {
   methods: {
     ...mapActions([
       'signup',
-      'set_errors',
+      'setErrors',
     ]),
   },
 
   created () {
-    this.set_errors( null )
+    this.setErrors( null )
   }
 }
 </script>

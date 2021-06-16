@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -53,7 +53,7 @@ export default {
   methods: {
     ...mapActions([
       'login',
-      'set_errors',
+      'setErrors',
     ]),
 
     toSignup () {
@@ -62,11 +62,9 @@ export default {
   },
 
   created () {
-    
     if ( this.errors !== '먼저 로그인을 해야 합니다.' ) {
-      this.set_errors( null )
+      this.setErrors( null )
     }
-
   },
 }
 </script>

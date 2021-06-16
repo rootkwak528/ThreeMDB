@@ -1,13 +1,11 @@
 <template>
 
   <div 
-
     :id   ="cardId"
     :class="{ card: movie === '', 
               cardImage: movie !== '' }"
     class ="d-flex justify-content-center"
-    @click="clickCard"
-
+    @click="addCard(movie)"
   > 
     <span class="tooltip-text"><b>{{ movie.title }}</b></span>
   </div>
@@ -15,6 +13,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'TmdbSearchItem',
   props: {
@@ -22,16 +22,10 @@ export default {
     itemIdx: Number,
   },
 
-  updated () {
-    const card = document.querySelector(`#${ this.cardId }`)
-    card.style.backgroundImage = this.posterPath ? `url(${ this.posterPath })` : 'none'
-  },
-
   methods: {
-    clickCard () {
-      // console.log('click', this.movie)
-      this.$emit('clickCard', this.movie)
-    },
+    ...mapActions([
+      'addCard',
+    ]),
   },
 
   computed: {
@@ -40,8 +34,13 @@ export default {
     },
 
     cardId () {
-      return `card${ this.itemIdx }`
+      return `card-${ this.itemIdx }`
     }
+  },
+
+  updated () {
+    const card = document.querySelector(`#${ this.cardId }`)
+    card.style.backgroundImage = this.posterPath ? `url(${ this.posterPath })` : 'none'
   },
 }
 </script>
