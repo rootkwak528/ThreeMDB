@@ -48,7 +48,7 @@ movies 테이블이 사용되는 순간은 사용자가 별점을 매기거나 �
 
 <br>
 
-> 영화 검색과 추천 기능은 [**TMDB API**](https://developers.themoviedb.org/3)를 사용했다.
+> 영화 검색과 추천 기능은 [**TMDB API**](https://developers.themoviedb.org/3)를 사용했습니다.
 >
 > [![tmdb-logo](https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg)](https://developers.themoviedb.org/3)
 
@@ -179,7 +179,7 @@ function animate () {
 
 > 모달창으로 구현된 영화 상세 페이지의 모습.
 >
-> 모달창으로 바꾸고 또 좋았던 점은 연습 삼아 구현한 후처리 기능을 포함시킬 수 있었다는 점이다. 덕분에 모달창 뒤의 3차원 영화 추천 목록을 다크모드처럼 표현해 화면 전환 효과를 더 극대화했다.
+> 모달창으로 바꾸고 또 좋았던 점은 연습 삼아 구현한 후처리 기능을 포함시킬 수 있었다는 점입니다. 덕분에 모달창 뒤의 3차원 영화 추천 목록을 다크모드처럼 표현해 화면 전환 효과를 더 극대화했습니다.
 
 <br>
 
