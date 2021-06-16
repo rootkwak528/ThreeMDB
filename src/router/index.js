@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Tmdb from '@/views/movies/Tmdb'
+import TmdbSearch from '@/views/movies/TmdbSearch'
 import Signup from '@/views/accounts/Signup'
 import Login from '@/views/accounts/Login'
 import MovieRecommend from '@/views/movies/MovieRecommend'
@@ -11,8 +11,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Tmdb',
-    component: Tmdb
+    name: 'TmdbSearch',
+    component: TmdbSearch,
   },
   {
     path: '/accounts/signup',
@@ -27,7 +27,7 @@ const routes = [
   {
     path: '/movies/recommend',
     name: 'MovieRecommend',
-    component: MovieRecommend
+    component: MovieRecommend,
   },
 ]
 

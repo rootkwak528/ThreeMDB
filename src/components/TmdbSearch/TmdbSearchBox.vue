@@ -20,9 +20,7 @@ export default {
   methods: {
     onInputText (event) {
       const searchKeyword = event.target.value.trim()
-      if (searchKeyword) {
-        this.$emit('tmdb-text-input', searchKeyword)
-      }
+      this.$emit('onTmdbTextInput', searchKeyword)
     },
     onResetText () {
       const inputBox = document.querySelector('#input-box')

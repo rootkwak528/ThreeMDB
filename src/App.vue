@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link :to="{ name: 'Tmdb' }">TMDB</router-link> |
+      <router-link :to="{ name: 'TmdbSearch' }">TMDB Search</router-link> |
       <span v-if="isLogin">
         <router-link @click.native="logout" to="#">Logout</router-link>
       </span>
@@ -31,7 +31,7 @@ export default {
       this.$router.push({ name: 'Login' })
     }
   },
-  created: function () {
+  created () {
     const token = localStorage.getItem('jwt')
     if ( token ) {
       this.isLogin = true

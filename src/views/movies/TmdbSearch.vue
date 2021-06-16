@@ -12,13 +12,12 @@
       <div v-if="likedMovies[2] === ''">
         <!-- <TmdbLikedMovies/> -->
         <TmdbSearchBox
-          @tmdb-text-input="onTmdbTextInput"
           :searchInit="searchInit"
+          @onTmdbTextInput="onTmdbTextInput"
           @textResetComplete="onTextResetComplete"
         />
         <TmdbSearchList
           :movieList="movieList"
-          @on-click-item="onClickItem"
           @clickCard="initSearchBoxAndList"
         />
       </div>
@@ -36,16 +35,16 @@
 <script>
 import axios from 'axios'
 
-import TmdbLikedList from '@/components/Tmdb/TmdbLikedList'
-import TmdbSearchBox from '@/components/Tmdb/TmdbSearchBox'
-import TmdbSearchList from '@/components/Tmdb/TmdbSearchList'
-import TmdbSubmitButton from '@/components/Tmdb/TmdbSubmitButton'
+import TmdbLikedList from '@/components/TmdbSearch/TmdbLikedList'
+import TmdbSearchBox from '@/components/TmdbSearch/TmdbSearchBox'
+import TmdbSearchList from '@/components/TmdbSearch/TmdbSearchList'
+import TmdbSubmitButton from '@/components/TmdbSearch/TmdbSubmitButton'
 
 const API_URL = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY
 
 export default {
-  name: 'Tmdb',
+  name: 'TmdbSearch',
   data () {
     return {
       selectedMovie: '',
@@ -60,6 +59,17 @@ export default {
     TmdbSearchList,
     TmdbLikedList,
     TmdbSubmitButton,
+  },
+
+  created () {
+    const token = localStorage.getItem('jwt')
+    
+    if ( !token ) {
+
+      localStorage.setItem('msg', '먼저 로그인을 해야 합니다.')
+      this.$router.push({ name: 'Login' })
+
+    }
   },
 
   methods: {
@@ -101,7 +111,7 @@ export default {
     clickSubmit () {
       const likedMoviesJson = JSON.stringify(this.likedMovies)
       localStorage.setItem('likedMovies', likedMoviesJson)
-      this.$router.push('movies/recommend')
+      this.$router.push({ name: 'MovieRecommend' })
     },
 
     onTextResetComplete () {
@@ -109,40 +119,35 @@ export default {
     },
     
     onTmdbTextInput (textInput) {
-      const params = {
-        region: 'KR',
-        language: 'ko',
-        query: textInput
-      }
-      
-      // TMDB 검색
-      this.searchTMDB('search', 'movie', params)
-        .then( res => {
-          // console.log(res)
-          const results = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
-          let idx = 0
-          res.data.results.forEach(movie => {
-            if (movie.poster_path) {
-              results[idx] = movie
-              idx += 1
-            }
-          })
-          this.movieList = results
-        })
-        .catch( err => {
-          console.log(err)
-        })
-    },
+      if (textInput) {
 
-    onClickItem (movie) {
-      // TMDB 예고편 정보 확인
-      this.searchTMDB('movie', `${movie.id}/videos`)
-        .then( () => {
-          this.selectedMovie = movie
-        })
-        .catch( err => {
-          console.log(err)
-        })
+        const params = {
+          region: 'KR',
+          language: 'ko',
+          query: textInput
+        }
+        
+        // TMDB 검색
+        this.searchTMDB('search', 'movie', params)
+          .then( res => {
+            // console.log(res)
+            const results = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
+            let idx = 0
+            res.data.results.forEach(movie => {
+              if (movie.poster_path) {
+                results[idx] = movie
+                idx += 1
+              }
+            })
+            this.movieList = results
+          })
+          .catch( err => {
+            console.log(err)
+          })
+
+      } else {
+        this.movieList = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
+      }
     },
     
     async searchTMDB (category, feature, params) {
