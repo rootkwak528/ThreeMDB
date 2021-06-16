@@ -3,10 +3,10 @@
   <div 
 
     :id   ="cardId"
-    :class="{ card: likedMovie === '', 
-              cardImage: likedMovie !== '' }"
+    :class="{ card: !likedMovie, 
+              cardImage: likedMovie }"
     class ="d-flex justify-content-center align-items-center"
-    @click="clickLikedCard"
+    @click="removeCard(likedMovie)"
 
   >
     <span class="liked-tooltip-text"><b>{{ likedMovie.title }}</b></span>
@@ -20,22 +20,24 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'TmdbLikedItem',
   props: {
     likedMovie: [Object, String],
     itemIdx: Number,
   },
+  
+  methods: {
+    ...mapActions([
+      'removeCard',
+    ])
+  },
 
   updated () {
     const card = document.querySelector(`#${ this.cardId }`)
     card.style.backgroundImage = this.posterPath ? `url(${ this.posterPath })` : 'none'
-  },
-  
-  methods: {
-    clickLikedCard () {
-      this.$emit('clickLikedCard', this.likedMovie)
-    }
   },
 
   computed: {
@@ -44,8 +46,8 @@ export default {
     },
 
     cardId () {
-      return `likedCard${ this.itemIdx }`
-    }
+      return `liked-card-${ this.itemIdx }`
+    },
   },
 }
 </script>

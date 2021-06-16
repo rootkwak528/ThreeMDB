@@ -1,19 +1,14 @@
 <template>
 
   <div
-
     id   ="card-list" 
     class="d-flex justify-content-center row g-4 mx-5 pb-5"
-
   >
     <TmdbSearchItem
-
-      v-for     ="(movie, idx) in movieList"
-      :movie    =movie
-      :itemIdx  =idx
-      :key      =idx
-      @clickCard="clickCard"
-
+      v-for   ="(movie, idx) in searchResults"
+      :movie  =movie
+      :itemIdx=idx
+      :key    =idx
     />
   </div>
 
@@ -21,6 +16,7 @@
 
 <script>
 import TmdbSearchItem from '@/components/TmdbSearch/TmdbSearchItem'
+import { mapState } from 'vuex'
 
 export default {
   name: 'TmdbSearchList',
@@ -28,16 +24,11 @@ export default {
     TmdbSearchItem
   },
 
-  props: {
-    movieList: [String, Array]
+  computed: {
+    ...mapState([
+      'searchResults',
+    ])
   },
-
-  methods: {
-    clickCard ( movie ) {
-      // console.log('mid recieve')
-      this.$emit('clickCard', movie)
-    },
-  }
 }
 </script>
 

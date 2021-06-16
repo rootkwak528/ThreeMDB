@@ -2,38 +2,46 @@
   <div class="mx-3">
 
     <input 
-      type="text" 
-      @input="onInputText"
-      id="input-box"
+      id         ="input-box"
+      type       ="text"
+      v-model    ="tmpSearchInput"
       placeholder="좋아하는 영화 제목을 입력해주세요."
+      @input     ="setSearchInput(tmpSearchInput)"
     >
 
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'TmdbSearchBox',
-  props: {
-    searchInit: Boolean
+
+  data () {
+    return {
+      tmpSearchInput: '',
+    }
   },
+
+  computed: {
+    ...mapState([
+      'searchInput',
+    ])
+  },
+
   methods: {
-    onInputText (event) {
-      const searchKeyword = event.target.value.trim()
-      this.$emit('onTmdbTextInput', searchKeyword)
-    },
-    onResetText () {
-      const inputBox = document.querySelector('#input-box')
-      inputBox.value = ''
-    }
+    ...mapActions([
+      'setSearchInput',
+    ]),
   },
+
   watch: {
-    searchInit (val) {
-      if (val) {
-        this.onResetText()
-        this.$emit('textResetComplete')
+    searchInput (val) {
+      if (!val) {
+        this.tmpSearchInput = val
       }
-    }
+    },
   }
 }
 </script>

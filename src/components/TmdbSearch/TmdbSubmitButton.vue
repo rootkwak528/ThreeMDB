@@ -1,9 +1,9 @@
 <template>
   <div class="mx-3">
 
-    <button 
-      id="submit-button"
-      @click="clickSubmit"
+    <button
+      id    ="submit-button"
+      @click="recommend"
     >
       영화 추천 페이지로 이동!
     </button>
@@ -17,7 +17,7 @@ export default {
 
   methods: {
     clickSubmit () {
-      this.$emit('clickSubmit')
+      this.$router.push({ name: 'MovieRecommend' })
     },
   },
 }
