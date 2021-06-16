@@ -5,6 +5,10 @@
 
       <h1 class="mb-3">Signup</h1>
 
+      <div v-if="errors" class="fade-in mb-3">
+        <span>{{ errors }}</span>
+      </div>
+
       <div class="form-group mb-3">
         <label for="username">사용자 이름: </label>
         <input class="form-control" type="text" id="username" v-model="credentials.username">
@@ -23,10 +27,6 @@
       </div>
 
       <button class="btn btn-outline-secondary mb-3" @click="signup(credentials)">회원가입</button>
-
-      <div v-if="errors" class="fade-in">
-        <span>{{ errors }}</span>
-      </div>
 
     </div>
   </div>
