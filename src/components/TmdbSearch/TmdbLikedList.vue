@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import TmdbLikedItem from '@/components/Tmdb/TmdbLikedItem'
+import TmdbLikedItem from '@/components/TmdbSearch/TmdbLikedItem'
 
 export default {
   name: 'TmdbLikedList',
