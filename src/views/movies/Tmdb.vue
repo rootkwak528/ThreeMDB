@@ -12,13 +12,12 @@
       <div v-if="likedMovies[2] === ''">
         <!-- <TmdbLikedMovies/> -->
         <TmdbSearchBox
-          @tmdb-text-input="onTmdbTextInput"
           :searchInit="searchInit"
+          @onTmdbTextInput="onTmdbTextInput"
           @textResetComplete="onTextResetComplete"
         />
         <TmdbSearchList
           :movieList="movieList"
-          @on-click-item="onClickItem"
           @clickCard="initSearchBoxAndList"
         />
       </div>
@@ -109,40 +108,35 @@ export default {
     },
     
     onTmdbTextInput (textInput) {
-      const params = {
-        region: 'KR',
-        language: 'ko',
-        query: textInput
-      }
-      
-      // TMDB 검색
-      this.searchTMDB('search', 'movie', params)
-        .then( res => {
-          // console.log(res)
-          const results = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
-          let idx = 0
-          res.data.results.forEach(movie => {
-            if (movie.poster_path) {
-              results[idx] = movie
-              idx += 1
-            }
-          })
-          this.movieList = results
-        })
-        .catch( err => {
-          console.log(err)
-        })
-    },
+      if (textInput) {
 
-    onClickItem (movie) {
-      // TMDB 예고편 정보 확인
-      this.searchTMDB('movie', `${movie.id}/videos`)
-        .then( () => {
-          this.selectedMovie = movie
-        })
-        .catch( err => {
-          console.log(err)
-        })
+        const params = {
+          region: 'KR',
+          language: 'ko',
+          query: textInput
+        }
+        
+        // TMDB 검색
+        this.searchTMDB('search', 'movie', params)
+          .then( res => {
+            // console.log(res)
+            const results = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
+            let idx = 0
+            res.data.results.forEach(movie => {
+              if (movie.poster_path) {
+                results[idx] = movie
+                idx += 1
+              }
+            })
+            this.movieList = results
+          })
+          .catch( err => {
+            console.log(err)
+          })
+
+      } else {
+        this.movieList = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
+      }
     },
     
     async searchTMDB (category, feature, params) {
