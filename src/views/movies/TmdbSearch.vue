@@ -61,6 +61,17 @@ export default {
     TmdbSubmitButton,
   },
 
+  created () {
+    const token = localStorage.getItem('jwt')
+    
+    if ( !token ) {
+
+      localStorage.setItem('msg', '먼저 로그인을 해야 합니다.')
+      this.$router.push({ name: 'Login' })
+
+    }
+  },
+
   methods: {
     initSearchBoxAndList (likedMovie) {
       let newLikedMovies = ['', '', '',]
@@ -100,7 +111,7 @@ export default {
     clickSubmit () {
       const likedMoviesJson = JSON.stringify(this.likedMovies)
       localStorage.setItem('likedMovies', likedMoviesJson)
-      this.$router.push('movies/recommend')
+      this.$router.push({ name: 'MovieRecommend' })
     },
 
     onTextResetComplete () {

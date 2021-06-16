@@ -15,11 +15,15 @@
         <input class="form-control" type="password" id="password" v-model="credentials.password" @keyup.enter="login">
       </div>
 
-      <button class="btn btn-outline-secondary" @click="login">로그인</button>
+      <button class="btn btn-outline-secondary mb-3" @click="login">로그인</button>
 
-      <div v-if="errors" class="fade-in">
+      <div v-if="errors" class="fade-in mb-3">
         <span>{{ errors }}</span>
       </div>
+
+      <p class="signup-info">
+        아직 회원이 아니신가요? <span class="link" @click="toSignup">회원가입</span>
+      </p>
 
     </div>
     
@@ -42,8 +46,21 @@ export default {
       errors: null,
     }
   },
+
+  created () {
+    
+    const msg = localStorage.getItem( 'msg' )
+    if ( msg ) {
+
+      localStorage.removeItem( 'msg' )
+      this.errors = msg
+
+    }
+
+  },
+
   methods: {
-    login: function () {
+    login () {
       this.errors = null
       
       axios({
@@ -55,12 +72,18 @@ export default {
           console.log(res)
           localStorage.setItem('jwt', res.data.token)
           this.$emit('login')
-          this.$router.push({ name: 'Tmdb' })
+          this.$router.push({ name: 'TmdbSearch' })
         })
         .catch(err => {
           console.log(err)
           this.errors = 'ID와 비밀번호를 확인해주세요.'
         })
+    },
+
+    toSignup () {
+
+      this.$router.push({ name: 'Signup' })
+
     }
   }
 }
@@ -88,11 +111,22 @@ export default {
   width: 20vw;
 }
 
+.signup-info {
+  font-size: 0.8rem;
+}
+
+.link {
+  color: #41B883;
+}
+
+.link:hover {
+  cursor: pointer;
+}
+
 .fade-in {
   animation: fadeIn ease 1s;
   color: crimson;
   font-size: 0.8rem;
-  margin-top: 1rem;
 }
 
 @keyframes fadeIn{
