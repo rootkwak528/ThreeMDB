@@ -46,13 +46,13 @@ movies 테이블이 사용되는 순간은 사용자가 별점을 매기거나 �
 
 따라서 사이트의 영화 상세 페이지에 접속하는 순간 DB에서 movie 레코드를 불러오거나 생성합니다.
 
-
+<br>
 
 > 영화 검색과 추천 기능은 [**TMDB API**](https://developers.themoviedb.org/3)를 사용했다.
 >
 > [![tmdb-logo](https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg)](https://developers.themoviedb.org/3)
 
-
+<br>
 
 아래는 관련된 [View 함수 코드](https://github.com/rootkwak528/BE-ssafy-final-pjt/blob/master/movies/views.py)입니다.
 
@@ -119,7 +119,7 @@ Camera는 실시간으로 Scene을 촬영하는 객체로서 Controller를 통�
 
 마지막으로 Renderer는 Camera가 촬영한 장면을 클라이언트 화면에 출력하는 객체입니다.
 
-
+<br>
 
 아래는 프로젝트에 포함된 [three.js 코드](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)의 큰 흐름을 보여주는 의사코드입니다.
 
@@ -161,21 +161,19 @@ function animate () {
 
 이는 UX 측면에서는 사용자가 탐색을 반복해야 하기 때문에 낭비를 발생시키는 큰 문제였습니다.
 
-
+<br>
 
 데이터를 유지하려면 두가지 옵션이 가능해보였습니다.
 
 클라이언트에 임시로 데이터를 저장하거나, 서버에 데이터를 저장하는 방식이었습니다.
 
-하지만 3차원 Scene을 모두 유지하려면 문자열로 1천만~ 수억 사이즈였는데, 클라이언트 로컬 스토리지 최대 사이즈인 5MB를 초과하는 사이즈였습니다.
+하지만 3차원 Scene을 모두 유지하려면 문자열로 1천만~ 수억 사이즈였는데, 클라이언트 로컬 스토리지 최대 사이즈인 5MB를 초과하는 사이즈였습니다. (출처 : https://web.dev/storage-for-the-web/)
 
 또한 서버에 비정형 데이터를 저장하려면 SQLite 외에 새로운 DB를 추가해야 하고, 상세 페이지에 방문할 때마다 수십~수백 MB의 큰 데이터를 주고받아야 한다는 문제점이 있었습니다.
 
-
+<br>
 
 결론적으로 사용자 입장에서도 익숙한 모달창으로 상세 페이지를 구현해, url 이동 없이 Scene 데이터를 보존할 수 있었습니다.
-
-
 
 ![image-20210527193220115](README.assets/image-20210527193220115.png)
 
@@ -230,6 +228,6 @@ three.js의 잘 갖춰진 공식 문서와 예제들을 참고하여 아이디�
 
 다음에는 쉐이더와 후처리 기능을 더 발전시켜 구현하고 싶다.
 
-
+<br>
 
 Fin.
