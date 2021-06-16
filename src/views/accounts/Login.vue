@@ -5,10 +5,6 @@
 
       <h1 class="mb-3">Login</h1>
 
-      <div v-if="errors" class="fade-in mb-3">
-        <span>{{ errors }}</span>
-      </div>
-
       <div class="form-group mb-3">
         <label for="username">사용자 이름: </label>
         <input class="form-control" type="text" id="username" v-model="credentials.username">
@@ -16,14 +12,18 @@
 
       <div class="form-group mb-4">
         <label for="password">비밀번호: </label>
-        <input class="form-control" type="password" id="password" v-model="credentials.password" @keyup.enter="login">
+        <input class="form-control" type="password" id="password" v-model="credentials.password" @keyup.enter="login(credentials)">
       </div>
 
-      <button class="btn btn-outline-secondary mb-3" @click="login">로그인</button>
+      <button class="btn btn-outline-secondary mb-3" @click="login(credentials)">로그인</button>
 
-      <p class="signup-info">
+      <p class="signup-info mb-3">
         아직 회원이 아니신가요? <span class="link" @click="toSignup">회원가입</span>
       </p>
+
+      <div v-if="errors" class="fade-in mb-3">
+        <span>{{ errors }}</span>
+      </div>
 
     </div>
     
@@ -31,61 +31,43 @@
 </template>
 
 <script>
-import axios from 'axios'
-
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Login',
-  data: function () {
+  data () {
     return {
       credentials: {
         username: null,
         password: null,
       },
-      errors: null,
+    }
+  },
+
+  computed: {
+    ...mapState([
+      'errors',
+    ]),
+  },
+
+  methods: {
+    ...mapActions([
+      'login',
+      'set_errors',
+    ]),
+
+    toSignup () {
+      this.$router.push({ name: 'Signup' })
     }
   },
 
   created () {
     
-    const msg = localStorage.getItem( 'msg' )
-    if ( msg ) {
-
-      localStorage.removeItem( 'msg' )
-      this.errors = msg
-
+    if ( this.errors !== '먼저 로그인을 해야 합니다.' ) {
+      this.set_errors( null )
     }
 
   },
-
-  methods: {
-    login () {
-      this.errors = null
-      
-      axios({
-        method: 'post',
-        url: `${SERVER_URL}/accounts/api-token-auth/`,
-        data: this.credentials,
-      })
-        .then(res => {
-          console.log(res)
-          localStorage.setItem('jwt', res.data.token)
-          this.$emit('login')
-          this.$router.push({ name: 'TmdbSearch' })
-        })
-        .catch(err => {
-          console.log(err)
-          this.errors = 'ID와 비밀번호를 확인해주세요.'
-        })
-    },
-
-    toSignup () {
-
-      this.$router.push({ name: 'Signup' })
-
-    }
-  }
 }
 </script>
 

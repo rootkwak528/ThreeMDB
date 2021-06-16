@@ -40,6 +40,8 @@ import TmdbSearchBox from '@/components/TmdbSearch/TmdbSearchBox'
 import TmdbSearchList from '@/components/TmdbSearch/TmdbSearchList'
 import TmdbSubmitButton from '@/components/TmdbSearch/TmdbSubmitButton'
 
+import { mapActions } from 'vuex'
+
 const API_URL = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY
 
@@ -66,13 +68,17 @@ export default {
     
     if ( !token ) {
 
-      localStorage.setItem('msg', '먼저 로그인을 해야 합니다.')
+      this.set_errors( '먼저 로그인을 해야 합니다.' )
       this.$router.push({ name: 'Login' })
 
     }
   },
 
   methods: {
+    ...mapActions([
+      'set_errors',
+    ]),
+
     initSearchBoxAndList (likedMovie) {
       let newLikedMovies = ['', '', '',]
       for (let i=0; i<3; i++) {
