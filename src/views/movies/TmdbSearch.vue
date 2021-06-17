@@ -36,6 +36,13 @@ export default {
     ]),
   },
 
+  methods: {
+    ...mapActions([
+      'setErrors',
+      'resetSearch'
+    ]),
+  },
+
   components: {
     TmdbSearchBox,
     TmdbSearchList,
@@ -55,13 +62,6 @@ export default {
       this.resetSearch()
     }
   },
-
-  methods: {
-    ...mapActions([
-      'setErrors',
-      'resetSearch'
-    ]),
-  }
 }
 </script>
 

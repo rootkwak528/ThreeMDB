@@ -41,6 +41,8 @@ import { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader.js';
 // import results from '@/data/movies' // this is for test
 import axios from 'axios'
 
+import { mapState } from 'vuex'
+
 const TMDB_API_KEY = process.env.VUE_APP_TMDB_API_KEY
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
@@ -73,11 +75,18 @@ export default {
     DetailCard,
   },
 
+  computed: {
+    ...mapState([
+      'likedMovies',
+      'movieDetail',
+    ]),
+  },
+
   data () {
 
     return {
       // index 페이지에서 받아오는 데이터
-      likedMovies: [],
+      // likedMovies: [],
 
       // three.js
       isDetail: false,
@@ -91,8 +100,8 @@ export default {
   mounted () {
 
     // index 페이지에서 받아오는 데이터
-    const likedMoviesJson = localStorage.getItem('likedMovies')
-    this.likedMovies = JSON.parse(likedMoviesJson)
+    // const likedMoviesJson = localStorage.getItem('likedMovies')
+    // this.likedMovies = JSON.parse(likedMoviesJson)
 
     // console.log(this.likedMovies)
 

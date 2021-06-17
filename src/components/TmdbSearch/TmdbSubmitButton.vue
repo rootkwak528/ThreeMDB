@@ -16,7 +16,7 @@ export default {
   name: 'TmdbSubmitButton',
 
   methods: {
-    clickSubmit () {
+    recommend () {
       this.$router.push({ name: 'MovieRecommend' })
     },
   },
