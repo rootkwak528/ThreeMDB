@@ -25,7 +25,7 @@ const routes = [
     component: Login,
   },
   {
-    path: '/movies/recommend',
+    path: '/movies',
     name: 'MovieRecommend',
     component: MovieRecommend,
   },

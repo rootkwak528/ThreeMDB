@@ -8,15 +8,22 @@ import SERVER from '@/api/drf.js'
 
 const API_URL = 'https://api.themoviedb.org/3'
 const API_KEY = process.env.VUE_APP_TMDB_API_KEY
+const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    // accounts
     errors: null,
+    
+    // tmdb search
     likedMovies: ['', '', '', ],
     searchInput: '',
     searchResults: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ],
+
+    // recommend - three.js
+    movieRecommends: null,
     movieDetail: null,
   },
 
@@ -94,7 +101,16 @@ export default new Vuex.Store({
       state.searchInput = ''
       state.searchResults = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
       state.likedMovies = ['', '', '', ]
-    }
+    },
+
+    // recommend - three.js
+    SET_MOVIE_RECOMMENDS (state, movieRecommends) {
+      state.movieRecommends = movieRecommends
+    },
+
+    SET_MOVIE_DETAIL (state, movieDetail) {
+      state.movieDetail = movieDetail
+    },
   },
 
   actions: {
@@ -205,6 +221,44 @@ export default new Vuex.Store({
 
     resetSearch ({ commit }) {
       commit('RESET_SEARCH')
+    },
+
+    // recommend - three.js
+    async getRecommends ({ commit }, movieId) {
+      const url = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
+
+      await axios({
+        url: url,
+        method: 'get',
+      })
+        .then( res => {
+          if (res.data.results) {
+            commit('SET_MOVIE_RECOMMENDS', res.data.results)
+          } else {
+            commit('SET_MOVIE_RECOMMENDS', null)
+          }
+        })
+        .catch( err => {
+          console.log(err)
+          commit('SET_MOVIE_RECOMMENDS', null)
+        })
+    },
+
+    async getDetail ({ commit }, movie ){
+      const url = `${SERVER_URL}/movies/`
+
+      await axios({
+        url: url,
+        method: 'post',
+        data: movie,
+      })
+        .then( res => {
+          commit('SET_MOVIE_DETAIL', res.data)
+        })
+        .catch( err => {
+          console.log( err )
+          commit('SET_MOVIE_DETAIL', null)
+        })
     },
   },
 
