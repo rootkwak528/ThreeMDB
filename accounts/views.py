@@ -9,6 +9,9 @@ def signup(request):
     username = request.data.get('username')
     password = request.data.get('password')
     password_confirmation = request.data.get('passwordConfirmation')
+
+    if not username:
+        return Response({'error': 'ID를 입력해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
 	
     if '0' <= username[0] <= '9':
         return Response({'error': 'ID는 숫자로 시작할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -24,6 +27,12 @@ def signup(request):
             ch == '_'):
             return Response({'error': 'ID는 4~12자의 영문, 숫자, _로만 작성될 수 있습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    if not password:
+        return Response({'error': '비밀번호를 입력해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
+	
+    if not password_confirmation:
+        return Response({'error': '비밀번호 확인을 입력해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
+	
     if password != password_confirmation:
         return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
     

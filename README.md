@@ -4,7 +4,7 @@
 >
 > 프로젝트 기간 : 2021.05.20 ~ 2021.05.28
 
-
+<br>
 
 ## Table of Contents
 
@@ -13,10 +13,11 @@
 3. [특징 a) ERD 및 movie 데이터](#특징-a-ERD-및-movie-데이터)
 4. [특징 b) three.js](#특징-b-threejs)
 5. [특징 c) 모달 창으로 구현한 영화 상세 페이지](#특징-c-모달-창으로-구현한-영화-상세-페이지)
-6. [업무 분담](#업무-분담)
-7. [느낀점](#느낀점)
+6. [특징 d) async-await 비동기 처리](#특징-d-async-await-비동기-처리)
+7. [업무 분담](#업무-분담)
+8. [느낀점](#느낀점)
 
-<br>
+<br><br>
 
 ## 개발환경
 
@@ -25,7 +26,7 @@
 * Python 3.8.6
 * Node.js 14.16.1
 
-<br>
+<br><br>
 
 ## 주요 프레임워크 및 라이브러리
 
@@ -34,7 +35,7 @@
 * Vue.js 2.6.11
 * three.js 0.128.0
 
-<br>
+<br><br>
 
 ## 특징 a) ERD 및 movie 데이터
 
@@ -46,13 +47,13 @@ movies 테이블이 사용되는 순간은 사용자가 별점을 매기거나 �
 
 따라서 사이트의 영화 상세 페이지에 접속하는 순간 DB에서 movie 레코드를 불러오거나 생성합니다.
 
-<br>
+<br><br>
 
 > 영화 검색과 추천 기능은 [**TMDB API**](https://developers.themoviedb.org/3)를 사용했습니다.
 >
 > [![tmdb-logo](https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg)](https://developers.themoviedb.org/3)
 
-<br>
+<br><br>
 
 아래는 관련된 [View 함수 코드](https://github.com/rootkwak528/BE-ssafy-final-pjt/blob/master/movies/views.py)입니다.
 
@@ -101,7 +102,7 @@ def movie_create(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 ```
 
-<br>
+<br><br>
 
 ## 특징 b) three.js
 
@@ -119,13 +120,14 @@ Camera는 실시간으로 Scene을 촬영하는 객체로서 Controller를 통�
 
 마지막으로 Renderer는 Camera가 촬영한 장면을 클라이언트 화면에 출력하는 객체입니다.
 
-<br>
+<br><br>
 
 아래는 프로젝트에 포함된 [three.js 코드](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)의 큰 흐름을 보여주는 의사코드입니다.
 
 ``` 
 // three.js 초기화
 function init () {
+
 	씬 생성
 	카메라 생성 및 씬에 추가
 	렌더러 생성
@@ -139,17 +141,20 @@ function init () {
 	씬에 컨트롤러 추가
 	
 	animate()
+	
 }
 
 // three.js 애니메이션 생성
 // 비동기로 작동하는 requestAnimationFrame()를 재귀적으로 호출하기 때문에 (이론 상 60 calls/s)
 // 사용자 인풋이나 데이터 변화를 거의 실시간으로 반영할 수 있습니다.
 function animate () {
+
 	requestAnimationFrame( animate )
+	
 }
 ```
 
-<br>
+<br><br>
 
 ## 특징 c) 모달 창으로 구현한 영화 상세 페이지
 
@@ -161,7 +166,7 @@ function animate () {
 
 이는 UX 측면에서는 사용자가 탐색을 반복해야 하기 때문에 낭비를 발생시키는 큰 문제였습니다.
 
-<br>
+<br><br>
 
 데이터를 유지하려면 두가지 옵션이 가능해보였습니다.
 
@@ -171,7 +176,7 @@ function animate () {
 
 또한 서버에 비정형 데이터를 저장하려면 SQLite 외에 새로운 DB를 추가해야 하고, 상세 페이지에 방문할 때마다 수십~수백 MB의 큰 데이터를 주고받아야 한다는 문제점이 있었습니다.
 
-<br>
+<br><br>
 
 결론적으로 사용자 입장에서도 익숙한 모달창으로 상세 페이지를 구현해, url 이동을 없애고 Scene 데이터를 보존했습니다.
 
@@ -181,7 +186,83 @@ function animate () {
 >
 > 모달창으로 바꾸고 또 좋았던 점은 연습 삼아 구현한 후처리 기능을 포함시킬 수 있었다는 점입니다. 덕분에 모달창 뒤의 3차원 영화 추천 목록을 다크모드처럼 표현해 화면 전환 효과를 더 극대화했습니다.
 
+<br><br>
+
+## 특징 d) async-await 비동기 처리
+
+**axios**는 비동기적으로 요청과 응답을 처리해주는 **Promise** 기반의 함수로, 일반적인 경우라면 **axios**를 도입하는 것만으로 비동기를 처리하기 부족함이 없을 것입니다.
+
+하지만 이 프로젝트에서는 **vuex**와 **three.js**를 도입했기 때문에 **axios**와 데이터가 서로 다른 파일에 위치하면서 작동이 틀어졌습니다. **axios**는 **vuex**의 `index.js` 에서 실행됐지만, 바꿔야 하는 데이터는 추천 컴포넌트 파일 내에 위치하고 있습니다.
+
 <br>
+
+<br>
+
+다른 컴포넌트에서 사용하는 일이 없기 때문에 데이터를 **state**로 처리하는 것은 비효율적이었습니다. 따라서 기존의 코드도 헤치지 않고 간단히 **async-await**로 **dispatch** 코드를 비동기 처리하여 문제를 해결했습니다.
+
+이 예시 외에도 다양한 코드에서 이와 같이 비동기 처리를 실시해 오류를 피해갈 수 있었습니다.
+
+> ![image-20210617164711965](README.assets/image-20210617164711965.png)
+>
+> **axios**만 사용하면, 응답을 받기 전에 데이터를 확인하고 3D 씬을 구성하기 때문에 추천 목록이 표시되지 않습니다.
+
+> ![image-20210617164612300](README.assets/image-20210617164612300.png)
+>
+> **async await** 코드를 추가하자, HTTP 응답과 데이터 확인이 비동기적으로 일어나 3D 씬이 올바르게 생성되었습니다.
+
+<br><br>
+
+아래는 관련된 [컴포넌트](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)와 [vuex](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/store/index.js)의 코드 일부분입니다.
+
+```js
+// FE/src/views/movies/MovieRecommend.vue
+
+async recommend ( movieId, position ) {
+
+  await this.getRecommends( movieId )
+
+  if ( this.movieRecommends ) {
+
+  	this.updateGeometriesToScene( this.movieRecommends, position )
+    
+  }
+}
+```
+
+```js
+// FE/src/store.index.js
+
+async getRecommends ({ commit }, movieId) {
+  
+  const url = `https://api.themoviedb.org/...`
+  await axios({
+    
+    url: url,
+    method: 'get',
+    
+  })
+    .then( res => {
+    
+    if (res.data.results) {
+      
+      commit('SET_MOVIE_RECOMMENDS', res.data.results)
+      
+    } else {
+      
+      commit('SET_MOVIE_RECOMMENDS', null)
+      
+    }
+  })
+    .catch( err => {
+    
+    console.log(err)
+    commit('SET_MOVIE_RECOMMENDS', null)
+    
+  })
+},
+```
+
+<br><br>
 
 ## 업무 분담
 
@@ -190,7 +271,7 @@ function animate () {
 | 팀장 |  곽호근   | **three.js로 3차원 영화 추천 페이지 구현**<br/>- 영화 카드 제작<br/>- 카드 Texture에 영화 포스터 매핑<br/>- 3차원 상에 카드 배치, 연관성 높은 영화는 가깝게<br/>- 카드 마다 영화 데이터 할당<br/>- 이미지 후처리<br/>**배포** |
 | 팀원 |  정훈규   | DB 모델 구축<br/>계정 인증 기능 구현<br/>영화 검색 기능 구현<br/>영화 선택 페이지 구현<br/> 영화 상세 페이지 구현<br/>게시글 CRUD 구현<br/>댓글 CRUD 구현 |
 
-<br>
+<br><br>
 
 ## 느낀점
 
@@ -204,7 +285,7 @@ function animate () {
 
 물론 세세한 부분에서 예상치 못한 변수 때문에 조바심을 느끼며, 밤까지 오버페이스를 하는 경우도 종종 있었다. 프로젝트 기간이 더 길어진다면 사전 조사를 더 철저히 실시하고, 예상치 못한 상황을 고려한 일정 상의 버퍼를 잡아야겠다.
 
-<br>
+<br><br>
 
 ### 처음으로 프론트와 백엔드를 나눠서 배포했다.
 
@@ -214,7 +295,7 @@ function animate () {
 
 이번에는 프론트엔드 서버를 Netlify에서, 백엔드 서버를 Heroku에서 배포했는데, 다음에는 Docker를 이용해 AWS로 배포해보겠다.
 
-<br>
+<br><br>
 
 ### Oh, my three.js.
 
@@ -228,6 +309,6 @@ three.js의 잘 갖춰진 공식 문서와 예제들을 참고하여 아이디�
 
 다음에는 쉐이더와 후처리 기능을 더 발전시켜 구현하고 싶다.
 
-<br>
+<br><br>
 
 Fin.

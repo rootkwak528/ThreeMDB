@@ -7,5 +7,4 @@ class Movie(models.Model):
     overview = models.TextField()
     poster_path = models.CharField(max_length=200)
     youtube_trailer_url = models.CharField(max_length=200)
-    # DateField? DateTimeField?
     release_date = models.DateField()

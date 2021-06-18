@@ -31,6 +31,12 @@ def movie_create(request):
             'release_date': request.data.get('release_date'),
             'poster_path': request.data.get('poster_path'),
         }
+
+        if not movie_data['overview']:
+            movie_data['overview'] = 'no overview'
+        
+        if not movie_data['release_date']:
+            movie_data['release_date'] = '1900-01-01'
         
         serializer = MovieSerializer(data=movie_data)
         if serializer.is_valid(raise_exception=True):
