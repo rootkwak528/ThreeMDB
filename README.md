@@ -47,13 +47,13 @@ movies 테이블이 사용되는 순간은 사용자가 별점을 매기거나 �
 
 따라서 사이트의 영화 상세 페이지에 접속하는 순간 DB에서 movie 레코드를 불러오거나 생성합니다.
 
-<br><br>
+<br>
 
 > 영화 검색과 추천 기능은 [**TMDB API**](https://developers.themoviedb.org/3)를 사용했습니다.
 >
 > [![tmdb-logo](https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg)](https://developers.themoviedb.org/3)
 
-<br><br>
+<br>
 
 아래는 관련된 [View 함수 코드](https://github.com/rootkwak528/BE-ssafy-final-pjt/blob/master/movies/views.py)입니다.
 
@@ -120,7 +120,7 @@ Camera는 실시간으로 Scene을 촬영하는 객체로서 Controller를 통�
 
 마지막으로 Renderer는 Camera가 촬영한 장면을 클라이언트 화면에 출력하는 객체입니다.
 
-<br><br>
+<br>
 
 아래는 프로젝트에 포함된 [three.js 코드](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)의 큰 흐름을 보여주는 의사코드입니다.
 
@@ -166,7 +166,7 @@ function animate () {
 
 이는 UX 측면에서는 사용자가 탐색을 반복해야 하기 때문에 낭비를 발생시키는 큰 문제였습니다.
 
-<br><br>
+<br>
 
 데이터를 유지하려면 두가지 옵션이 가능해보였습니다.
 
@@ -176,9 +176,11 @@ function animate () {
 
 또한 서버에 비정형 데이터를 저장하려면 SQLite 외에 새로운 DB를 추가해야 하고, 상세 페이지에 방문할 때마다 수십~수백 MB의 큰 데이터를 주고받아야 한다는 문제점이 있었습니다.
 
-<br><br>
+<br>
 
 결론적으로 사용자 입장에서도 익숙한 모달창으로 상세 페이지를 구현해, url 이동을 없애고 Scene 데이터를 보존했습니다.
+
+<br>
 
 ![image-20210527193220115](README.assets/image-20210527193220115.png)
 
@@ -196,21 +198,21 @@ function animate () {
 
 <br>
 
-<br>
-
 다른 컴포넌트에서 사용하는 일이 없기 때문에 데이터를 **state**로 처리하는 것은 비효율적이었습니다. 따라서 기존의 코드도 헤치지 않고 간단히 **async-await**로 **dispatch** 코드를 비동기 처리하여 문제를 해결했습니다.
 
 이 예시 외에도 다양한 코드에서 이와 같이 비동기 처리를 실시해 오류를 피해갈 수 있었습니다.
 
-> ![image-20210617164711965](README.assets/image-20210617164711965.png)
->
+![image-20210617164711965](README.assets/image-20210617164711965.png)
+
 > **axios**만 사용하면, 응답을 받기 전에 데이터를 확인하고 3D 씬을 구성하기 때문에 추천 목록이 표시되지 않습니다.
 
-> ![image-20210617164612300](README.assets/image-20210617164612300.png)
->
+<br>
+
+![image-20210617164612300](README.assets/image-20210617164612300.png)
+
 > **async await** 코드를 추가하자, HTTP 응답과 데이터 확인이 비동기적으로 일어나 3D 씬이 올바르게 생성되었습니다.
 
-<br><br>
+<br>
 
 아래는 관련된 [컴포넌트](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)와 [vuex](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/store/index.js)의 코드 일부분입니다.
 
