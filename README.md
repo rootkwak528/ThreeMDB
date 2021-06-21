@@ -3,6 +3,8 @@
 > 프로젝트 개요 : SSAFY 1학기 Final 관통 프로젝트
 >
 > 프로젝트 기간 : 2021.05.20 ~ 2021.05.28
+>
+> 코드수정 기간 : 2021.06.16 ~ (현재 진행중)
 
 <br>
 
@@ -41,11 +43,14 @@
 
 ![ERD](./README.assets/image-20210527180344809.png)
 
-영화 검색과 추천은 모두 **TMDB API**를 사용하기 때문에 movies 테이블은 최초에 빈 테이블입니다.
+영화 검색과 추천은 모두 **TMDB API**를 사용하기 때문에 **movies 테이블은 최초에 빈 테이블입니다.**
 
 movies 테이블이 사용되는 순간은 사용자가 별점을 매기거나 리뷰를 남기는 등의 행위를 할 때입니다.
 
-따라서 사이트의 영화 상세 페이지에 접속하는 순간 DB에서 movie 레코드를 불러오거나 생성합니다.
+**따라서 사이트의 영화 상세 페이지에 접속하는 순간, 클라이언트는 영화 정보를 request body에 담아 서버에 조회 요청을 보내고, 서버는 상황에 따라 두가지 다른 경로로 응답을 보내옵니다.**
+
+1. 만약 DB에 해당 영화의 레코드가 있다면, 바로 DB에서 레코드를 불러와 응답 메시지에 담아 전송합니다.
+2. 하지만 DB에 해당 영화의 레코드가 없다면, 먼저 TMDB 서버에 영화 데이터를 요청하고, 응답 받은 데이터를 DB에 저장하고 동시에 DB에 저장한 데이터를 응답 메시지에 담아 전송합니다.
 
 <br>
 
@@ -108,11 +113,11 @@ def movie_create(request):
 
 [![three.js-logo](https://miro.medium.com/max/724/1*aDcnXab1QC_5KF8JUxDEYA.png)](https://threejs.org/)
 
-[three.js](https://threejs.org/)는 이름에 힌트가 있듯 3차원 공간을 표현하기 위한 JavaScript 3D library로, WebGL 엔진을 기반하여 만들어졌으며, 훌륭한 공식 문서와 다양한 레퍼런스를 갖고 있습니다.
+**[three.js](https://threejs.org/)는 WebGL 엔진에 기반한 JavaScript 3D library로, 훌륭한 [공식 문서](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)와 [다양한 레퍼런스](https://threejs.org/examples/)를 갖고 있습니다.**
 
-3차원 공간을 구현하기 위해 일반적인 웹에서 사용되지 않는 개념들을 다수 포함하고 있습니다.
+three.js는 3차원 공간을 구현하기 위해 일반적인 웹에서 사용되지 않는 개념들을 다수 포함하고 있습니다.
 
-three.js는 객체지향적이며, 가장 주요한 세가지 객체는 Scene, Camera, Renderer입니다.
+라이브러리는 객체지향적으로 작성되었으며, 가장 주요한 세가지 객체는 Scene, Camera, Renderer입니다.
 
 먼저, Scene은 화면에 표시하고자 하는 모든 3차원 객체를 포함하는 객체입니다.
 
@@ -122,22 +127,26 @@ Camera는 실시간으로 Scene을 촬영하는 객체로서 Controller를 통�
 
 <br>
 
-아래는 프로젝트에 포함된 [three.js 코드](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)의 큰 흐름을 보여주는 의사코드입니다.
+아래는 본 프로젝트에서 작성된 **[three.js 코드](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)의 개략적 의사코드입니다.**
 
 ``` 
+init()
+
 // three.js 초기화
 function init () {
 
 	씬 생성
-	카메라 생성 및 씬에 추가
+	카메라 생성
 	렌더러 생성
 	
-	DOM에 렌더러 추가해서 출력
+	// 웹 화면에 출력하기 위함
+	DOM에 렌더러 추가
 	
-	씬에 조명 추가
-	씬에 메쉬 추가
+	조명 및 3D 메쉬 생성
+	씬에 조명 및 3D 메쉬 추가
 	
-  // 컨트롤러를 통해 사용자 인풋으로 카메라 위치 등을 제어
+  // 사용자 인풋에 반응하기 위함
+	컨트롤러 생성
 	씬에 컨트롤러 추가
 	
 	animate()
@@ -147,6 +156,7 @@ function init () {
 // three.js 애니메이션 생성
 // 비동기로 작동하는 requestAnimationFrame()를 재귀적으로 호출하기 때문에 (이론 상 60 calls/s)
 // 사용자 인풋이나 데이터 변화를 거의 실시간으로 반영할 수 있습니다.
+// - requestAnimationFrame()은 Web API의 내장함수입니다.
 function animate () {
 
 	requestAnimationFrame( animate )
@@ -162,7 +172,7 @@ function animate () {
 
 3차원 상의 영화 추천 목록을 돌아다니다 영화 카드를 클릭하면 상세 페이지로 넘어가는 방식이었습니다.
 
-그러나 이렇게 되면 상세 페이지에 방문했다 영화 추천 페이지로 되돌아올 때 3차원 Scene이 초기화되는 문제가 있었습니다.
+그러나 이렇게 되면 **상세 페이지에 방문했다 영화 추천 페이지로 되돌아올 때 3차원 Scene이 초기화되는 문제가 있었습니다.**
 
 이는 UX 측면에서는 사용자가 탐색을 반복해야 하기 때문에 낭비를 발생시키는 큰 문제였습니다.
 
@@ -178,7 +188,7 @@ function animate () {
 
 <br>
 
-결론적으로 사용자 입장에서도 익숙한 모달창으로 상세 페이지를 구현해, url 이동을 없애고 Scene 데이터를 보존했습니다.
+결론적으로 사용자 입장에서도 익숙한 **모달창으로 상세 페이지를 구현해, url 이동을 없애고 Scene 데이터를 보존했습니다.**
 
 <br>
 
