@@ -54,8 +54,8 @@ def movie_create(request):
                 Prefetch('reviews__comments', queryset=comments)
                 ).get(pk=movie[0].pk)
 
+            serializer = MovieSerializer(movie)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = MovieSerializer(movie)
-        return Response(serializer.data, status=status.HTTP_200_OK)
