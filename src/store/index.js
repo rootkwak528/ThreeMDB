@@ -175,24 +175,27 @@ export default new Vuex.Store({
     login ({ commit, dispatch }, credentials) {
       dispatch('setLoading', true)
       dispatch('setErrors', null)
+
+      setTimeout(function() {
+        axios({
+          url: SERVER.URL + SERVER.ROUTES.login,
+          method: 'post',
+          data: credentials,
+        })
+          .then(res => {
+            dispatch('setLoading', false)
+  
+            commit('SET_TOKEN', res.data.token)
+            router.push({ name: 'TmdbSearch' })
+          })
+          .catch(err => {
+            dispatch('setLoading', false)
+  
+            console.log(err)
+            dispatch('setErrors', 'ID와 비밀번호를 확인해주세요.')
+          })
+      }, 5000)
       
-      axios({
-        url: SERVER.URL + SERVER.ROUTES.login,
-        method: 'post',
-        data: credentials,
-      })
-        .then(res => {
-          dispatch('setLoading', false)
-
-          commit('SET_TOKEN', res.data.token)
-          router.push({ name: 'TmdbSearch' })
-        })
-        .catch(err => {
-          dispatch('setLoading', false)
-
-          console.log(err)
-          dispatch('setErrors', 'ID와 비밀번호를 확인해주세요.')
-        })
     },
 
     logout ({ commit }) {
