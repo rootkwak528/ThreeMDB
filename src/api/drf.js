@@ -5,6 +5,5 @@ export default {
   ROUTES: {
     signup: '/accounts/signup/',
     login: '/accounts/api-token-auth/',
-    todo: '/todos/',
   }
 }

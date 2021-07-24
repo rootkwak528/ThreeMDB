@@ -15,7 +15,6 @@
 
     <div v-if="isDetail">
       <DetailCard
-        :selectedMovie="selectedMovie"
         @close-detail="closeDetail"
       />
     </div>
@@ -24,6 +23,7 @@
 </template>
 
 <script>
+            // import axios from 'axios'
 import DetailCard from '@/components/Recommend/DetailCard'
 
 import * as THREE from 'three'
@@ -31,20 +31,16 @@ import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
 import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils'
 
 // post-processing
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 
-import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js';
-import { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader.js';
+import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js'
+import { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader.js'
 
 // import results from '@/data/movies' // this is for test
-import axios from 'axios'
 
-import { mapState } from 'vuex'
-
-const TMDB_API_KEY = process.env.VUE_APP_TMDB_API_KEY
-const SERVER_URL = process.env.VUE_APP_SERVER_URL
+import { mapActions, mapState } from 'vuex'
 
 // scene 변수
 let container
@@ -65,10 +61,6 @@ let ctrlDown = false
 // Fly Controls 변수
 const clock = new THREE.Clock()
 
-// style
-// const navbarDOM = document.querySelector('#nav')
-// const infoDOM = document.querySelector('#info')
-
 export default {
   name: 'MovieRecommend',
   components: {
@@ -78,6 +70,7 @@ export default {
   computed: {
     ...mapState([
       'likedMovies',
+      'movieRecommends',
       'movieDetail',
     ]),
   },
@@ -85,26 +78,16 @@ export default {
   data () {
 
     return {
-      // index 페이지에서 받아오는 데이터
-      // likedMovies: [],
-
       // three.js
       isDetail: false,
-      selectedMovie: null,
-      movieObject: {}, // this is for test
-      movieLength: 0,
+      movieObjects: {},
     }
 
   },
 
   mounted () {
 
-    // index 페이지에서 받아오는 데이터
-    // const likedMoviesJson = localStorage.getItem('likedMovies')
-    // this.likedMovies = JSON.parse(likedMoviesJson)
-
-    // console.log(this.likedMovies)
-
+    // 조작법 표시 info-bar
     const infobar = document.getElementById( 'info' )
     const infobarHeight = infobar.offsetHeight
     infobar.style.top = `${window.innerHeight - infobarHeight}px`
@@ -112,15 +95,24 @@ export default {
     // three.js
     this.main()
 
-    // console.log(this.likedMovies)
+    // 사용자가 선택한 3개 영화 기준으로 최초 추천 화면 출력
+    this.recommend( this.likedMovies[1].id, new THREE.Vector3(     0, 0, -1000 ) )
+    this.recommend( this.likedMovies[0].id, new THREE.Vector3( -1800, 0, -1000 ) )
+    this.recommend( this.likedMovies[2].id, new THREE.Vector3(  1800, 0, -1000 ) )
 
-    this.getRecommendations( this.likedMovies[1].id, new THREE.Vector3(     0, 0, -1000 ) )
-    this.getRecommendations( this.likedMovies[0].id, new THREE.Vector3( -1800, 0, -1000 ) )
-    this.getRecommendations( this.likedMovies[2].id, new THREE.Vector3(  1800, 0, -1000 ) )
+    console.log(this.movieObjects)
 
   },
 
   methods: {
+
+    ...mapActions([
+      // 'addMovieObjects',
+      // 'resetMovieObjects',
+      'getRecommends',
+      'getDetail',
+      'resetDetail',
+    ]),
 
     main () {
 
@@ -131,36 +123,37 @@ export default {
 
     init () {
 
-      container = document.getElementById( 'container' );
+      // state 값 초기화
+      this.resetDetail()
+      this.movieObjects = {}
 
-      // // 씬
-      // this.initScene()
+      container = document.getElementById( 'container' )
 
       // 씬 초기화
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color( 0xffffff );
+      scene = new THREE.Scene()
+      scene.background = new THREE.Color( 0xffffff )
       // scene.background.setStyle( "rgba(100, 98, 98, 0.5)" )
 
       // 마우스 가리키는 씬
-      pickingScene = new THREE.Scene();
-      pickingTexture = new THREE.WebGLRenderTarget( 1, 1 );
+      pickingScene = new THREE.Scene()
+      pickingTexture = new THREE.WebGLRenderTarget( 1, 1 )
 
       // 재질 로더
       // loader = new THREE.TextureLoader()
 
       // 조명 1
-      scene.add( new THREE.AmbientLight( 0x555555 ) );
+      scene.add( new THREE.AmbientLight( 0x555555 ) )
 
       // 조명 2
-      const light = new THREE.SpotLight( 0xffffff, 1.5 );
-      light.position.set( 0, 500, 2000 );
-      scene.add( light );
+      const light = new THREE.SpotLight( 0xffffff, 1.5 )
+      light.position.set( 0, 500, 2000 )
+      scene.add( light )
 
       // 영화 데이터 확인
       // const movies = results.results // this is for test
 
       // 영화 확인 전 피킹 데이터 초기화
-      pickingData = []
+      pickingData = {}
       pointer = new THREE.Vector2()
 
       // 포스터 카드 geometry 추가
@@ -175,40 +168,34 @@ export default {
         this.getHighlightGeometry(),
         new THREE.MeshBasicMaterial( { color: 0xffff00, depthTest: false }
 
-        ) );
+        ) )
       highlightBox.renderOrder = 1
-      scene.add( highlightBox );
+      scene.add( highlightBox )
 
       // 카메라
-      camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+      camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 )
       camera.rotation.x = 0.0367464081048994
-      // camera.rotation.x = 0.1367464081048994
-      // camera.rotation.y = -0.07590929642410132
-      // camera.rotation.z = 0.013967953561495515
-      // camera.position.x = -50.64439864745512
-      // camera.position.y = -89.17068354000168
-      // camera.position.z = 97.64381447381723
 
       camera.layers.enable(1)
 
       // 렌더러 화면에 추가
-      renderer = new THREE.WebGLRenderer( { antialias: true } );      
-      renderer.setPixelRatio( window.devicePixelRatio );
-      renderer.setSize( window.innerWidth, window.innerHeight );
-      container.appendChild( renderer.domElement );
+      renderer = new THREE.WebGLRenderer( { antialias: true } )      
+      renderer.setPixelRatio( window.devicePixelRatio )
+      renderer.setSize( window.innerWidth, window.innerHeight )
+      container.appendChild( renderer.domElement )
 
       // post-process #1 디테일 페이지 뒤에 지직 거리는 효과
       {
-        composerZizizik = new EffectComposer( renderer );
-        composerZizizik.addPass( new RenderPass( scene, camera ) );
+        composerZizizik = new EffectComposer( renderer )
+        composerZizizik.addPass( new RenderPass( scene, camera ) )
 
-        const effect1 = new ShaderPass( DotScreenShader );
-        effect1.uniforms[ 'scale' ].value = 100;
-        composerZizizik.addPass( effect1 );
+        const effect1 = new ShaderPass( DotScreenShader )
+        effect1.uniforms[ 'scale' ].value = 100
+        composerZizizik.addPass( effect1 )
 
-        const effect2 = new ShaderPass( RGBShiftShader );
-        effect2.uniforms[ 'amount' ].value = 0.001;
-        composerZizizik.addPass( effect2 );
+        const effect2 = new ShaderPass( RGBShiftShader )
+        effect2.uniforms[ 'amount' ].value = 0.001
+        composerZizizik.addPass( effect2 )
       }
       
       // 컨트롤러 추가
@@ -221,47 +208,42 @@ export default {
                               DIST  = new THREE.Vector3( 1500, 1000, 500 ) ) {
 
       // pickingScene 의 재질
-      const pickingMaterial = new THREE.MeshBasicMaterial( { vertexColors: true } );
+      const pickingMaterial = new THREE.MeshBasicMaterial( { vertexColors: true } )
 
       // geometry 배열
-      // const geometriesDrawn = [];
-      const geometriesPicking = [];
+      // const geometriesDrawn = []
+      const geometriesPicking = []
 
       // 그외 변수
-      const matrix = new THREE.Matrix4();
-      const quaternion = new THREE.Quaternion();
-      const color = new THREE.Color();
+      const matrix = new THREE.Matrix4()
+      const quaternion = new THREE.Quaternion()
+      const color = new THREE.Color()
 
       movies.forEach( movie => {
 
+        if ( !movie ) {
+          return
+        }
+
         // 포스터 없으면 continue
-        if (!movie.poster_path) {
+        if ( !movie.poster_path ) {
           return
         }
 
         // 이미 리스트에 있으면 continue
-        if (pickingData[ movie.id ]) {
+        if ( this.movieObjects[ movie.id ] ) {
           return
         }
 
-        // movieObject에 데이터 저장
-        this.movieObject[ movie.id ] = movie
-        // this.movieObject[ movie.id ] = {
-        //   ...movie,
-        //   movie_id: movie.id,
-        // }
-        // delete this.movieObject[ movie.id ].id
-
-
-        // movieLength 추가
-        this.movieLength += 1
+        // movieObjects에 데이터 저장
+        this.movieObjects[ movie.id ] = movie
           
         // geometry 원형
         let geometry = this.getPosterGeometry()
 
         // Scene 의 재질에 texture image 적용할 TextureLoader
-        const loadManager = new THREE.LoadingManager();
-        const loader = new THREE.TextureLoader(loadManager);
+        const loadManager = new THREE.LoadingManager()
+        const loader = new THREE.TextureLoader(loadManager)
 
         const posterTexture = loader.load(`https://www.themoviedb.org/t/p/w500${movie.poster_path}`)
         const posterMaterial = new THREE.MeshBasicMaterial({ map: posterTexture })
@@ -271,33 +253,33 @@ export default {
         posterTexture.magFilter = THREE.LinearFilter
         
         // 위치 설정
-        const position = new THREE.Vector3();
-        position.x = POS.x + DIST.x * ( 1 - 2 * Math.random() );
-        position.y = POS.y + DIST.y * ( 1 - 2 * Math.random() );
-        position.z = POS.z + DIST.z * ( - Math.random() ) - 500;
+        const position = new THREE.Vector3()
+        position.x = POS.x + DIST.x * ( 1 - 2 * Math.random() )
+        position.y = POS.y + DIST.y * ( 1 - 2 * Math.random() )
+        position.z = POS.z + DIST.z * ( - Math.random() ) - 500
 
         // 방향 설정
-        const rotation = new THREE.Euler();
-        rotation.x = 0;
-        rotation.y = 0;
-        rotation.z = 0;
+        const rotation = new THREE.Euler()
+        rotation.x = 0
+        rotation.y = 0
+        rotation.z = 0
 
         // 스케일 설정
-        const scale = new THREE.Vector3();
-        scale.x = 100;
-        scale.y = 100;
-        scale.z = 100;
+        const scale = new THREE.Vector3()
+        scale.x = 100
+        scale.y = 100
+        scale.z = 100
 
         // 위치, 방향, 스케일 적용
-        quaternion.setFromEuler( rotation );
-        matrix.compose( position, quaternion, scale );
-        geometry.applyMatrix4( matrix );
+        quaternion.setFromEuler( rotation )
+        matrix.compose( position, quaternion, scale )
+        geometry.applyMatrix4( matrix )
 
         // geometry를 마우스 가리키는 씬에 사용할 geometry 배열에 추가
         // 단, 컬러를 "id" (movie.id) 값으로 설정한다.
-        const pickingGeometry = geometry.clone();
-        this.applyVertexColors( pickingGeometry, color.setHex( movie.id ) );
-        geometriesPicking.push( pickingGeometry );
+        const pickingGeometry = geometry.clone()
+        this.applyVertexColors( pickingGeometry, color.setHex( movie.id ) )
+        geometriesPicking.push( pickingGeometry )
 
         // 각 카드 별 데이터 저장
         pickingData[ movie.id ] = {
@@ -307,7 +289,7 @@ export default {
           scale,
           highlightMaterial,
 
-        };
+        }
 
         loadManager.onLoad = () => {
           
@@ -318,55 +300,56 @@ export default {
             geometry,
             posterMaterial,
 
-            );
+            )
 
+          scene.add( object )
 
-          scene.add( object );
-
-        };
+        }
         
       }) // forEach end
 
-      // 포인터 바라보는 Scene에도 포스터 카드 추가
-      const pickingObejcts = new THREE.Mesh( 
+      if ( geometriesPicking.length ) {
 
-        BufferGeometryUtils.mergeBufferGeometries( geometriesPicking ),
-        pickingMaterial
-        
-        )
-      pickingScene.add( pickingObejcts )
-
+        // 포인터 바라보는 Scene에도 포스터 카드 추가
+        const pickingObejcts = new THREE.Mesh( 
+  
+          BufferGeometryUtils.mergeBufferGeometries( geometriesPicking ),
+          pickingMaterial
+          
+          )
+        pickingScene.add( pickingObejcts )
+      }
     },
 
     getCubeGeometry ( boxWidth, boxHeight, boxDepth ) {
 
-      return new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+      return new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth)
 
     },
 
     getPosterGeometry () {
 
-      return this.getCubeGeometry(2, 3, 0.03);
+      return this.getCubeGeometry(2, 3, 0.03)
 
     },
 
     getHighlightGeometry () {
 
-      return this.getCubeGeometry(2.3, 3.45, 0.0345);
+      return this.getCubeGeometry(2.3, 3.45, 0.0345)
 
     },
 
     // 카드 geometry 생성
     getCardGeometry () {
 
-      const width = 2, height = 3;
+      const width = 2, height = 3
 
-      const shape = new THREE.Shape();
-      shape.moveTo( 0,0 );
-      shape.lineTo( 0, height );
-      shape.lineTo( width, height );
-      shape.lineTo( width, 0 );
-      shape.lineTo( 0, 0 );
+      const shape = new THREE.Shape()
+      shape.moveTo( 0,0 )
+      shape.lineTo( 0, height )
+      shape.lineTo( width, height )
+      shape.lineTo( width, 0 )
+      shape.lineTo( 0, 0 )
 
       const extrudeSettings = {
 
@@ -377,7 +360,7 @@ export default {
         bevelSize: 0.06,
         bevelSegments: 1
 
-      };
+      }
       
       return new THREE.ExtrudeGeometry(shape, extrudeSettings)
 
@@ -386,16 +369,16 @@ export default {
     // 컬러 적용
     applyVertexColors ( geometry, color ) {
 
-      const position = geometry.attributes.position; // geometry.attributes 속성으로 위치 등에 접근할 수 있나보다.
-      const colors = [];
+      const position = geometry.attributes.position // geometry.attributes 속성으로 위치 등에 접근할 수 있나보다.
+      const colors = []
 
       for ( let i = 0; i < position.count; i ++ ) {
 
-        colors.push( color.r, color.g, color.b );
+        colors.push( color.r, color.g, color.b )
 
       }
 
-      geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+      geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) )
 
     },
 
@@ -434,8 +417,8 @@ export default {
 
     onPointerMove ( e ) {
 
-      pointer.x = e.clientX;
-      pointer.y = e.clientY;
+      pointer.x = e.clientX
+      pointer.y = e.clientY
 
     },
 
@@ -465,12 +448,6 @@ export default {
         camera.position.x = 0
         camera.position.y = 0
         camera.position.z = 0
-        // camera.rotation.x = 0.1367464081048994
-        // camera.rotation.y = -0.07590929642410132
-        // camera.rotation.z = 0.013967953561495515
-        // camera.position.x = -50.64439864745512
-        // camera.position.y = -89.17068354000168
-        // camera.position.z = 97.64381447381723
 
       }
 
@@ -488,29 +465,29 @@ export default {
                             pointer.y * window.devicePixelRatio | 0, 
                             // (pointer.y - navbarHeight) * window.devicePixelRatio | 0, // navbar 사이즈만큼 위치 조절
                             1, 
-                            1 );
+                            1 )
 
       // render the scene
 
-      renderer.setRenderTarget( pickingTexture );
-      renderer.render( pickingScene, camera );
+      renderer.setRenderTarget( pickingTexture )
+      renderer.render( pickingScene, camera )
 
       // clear the view offset so rendering returns to normal
 
-      camera.clearViewOffset();
+      camera.clearViewOffset()
 
       //create buffer for reading single pixel
 
-      const pixelBuffer = new Uint8Array( 4 );
+      const pixelBuffer = new Uint8Array( 4 )
 
       //read the pixel
 
-      renderer.readRenderTargetPixels( pickingTexture, 0, 0, 1, 1, pixelBuffer );
+      renderer.readRenderTargetPixels( pickingTexture, 0, 0, 1, 1, pixelBuffer )
 
       //interpret the pixel as an ID
 
-      pointedCardId = ( pixelBuffer[ 0 ] << 16 ) | ( pixelBuffer[ 1 ] << 8 ) | ( pixelBuffer[ 2 ] );
-      const data = pickingData[ pointedCardId ];
+      pointedCardId = ( pixelBuffer[ 0 ] << 16 ) | ( pixelBuffer[ 1 ] << 8 ) | ( pixelBuffer[ 2 ] )
+      const data = pickingData[ pointedCardId ]
 
       if ( data ) {
 
@@ -518,23 +495,23 @@ export default {
 
         if ( data.position && data.rotation && data.scale ) {
 
-          highlightBox.position.copy( data.position );
-          highlightBox.rotation.copy( data.rotation );
-          highlightBox.scale.copy( data.scale );
-          highlightBox.material.copy( data.highlightMaterial );
-          highlightBox.visible = true;
+          highlightBox.position.copy( data.position )
+          highlightBox.rotation.copy( data.rotation )
+          highlightBox.scale.copy( data.scale )
+          highlightBox.material.copy( data.highlightMaterial )
+          highlightBox.visible = true
 
         } 
 
       } else {
 
-        highlightBox.visible = false;
+        highlightBox.visible = false
 
       }
 
     },
 
-    async choice () {
+    choice () {
 
       if ( clicked ) {
         
@@ -542,98 +519,87 @@ export default {
 
         if ( pointedCardId ) {
 
-          // recommend
           if ( shiftDown ) {
 
-            console.log( 'shift +', pointedCardId )
-            this.getRecommendations( pointedCardId,
-                                     pickingData[ pointedCardId ].position )
+            // console.log( 'shift +', pointedCardId )
+            this.recommend( pointedCardId,
+                            pickingData[ pointedCardId ].position )
 
-          // detail
           } else if ( ctrlDown ) {
 
-            console.log( 'ctrl +', pointedCardId )
-            // console.log( this.movieObject[ pointedCardId ] )
-            // this.exportScene() // 굉장히 비싼 작업
-            
-            // 디테일 창을 띄우기 전에 서버로부터 데이터 가져오기
-            await axios({
-              url: `${SERVER_URL}/movies/`,
-              method: 'post',
-              data: this.movieObject[ pointedCardId ],
-            })
-              .then((res) => {
-                this.selectedMovie = res.data
-                // console.log('res.data:', res.data)
-              })
-              .catch((err) => {
-                console.log(err)
-              })
-
-            this.isDetail = true
-            this.deactivateEventsAndControls( pointedCardId )
-
-            scene.background = new THREE.Color( 0x000000 );
-
-            const navbarDOM = document.querySelector('#nav')
-            const infoDOM = document.querySelector('#info')
-            navbarDOM.style.display = 'none'
-            infoDOM.style.display = 'none'
+            // console.log( 'ctrl +', pointedCardId )
+            console.log('click1', pointedCardId)
+            console.log('click2', this.movieObjects[ pointedCardId ])
+            this.detail( this.movieObjects[ pointedCardId ])
 
           }
         }
       }
     },
 
-    getRecommendations ( movieId, position ) {
+    async recommend ( movieId, position ) {
 
-      axios({
+      await this.getRecommends( movieId )
 
-        url: `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${TMDB_API_KEY}&language=ko-KR&page=1`,
-        method: 'get',
+      if ( this.movieRecommends ) {
 
-      })
+        this.updateGeometriesToScene( this.movieRecommends, position )
 
-        .then( res => {
+      }
+    },
 
-          if (res.data.results) {
+    async detail ( movie ) {
 
-            const movies = res.data.results
-            this.updateGeometriesToScene( movies, position )
+      this.isDetail = false
+      console.log( 'MovieRecommend.vue async detail1', movie )
 
-          }
-          
-        })
+      await this.getDetail( movie )
+      if ( this.movieDetail ) {
 
-        .catch( err => {
+        console.log('MovieRecommend.vue async detail2', this.movieDetail)
 
-          console.log(err)
+        console.log(1)
+        this.deactivateEventsAndControls()
+        console.log(2)
+        scene.background = new THREE.Color( 0x000000 )
+        console.log(3)
 
-        })
+        const navbarDOM = document.querySelector('#nav')
+        console.log(4)
+        const infoDOM = document.querySelector('#info')
+        console.log(5)
+        navbarDOM.style.display = 'none'
+        console.log(6)
+        infoDOM.style.display = 'none'
+        console.log(7)
 
+        this.isDetail = true
+        console.log(8, this.isDetail)
+
+      }
     },
 
     animate () {
 
       // 비동기 함수
-      requestAnimationFrame( this.animate );
+      requestAnimationFrame( this.animate )
 
-      this.render();
+      this.render()
 
     },
 
     render () {
 
       // Fly Controls
-      controls.update( clock.getDelta() );
+      controls.update( clock.getDelta() )
 
-      this.pick();
+      this.pick()
       this.choice()
 
       if ( !this.isDetail ) {
 
-        renderer.setRenderTarget( null );
-        renderer.render( scene, camera );
+        renderer.setRenderTarget( null )
+        renderer.render( scene, camera )
         
       } else {
 
@@ -645,6 +611,9 @@ export default {
 
     closeDetail () {
 
+      // state의 movieDetail 초기화
+      this.resetDetail()
+
       this.isDetail = false
       this.activateEventsAndControls()
 
@@ -652,25 +621,25 @@ export default {
       shiftDown = false
       ctrlDown = false
 
-      scene.background = new THREE.Color( 0xffffff );
+      scene.background = new THREE.Color( 0xffffff )
 
       const navbarDOM = document.querySelector('#nav')
       const infoDOM = document.querySelector('#info')
       navbarDOM.style.display = 'block'
       infoDOM.style.display = 'block'
 
-    }
+    },
   }
 }
 </script>
 
 <style>
 #info b {
-  color: orange
+  color: orange;
 }
 
 /* #info span {
-  color: rgba( 255, 255, 255, 0.6 )
+  color: rgba( 255, 255, 255, 0.6 );
 } */
 
 #info {
