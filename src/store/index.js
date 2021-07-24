@@ -14,7 +14,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    // loading
+    loading: false,
+
     // accounts
+    authToken: null,
     errors: null,
     
     // tmdb search
@@ -23,6 +27,7 @@ export default new Vuex.Store({
     searchResults: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ],
 
     // recommend - three.js
+    movieObjects: {},
     movieRecommends: null,
     movieDetail: null,
   },
@@ -33,6 +38,11 @@ export default new Vuex.Store({
 
   mutations: {
 
+    // loading
+    SET_LOADING (state, loading) {
+      state.loading = loading
+    },
+
     // accounts
     SET_TOKEN (state, token) {
       localStorage.setItem('jwt', token)
@@ -41,7 +51,7 @@ export default new Vuex.Store({
 
     REMOVE_TOKEN (state) {
       localStorage.removeItem('jwt')
-      state.authToken = localStorage.getItem('jwt')
+      state.authToken = null
     },
 
     SET_ERRORS (state, errors) {
@@ -104,19 +114,39 @@ export default new Vuex.Store({
     },
 
     // recommend - three.js
+    // ADD_MOVIE_OBJECTS (state, movieId, movie) {
+    //   state.movieObjects[ movieId ] = movie
+    // },
+
+    // RESET_MOVIE_OBJECTS (state) {
+    //   state.movieObjects = {}
+    // },
+
     SET_MOVIE_RECOMMENDS (state, movieRecommends) {
       state.movieRecommends = movieRecommends
     },
 
     SET_MOVIE_DETAIL (state, movieDetail) {
+      console.log('Mutation SET_DETAIL()1', movieDetail)
       state.movieDetail = movieDetail
+      console.log('Mutation SET_DETAIL()2', state.movieDetail)
+    },
+
+    RESET_MOVIE_DETAIL (state) {
+      state.movieDetail = null
     },
   },
 
   actions: {
 
+    // loading
+    setLoading ({ commit }, loading) {
+      commit('SET_LOADING', loading)
+    },
+
     // accounts
     signup ({ commit, dispatch }, credentials) {
+      dispatch('setLoading', true)
       dispatch('setErrors', null)
     
       axios({
@@ -125,10 +155,14 @@ export default new Vuex.Store({
         data: credentials,
       })
         .then(res => {
+          dispatch('setLoading', false)
+
           commit('SET_TOKEN', res.data.token)
           router.push({ name: 'TmdbSearch' })
         })
         .catch(err => {
+          dispatch('setLoading', false)
+
           console.log(err)
           if (err.response.data.error) {
             dispatch('setErrors', err.response.data.error)
@@ -139,6 +173,7 @@ export default new Vuex.Store({
     },
 
     login ({ commit, dispatch }, credentials) {
+      dispatch('setLoading', true)
       dispatch('setErrors', null)
       
       axios({
@@ -147,16 +182,21 @@ export default new Vuex.Store({
         data: credentials,
       })
         .then(res => {
+          dispatch('setLoading', false)
+
           commit('SET_TOKEN', res.data.token)
           router.push({ name: 'TmdbSearch' })
         })
         .catch(err => {
+          dispatch('setLoading', false)
+
           console.log(err)
           dispatch('setErrors', 'ID와 비밀번호를 확인해주세요.')
         })
     },
 
     logout ({ commit }) {
+      router.push({ name: 'Login' })
       commit('REMOVE_TOKEN')
     },
 
@@ -165,7 +205,9 @@ export default new Vuex.Store({
     },
 
     // tmdb search
-    setSearchInput ({ commit }, searchInput ) {
+    setSearchInput ({ commit, dispatch }, searchInput ) {
+      dispatch('setLoading', true)
+
       const trimmedSearchInput = searchInput.trim()
       commit( 'SET_SEARCH_INPUT', trimmedSearchInput )
       
@@ -187,6 +229,8 @@ export default new Vuex.Store({
           method: 'get',
         })
           .then( res => {
+            dispatch('setLoading', false)
+
             const results = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
             let idx = 0
             res.data.results.forEach(movie => {
@@ -198,6 +242,8 @@ export default new Vuex.Store({
             commit( 'SET_SEARCH_RESULTS', results )
           })
           .catch( err => {
+            dispatch('setLoading', false)
+
             console.log(err)
           })
 
@@ -224,14 +270,26 @@ export default new Vuex.Store({
     },
 
     // recommend - three.js
-    async getRecommends ({ commit }, movieId) {
-      const url = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
+    // addMovieObjects ({ commit }, movieId, movie) {
+    //   commit('ADD_MOVIE_OBJECTS', movieId, movie)
+    // },
 
+    // resetMovieObjects ({ commit }) {
+    //   commit('RESET_MOVIE_OBJECTS')
+    // },
+
+    async getRecommends ({ commit, dispatch }, movieId) {
+      dispatch('setLoading', true)
+      
+      const url = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
+      
       await axios({
         url: url,
         method: 'get',
       })
         .then( res => {
+          dispatch('setLoading', false)
+
           if (res.data.results) {
             commit('SET_MOVIE_RECOMMENDS', res.data.results)
           } else {
@@ -239,12 +297,16 @@ export default new Vuex.Store({
           }
         })
         .catch( err => {
+          dispatch('setLoading', false)
+          
           console.log(err)
           commit('SET_MOVIE_RECOMMENDS', null)
         })
     },
 
-    async getDetail ({ commit }, movie ){
+    async getDetail ({ commit, dispatch }, movie ){
+      dispatch('setLoading', true)
+
       const url = `${SERVER_URL}/movies/`
 
       await axios({
@@ -253,13 +315,22 @@ export default new Vuex.Store({
         data: movie,
       })
         .then( res => {
+          dispatch('setLoading', false)
+          
+          console.log('Action getDetail()', res.data)
           commit('SET_MOVIE_DETAIL', res.data)
         })
         .catch( err => {
+          dispatch('setLoading', false)
+
           console.log( err )
           commit('SET_MOVIE_DETAIL', null)
         })
     },
+
+    resetDetail ({ commit }) {
+      commit('RESET_MOVIE_DETAIL', null)
+    }
   },
 
   plugins: [createPersistedState()],

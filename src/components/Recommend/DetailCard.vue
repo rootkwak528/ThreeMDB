@@ -1,6 +1,5 @@
 <template>
   <div id="detail-window">
-
     <div class="container">
       <div class="row">
 
@@ -39,9 +38,9 @@
           <ReviewList 
             :loginUsername="loginUsername"
             
-            :reviews     ="movie.reviews"
-            @reviewDelete="reviewDelete"
-            @reviewPut   ="reviewPut"
+            :reviews      ="movie.reviews"
+            @reviewDelete ="reviewDelete"
+            @reviewPut    ="reviewPut"
 
             @commentPost  ="commentPost"
             @commentDelete="commentDelete"
@@ -61,6 +60,7 @@ import ReviewList from '@/components/Review/ReviewList'
 
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+import { mapState } from 'vuex'
 
 const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
@@ -77,17 +77,40 @@ export default {
     }
   },
 
-  props: {
-    selectedMovie: {
-      type: [Object,],
-      default: null,
+  computed: {
+    ...mapState([
+      'movieDetail'
+    ]),
+
+    poster_path () {
+      return this.movie.poster_path ? `https://www.themoviedb.org/t/p/w300${this.movie.poster_path}` : ''
+    },
+
+    authToken () {
+      return localStorage.getItem('jwt')
+    },
+
+    loginUsername () {
+      const decode = jwt_decode(this.authToken)
+      return decode ? decode.username : 'anonymous_User'
+    },
+
+    averageRate () {
+      let rateSum = 0, rateCount = 0
+      this.movieDetail.reviews.forEach( review => {
+        rateSum += review.rate
+        rateCount += 1
+      })
+      return rateCount ? (rateSum / rateCount).toFixed(2) : 0
     },
   },
 
   mounted () {
     // this.movie 는 vuejs 에서만 바뀌는 데이터로, DB 를 **미믹한다.**
     // 미믹 없이 바로 prop 을 수정하면, Vue warn 이 발생한다.
-    this.movie = { ...this.selectedMovie }
+    this.movie = { ...this.movieDetail }
+
+    console.log('DetailCard.vue mounted()', this.movieDetail)
   },
 
   methods: {
@@ -269,30 +292,6 @@ export default {
 
     close () {
       this.$emit('close-detail')
-    },
-  },
-
-  computed: {
-    poster_path () {
-      return this.movie.poster_path ? `https://www.themoviedb.org/t/p/w300${this.movie.poster_path}` : ''
-    },
-
-    authToken () {
-      return localStorage.getItem('jwt')
-    },
-
-    loginUsername () {
-      const decode = jwt_decode(this.authToken)
-      return decode ? decode.username : 'anonymous_User'
-    },
-
-    averageRate () {
-      let sumRate = 0, cntRate = 0
-      this.selectedMovie.reviews.forEach( review => {
-        sumRate += review.rate
-        cntRate += 1
-      })
-      return cntRate ? (sumRate / cntRate).toFixed(2) : 0
     },
   },
 }

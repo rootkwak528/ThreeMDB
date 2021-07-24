@@ -15,7 +15,6 @@
 
     <div v-if="isDetail">
       <DetailCard
-        :selectedMovie="selectedMovie"
         @close-detail="closeDetail"
       />
     </div>
@@ -81,9 +80,7 @@ export default {
     return {
       // three.js
       isDetail: false,
-      selectedMovie: null,
-      movieObjects: {}, // this is for test
-      movieLength: 0,
+      movieObjects: {},
     }
 
   },
@@ -103,13 +100,18 @@ export default {
     this.recommend( this.likedMovies[0].id, new THREE.Vector3( -1800, 0, -1000 ) )
     this.recommend( this.likedMovies[2].id, new THREE.Vector3(  1800, 0, -1000 ) )
 
+    console.log(this.movieObjects)
+
   },
 
   methods: {
 
     ...mapActions([
+      // 'addMovieObjects',
+      // 'resetMovieObjects',
       'getRecommends',
       'getDetail',
+      'resetDetail',
     ]),
 
     main () {
@@ -120,6 +122,10 @@ export default {
     },
 
     init () {
+
+      // state 값 초기화
+      this.resetDetail()
+      this.movieObjects = {}
 
       container = document.getElementById( 'container' )
 
@@ -169,12 +175,6 @@ export default {
       // 카메라
       camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 )
       camera.rotation.x = 0.0367464081048994
-      // camera.rotation.x = 0.1367464081048994
-      // camera.rotation.y = -0.07590929642410132
-      // camera.rotation.z = 0.013967953561495515
-      // camera.position.x = -50.64439864745512
-      // camera.position.y = -89.17068354000168
-      // camera.position.z = 97.64381447381723
 
       camera.layers.enable(1)
 
@@ -237,16 +237,6 @@ export default {
 
         // movieObjects에 데이터 저장
         this.movieObjects[ movie.id ] = movie
-
-        // this.movieObjects[ movie.id ] = {
-        //   ...movie,
-        //   movie_id: movie.id,
-        // }
-        // delete this.movieObjects[ movie.id ].id
-
-
-        // movieLength 추가
-        this.movieLength += 1
           
         // geometry 원형
         let geometry = this.getPosterGeometry()
@@ -458,12 +448,6 @@ export default {
         camera.position.x = 0
         camera.position.y = 0
         camera.position.z = 0
-        // camera.rotation.x = 0.1367464081048994
-        // camera.rotation.y = -0.07590929642410132
-        // camera.rotation.z = 0.013967953561495515
-        // camera.position.x = -50.64439864745512
-        // camera.position.y = -89.17068354000168
-        // camera.position.z = 97.64381447381723
 
       }
 
@@ -535,34 +519,19 @@ export default {
 
         if ( pointedCardId ) {
 
-          // recommend
           if ( shiftDown ) {
 
             // console.log( 'shift +', pointedCardId )
             this.recommend( pointedCardId,
                             pickingData[ pointedCardId ].position )
 
-          // detail
           } else if ( ctrlDown ) {
 
             // console.log( 'ctrl +', pointedCardId )
-            this.detail( this.movieObjects[ pointedCardId ] )
+            console.log('click1', pointedCardId)
+            console.log('click2', this.movieObjects[ pointedCardId ])
+            this.detail( this.movieObjects[ pointedCardId ])
 
-            // 디테일 창을 띄우기 전에 서버로부터 데이터 가져오기
-            // const SERVER_URL = process.env.VUE_APP_SERVER_URL
-            // await axios({
-            //   url: `${SERVER_URL}/movies/`,
-            //   method: 'post',
-            //   data: this.movieObjects[ pointedCardId ],
-            // })
-            //   .then((res) => {
-            //     this.selectedMovie = res.data
-            //     console.log(this.selectedMovie)
-            //     // console.log('res.data:', res.data)
-            //   })
-            //   .catch((err) => {
-            //     console.log(err)
-            //   })
           }
         }
       }
@@ -573,7 +542,7 @@ export default {
       await this.getRecommends( movieId )
 
       if ( this.movieRecommends ) {
-        
+
         this.updateGeometriesToScene( this.movieRecommends, position )
 
       }
@@ -581,19 +550,32 @@ export default {
 
     async detail ( movie ) {
 
+      this.isDetail = false
+      console.log( 'MovieRecommend.vue async detail1', movie )
+
       await this.getDetail( movie )
       if ( this.movieDetail ) {
 
-        console.log('movie Detail:', this.movieDetail)
-        this.isDetail = true
-        this.deactivateEventsAndControls()
+        console.log('MovieRecommend.vue async detail2', this.movieDetail)
 
+        console.log(1)
+        this.deactivateEventsAndControls()
+        console.log(2)
         scene.background = new THREE.Color( 0x000000 )
+        console.log(3)
 
         const navbarDOM = document.querySelector('#nav')
+        console.log(4)
         const infoDOM = document.querySelector('#info')
+        console.log(5)
         navbarDOM.style.display = 'none'
+        console.log(6)
         infoDOM.style.display = 'none'
+        console.log(7)
+
+        this.isDetail = true
+        console.log(8, this.isDetail)
+
       }
     },
 
@@ -628,6 +610,9 @@ export default {
     },
 
     closeDetail () {
+
+      // state의 movieDetail 초기화
+      this.resetDetail()
 
       this.isDetail = false
       this.activateEventsAndControls()
