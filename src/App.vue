@@ -2,7 +2,7 @@
   <div id="app">
 
     <!-- loading spinner -->
-    <div v-if="loading" id="loading" class="text-light d-flex flex-column justify-content-center align-items-center">
+    <div v-if="loading" id="container" class="text-light d-flex flex-column justify-content-center align-items-center">
       <div class="spinner-border"></div>
       <h1>Loading..</h1>
 
@@ -88,7 +88,7 @@ export default {
   color: #42b983;
 }
 
-#loading {
+#container {
   position: absolute;
   height: 100%;
   width: 100%;

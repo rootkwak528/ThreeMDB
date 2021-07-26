@@ -69,6 +69,7 @@ export default {
 
   computed: {
     ...mapState([
+      'isDesktopPlatform',
       'likedMovies',
       'movieRecommends',
       'movieDetail',
@@ -86,6 +87,10 @@ export default {
   },
 
   mounted () {
+
+    if (!this.isDesktopPlatform) {
+      this.$router.push({ name: 'MobileAlert' })
+    }
 
     // 조작법 표시 info-bar
     const infobar = document.getElementById( 'info' )

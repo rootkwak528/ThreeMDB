@@ -12,10 +12,37 @@ const SERVER_URL = process.env.VUE_APP_SERVER_URL
 
 Vue.use(Vuex)
 
+function getIsDesktop() {
+  var userAgent = window.navigator.userAgent,
+      platform = window.navigator.platform,
+      macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+      windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+      iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+      os = null;
+
+  if (macosPlatforms.indexOf(platform) !== -1) { //Desktop - Mac
+    return true
+  } else if (iosPlatforms.indexOf(platform) !== -1) { // IOS
+    return false
+  } else if (windowsPlatforms.indexOf(platform) !== -1) { //Desktop - window
+    return true
+  } else if (/Android/.test(userAgent)) { //Android
+    return false
+  } else if (!os && /Linux/.test(platform)) { //Linux
+    return true
+  }
+
+  return os;
+}
+
+const isDesktop = getIsDesktop()
+
 export default new Vuex.Store({
   state: {
     // loading
     loading: false,
+    isDesktopPlatform: isDesktop,
+    // mobileEyes: 0,
 
     // accounts
     authToken: null,
@@ -135,6 +162,10 @@ export default new Vuex.Store({
     RESET_MOVIE_DETAIL (state) {
       state.movieDetail = null
     },
+
+    // ADD_MOBILE_EYES (state) {
+    //   state.mobileEyes += 1
+    // }
   },
 
   actions: {
@@ -333,7 +364,11 @@ export default new Vuex.Store({
 
     resetDetail ({ commit }) {
       commit('RESET_MOVIE_DETAIL', null)
-    }
+    },
+
+    // clickMobileEyes ({ commit }) {
+    //   commit('ADD_MOBILE_EYES' )
+    // }
   },
 
   plugins: [createPersistedState()],

@@ -5,6 +5,7 @@ import TmdbSearch from '@/views/movies/TmdbSearch'
 import Signup from '@/views/accounts/Signup'
 import Login from '@/views/accounts/Login'
 import MovieRecommend from '@/views/movies/MovieRecommend'
+import MobileAlert from '@/views/alert/MobileAlert'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/movies',
     name: 'MovieRecommend',
     component: MovieRecommend,
+  },
+  {
+    path: '/mobile-alert',
+    name: 'MobileAlert',
+    component: MobileAlert,
   },
 ]
 
