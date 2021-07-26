@@ -35,9 +35,12 @@ def movie_create(request):
         if not movie_data['overview']:
             movie_data['overview'] = 'no overview'
         
+<<<<<<< HEAD:movies/views.py
         if not movie_data['release_date']:
             movie_data['release_date'] = '1900-01-01'
         
+=======
+>>>>>>> 09688a53ca7bcc66f2488b418584a49bdf94d4c6:movies/views.py
         serializer = MovieSerializer(data=movie_data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -53,9 +56,12 @@ def movie_create(request):
                 Prefetch('reviews', queryset=reviews),
                 Prefetch('reviews__comments', queryset=comments)
                 ).get(pk=movie[0].pk)
+<<<<<<< HEAD:movies/views.py
 
             serializer = MovieSerializer(movie)
             return Response(serializer.data, status=status.HTTP_200_OK)
+=======
+>>>>>>> 09688a53ca7bcc66f2488b418584a49bdf94d4c6:movies/views.py
 
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
