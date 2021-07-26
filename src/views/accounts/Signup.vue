@@ -49,6 +49,7 @@ export default {
 
   computed: {
     ...mapState([
+      'isDesktopPlatform',
       'errors',
     ]),
   },
@@ -61,6 +62,10 @@ export default {
   },
 
   created () {
+    if (!this.isDesktopPlatform) {
+      this.$router.push({ name: 'MobileAlert' })
+    }
+    
     this.setErrors( null )
   }
 }

@@ -32,6 +32,7 @@ export default {
 
   computed: {
     ...mapState([
+      'isDesktopPlatform',
       'likedMovies',
     ]),
   },
@@ -51,6 +52,10 @@ export default {
   },
 
   created () {
+    if (!this.isDesktopPlatform) {
+      this.$router.push({ name: 'MobileAlert' })
+    }
+
     const token = localStorage.getItem('jwt')
     if ( !token ) {
 

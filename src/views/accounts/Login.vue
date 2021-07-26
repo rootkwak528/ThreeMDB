@@ -46,6 +46,7 @@ export default {
 
   computed: {
     ...mapState([
+      'isDesktopPlatform',
       'errors',
     ]),
   },
@@ -62,6 +63,10 @@ export default {
   },
 
   created () {
+    if (!this.isDesktopPlatform) {
+      this.$router.push({ name: 'MobileAlert' })
+    }
+
     if ( this.errors !== '먼저 로그인을 해야 합니다.' ) {
       this.setErrors( null )
     }
