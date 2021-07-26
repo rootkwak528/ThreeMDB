@@ -3,7 +3,8 @@
     <h1 class="text-light text-center">
       <i class="em em-building_construction" aria-role="presentation" aria-label=""></i><br><br>
       모바일 환경은<br>
-      아직 개발중입니다..<br><br>
+      아직 개발중입니다..<br>
+      PC로 접속해주세요.<br><br>
       <!-- <span v-model=""></span> -->
     </h1>
 
