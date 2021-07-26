@@ -6,10 +6,7 @@ Django==3.2.3
 django-cors-headers==3.7.0
 django-environ==0.4.5
 django-heroku==0.0.0
-<<<<<<< HEAD:requirements.txt
 django-redis==5.0.0
-=======
->>>>>>> 09688a53ca7bcc66f2488b418584a49bdf94d4c6:requirements.txt
 django-seed==0.2.2
 djangorestframework==3.12.4
 djangorestframework-jwt==1.11.0

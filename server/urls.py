@@ -30,12 +30,9 @@ urlpatterns = [
     path('community/', include('community.urls')),
 ]
 
-<<<<<<< HEAD:server/urls.py
 # history mode 지원
 urlpatterns += [
      re_path('^.*$', TemplateView.as_view(template_name='index.html')),
 ]
 
-=======
->>>>>>> 09688a53ca7bcc66f2488b418584a49bdf94d4c6:server/urls.py
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
