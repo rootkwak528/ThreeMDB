@@ -4,7 +4,6 @@
     <!-- loading spinner -->
     <div v-if="loading" id="container" class="text-light d-flex flex-column justify-content-center align-items-center">
       <div class="spinner-border"></div>
-      <h1>Loading..</h1>
 
       <div id="loading-message-container">
         <div id="loading-message">

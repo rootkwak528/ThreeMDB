@@ -239,9 +239,7 @@ export default new Vuex.Store({
     },
 
     // tmdb search
-    setSearchInput ({ commit, dispatch }, searchInput ) {
-      dispatch('setLoading', true)
-
+    setSearchInput ({ commit }, searchInput ) {
       const trimmedSearchInput = searchInput.trim()
       commit( 'SET_SEARCH_INPUT', trimmedSearchInput )
       
@@ -263,8 +261,6 @@ export default new Vuex.Store({
           method: 'get',
         })
           .then( res => {
-            dispatch('setLoading', false)
-
             const results = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ]
             let idx = 0
             res.data.results.forEach(movie => {
@@ -276,8 +272,6 @@ export default new Vuex.Store({
             commit( 'SET_SEARCH_RESULTS', results )
           })
           .catch( err => {
-            dispatch('setLoading', false)
-
             console.log(err)
           })
 
@@ -312,9 +306,7 @@ export default new Vuex.Store({
     //   commit('RESET_MOVIE_OBJECTS')
     // },
 
-    async getRecommends ({ commit, dispatch }, movieId) {
-      dispatch('setLoading', true)
-      
+    async getRecommends ({ commit }, movieId) {
       const url = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR&page=1`
       
       await axios({
@@ -322,8 +314,6 @@ export default new Vuex.Store({
         method: 'get',
       })
         .then( res => {
-          dispatch('setLoading', false)
-
           if (res.data.results) {
             commit('SET_MOVIE_RECOMMENDS', res.data.results)
           } else {
@@ -331,16 +321,12 @@ export default new Vuex.Store({
           }
         })
         .catch( err => {
-          dispatch('setLoading', false)
-          
           console.log(err)
           commit('SET_MOVIE_RECOMMENDS', null)
         })
     },
 
-    async getDetail ({ commit, dispatch }, movie ){
-      dispatch('setLoading', true)
-
+    async getDetail ({ commit }, movie ){
       const url = `${SERVER_URL}/movies/`
 
       await axios({
@@ -349,14 +335,10 @@ export default new Vuex.Store({
         data: movie,
       })
         .then( res => {
-          dispatch('setLoading', false)
-          
           console.log('Action getDetail()', res.data)
           commit('SET_MOVIE_DETAIL', res.data)
         })
         .catch( err => {
-          dispatch('setLoading', false)
-
           console.log( err )
           commit('SET_MOVIE_DETAIL', null)
         })
