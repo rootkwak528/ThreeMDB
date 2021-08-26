@@ -16,15 +16,23 @@
 
 [4. 기능 소개](#4-기능-소개)
 
+​		[A. 계정 로그인 및 회원가입](#A-계정-로그인-및-회원가입)
+
+​		[B. 영화 검색](#B-영화-검색)
+
+​		[C. 3차원 UI의 영화 추천](#C-3차원-UI의-영화-추천)
+
+​		[D. 리뷰 작성](#D-리뷰-작성)
+
 [5. 개발 이슈](#5-개발-이슈)
 
-​	[A. three.js 사용](A-three-js-사용)
+​		[A. three.js 사용](A-three-js-사용)
 
-​	[B. ERD 및 movie 데이터](#B-ERD-및-movie-데이터)
+​		[B. ERD 및 movie 데이터](#B-ERD-및-movie-데이터)
 
-​	[C. 상세 페이지 모달](#C-상세-페이지-모달)
+​		[C. 상세 페이지 모달](#C-상세-페이지-모달)
 
-​	[D. three.js 사용](#D-async-await-비동기-처리)
+​		[D. three.js 사용](#D-async-await-비동기-처리)
 
 [6. 실행 방법](#6-실행-방법)
 
@@ -42,7 +50,7 @@
 
 [<img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="tmdb-logo" style="zoom: 33%;" />](https://developers.themoviedb.org/3)
 
-[TMDB](https://themoviedb.org)는 전세계에서 가장 큰 규모의 영화 DB를 훌륭한 [API](https://developers.themoviedb.org/3)로 공개하고 있습니다. TMDB의 기본 추천 API를 3D UI에서 구현한다면, 같은 기능으로도 새로운 UX를 제공할 수 있지 않을까요? 이러한 아이디어에서 이번 프로젝트는 시작되었습니다.
+[TMDB](https://themoviedb.org)는 전세계에서 가장 큰 규모의 영화 DB를 훌륭한 [API](https://developers.themoviedb.org/3)로 공개하고 있습니다. **TMDB의 기본 추천 API를 3D UI에서 구현한다면, 같은 기능으로도 색다른 UX를 제공할 수 있지 않을까요?** 이러한 아이디어에서 이번 프로젝트는 시작되었습니다.
 
 <br><br>
 
@@ -52,7 +60,7 @@
 
 * **BackEnd :** ![django](https://img.shields.io/badge/django-3.2.3-green)![drf](https://img.shields.io/badge/drf-3.12.4-green)![drf-jwt](https://img.shields.io/badge/drf_jwt-1.11.0-green)
 * **FrontEnd :** ![vue.js](https://img.shields.io/badge/vue.js-2.6.11-green)![vuex](https://img.shields.io/badge/vuex-3.6.2-green)![bootstrap](https://img.shields.io/badge/bootstrap-5.0.1-green.svg)![three.js](https://img.shields.io/badge/three.js-0.128.0-green.svg) 
-* **Deploy : **![heroku](https://img.shields.io/badge/heroku--orange)![netlify](https://img.shields.io/badge/netlify--orange)
+* **Deploy :** ![heroku](https://img.shields.io/badge/heroku--orange)![netlify](https://img.shields.io/badge/netlify--orange)
 
 <br>
 
