@@ -1,7 +1,5 @@
 # ThreeMDB
 
-# three.js를 활용한 3차원 영화 추천 서비스
-
 ![image-20210802001427716](README.assets/image-20210802001427716.png)
 
 <br>
@@ -16,23 +14,21 @@
 
 [4. 기능 소개](#4-기능-소개)
 
-​		[4.1. 계정 로그인 및 회원가입](#4-1-계정-로그인-및-회원가입)
+​		[4.1. 계정 로그인 및 회원가입](#41-계정-로그인-및-회원가입)
 
-​		[4.2. 영화 검색](#4-2-영화-검색)
+​		[4.2. 영화 검색](#42-영화-검색)
 
-​		[4.3. 3차원 UI의 영화 추천](#4-3-3차원-UI의-영화-추천)
+​		[4.3. 3차원 UI의 영화 추천](#43-3차원-UI의-영화-추천)
 
-​		[4.4. 리뷰 작성](#4-4-리뷰-작성)
+​		[4.4. 리뷰 작성](#44-리뷰-작성)
 
 [5. 개발 이슈](#5-개발-이슈)
 
-​		[5.1. three.js 사용](5-1-three-js-사용)
+​		[5.1. three.js 사용](#51-threejs-사용)
 
-​		[5.2. ERD 및 movie 데이터](#5-2-ERD-및-movie-데이터)
+​		[5.2. ERD 및 movie 데이터](#52-ERD-및-movie-데이터)
 
-​		[5.3. 상세 페이지 모달](#5-3-상세-페이지-모달)
-
-​		[5.4. three.js 사용](#5-4-async-await-비동기-처리)
+​		[5.3. 상세 페이지 모달](#53-상세-페이지-모달)
 
 [6. 실행 방법](#6-실행-방법)
 
@@ -59,9 +55,9 @@
 
 ### 기술스택
 
-* **BackEnd :** ![django](https://img.shields.io/badge/django-3.2.3-green)![drf](https://img.shields.io/badge/drf-3.12.4-green)![drf-jwt](https://img.shields.io/badge/drf_jwt-1.11.0-green)
-* **FrontEnd :** ![vue.js](https://img.shields.io/badge/vue.js-2.6.11-green)![vuex](https://img.shields.io/badge/vuex-3.6.2-green)![bootstrap](https://img.shields.io/badge/bootstrap-5.0.1-green.svg)![three.js](https://img.shields.io/badge/three.js-0.128.0-green.svg) 
-* **Deploy :** ![heroku](https://img.shields.io/badge/heroku--orange)![netlify](https://img.shields.io/badge/netlify--orange)
+* **BackEnd :** ![django](https://img.shields.io/badge/django-3.2.3-green) ![drf](https://img.shields.io/badge/drf-3.12.4-green) ![drf-jwt](https://img.shields.io/badge/drf_jwt-1.11.0-green)
+* **FrontEnd :** ![vue.js](https://img.shields.io/badge/vue.js-2.6.11-green) ![vuex](https://img.shields.io/badge/vuex-3.6.2-green) ![bootstrap](https://img.shields.io/badge/bootstrap-5.0.1-green.svg) ![three.js](https://img.shields.io/badge/three.js-0.128.0-green.svg) 
+* **Deploy :** ![heroku](https://img.shields.io/badge/heroku--orange) ![netlify](https://img.shields.io/badge/netlify--orange)
 
 <br>
 
