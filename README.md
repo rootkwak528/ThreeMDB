@@ -16,23 +16,23 @@
 
 [4. 기능 소개](#4-기능-소개)
 
-​		[A. 계정 로그인 및 회원가입](#A-계정-로그인-및-회원가입)
+​		[4.1. 계정 로그인 및 회원가입](#4-1-계정-로그인-및-회원가입)
 
-​		[B. 영화 검색](#B-영화-검색)
+​		[4.2. 영화 검색](#4-2-영화-검색)
 
-​		[C. 3차원 UI의 영화 추천](#C-3차원-UI의-영화-추천)
+​		[4.3. 3차원 UI의 영화 추천](#4-3-3차원-UI의-영화-추천)
 
-​		[D. 리뷰 작성](#D-리뷰-작성)
+​		[4.4. 리뷰 작성](#4-4-리뷰-작성)
 
 [5. 개발 이슈](#5-개발-이슈)
 
-​		[A. three.js 사용](A-three-js-사용)
+​		[5.1. three.js 사용](5-1-three-js-사용)
 
-​		[B. ERD 및 movie 데이터](#B-ERD-및-movie-데이터)
+​		[5.2. ERD 및 movie 데이터](#5-2-ERD-및-movie-데이터)
 
-​		[C. 상세 페이지 모달](#C-상세-페이지-모달)
+​		[5.3. 상세 페이지 모달](#5-3-상세-페이지-모달)
 
-​		[D. three.js 사용](#D-async-await-비동기-처리)
+​		[5.4. three.js 사용](#5-4-async-await-비동기-처리)
 
 [6. 실행 방법](#6-실행-방법)
 
@@ -43,6 +43,7 @@
 * 기간 : 2021.05.20 - 2021.05.28
 * 인원 : 곽호근 (팀장 / Three.js, 배포), 정훈규 (Backend, Frontend)
 * 주제 : three.js를 활용한 3차원 영화 추천 웹 서비스
+* 소스코드 : [백엔드](https://github.com/rootkwak528/BE-ThreeMDB#1-threemdb-%EC%86%8C%EA%B0%9C) / [프론트엔드](https://github.com/rootkwak528/FE-ThreeMDB)
 
 <br><br>
 
@@ -75,7 +76,7 @@
 
 ## 4. 기능 소개
 
-### A. 계정 로그인 및 회원가입
+### 4.1. 계정 로그인 및 회원가입
 
 ![readme-login](README.assets/readme-login.gif)
 
@@ -83,7 +84,7 @@
 
 <br>
 
-### B. 영화 검색
+### 4.2. 영화 검색
 
 ![readme-search](README.assets/readme-search.gif)
 
@@ -91,7 +92,7 @@
 
 <br>
 
-### C. 3차원 UI의 영화 추천
+### 4.3. 3차원 UI의 영화 추천
 
 ![readme-recommend](README.assets/readme-recommend.gif)
 
@@ -103,7 +104,7 @@
 
 <br>
 
-### D. 리뷰 작성
+### 4.4. 리뷰 작성
 
 ![readme-review](README.assets/readme-review.gif)
 
@@ -113,7 +114,7 @@
 
 ## 5. 개발 이슈
 
-### A. three.js 사용
+### 5.1. three.js 사용
 
 [<img src="https://miro.medium.com/max/724/1*aDcnXab1QC_5KF8JUxDEYA.png" alt="three.js-logo" style="zoom:33%;" />](https://threejs.org/)
 
@@ -170,7 +171,7 @@ function animate () {
 
 <br><br>
 
-### B. ERD 및 movie 데이터
+### 5.2. ERD 및 movie 데이터
 
 ![ERD](./README.assets/image-20210527180344809.png)
 
@@ -234,7 +235,7 @@ def movie_create(request):
 
 <br><br>
 
-### C. 상세 페이지 모달
+### 5.3. 상세 페이지 모달
 
 최초에는 영화 상세 페이지를 별도 url로 라우팅하여 구현하려 했습니다.
 
@@ -268,7 +269,7 @@ def movie_create(request):
 
 <br><br>
 
-### D. async-await 비동기 처리
+### 5.4. async-await 비동기 처리
 
 **axios**는 비동기적으로 요청과 응답을 처리해주는 **Promise** 기반의 함수로, 일반적인 경우라면 **axios**를 도입하는 것만으로 비동기를 처리하기 부족함이 없을 것입니다.
 
