@@ -127,7 +127,7 @@ Camera는 실시간으로 Scene을 촬영하는 객체로서 Controller를 통�
 
 <br>
 
-아래는 본 프로젝트에서 작성된 **[three.js 코드](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)의 개략적 의사코드입니다.**
+아래는 본 프로젝트에서 작성된 **[three.js 코드](https://github.com/rootkwak528/ThreeMDB/blob/master/frontend/src/views/movies/MovieRecommend.vue#L27)의 개략적 의사코드입니다.**
 
 ``` 
 init()
@@ -181,7 +181,7 @@ movies 테이블이 사용되는 순간은 사용자가 별점을 매기거나 �
 
 <br>
 
-아래는 관련된 [View 함수 코드](https://github.com/rootkwak528/BE-ssafy-final-pjt/blob/master/movies/views.py)입니다.
+아래는 관련된 [View 함수 코드](https://github.com/rootkwak528/ThreeMDB/blob/master/backend/movies/views.py#L20)입니다.
 
 > Django는 MVC 패턴의 변형인 MTV 패턴을 사용하기 때문에 여기서 View는 MVC 패턴의 Controller에 해당합니다.
 
@@ -288,7 +288,7 @@ def movie_create(request):
 
 <br>
 
-아래는 관련된 [컴포넌트](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/views/movies/MovieRecommend.vue)와 [vuex](https://github.com/rootkwak528/FE-ssafy-final-pjt/blob/master/src/store/index.js)의 코드 일부분입니다.
+아래는 관련된 [컴포넌트](https://github.com/rootkwak528/ThreeMDB/blob/master/frontend/src/views/movies/MovieRecommend.vue#L545)와 [vuex](https://github.com/rootkwak528/ThreeMDB/blob/master/frontend/src/store/index.js#L309)의 코드 일부분입니다.
 
 ```js
 // FE/src/views/movies/MovieRecommend.vue
@@ -328,7 +328,7 @@ async getRecommends ({ commit }, movieId) {
 
 ## 6. 실행 방법
 
-### [BackEnd](https://github.com/rootkwak528/BE-ThreeMDB)
+### BackEnd
 
 1. 라이브러리를 설치합니다.
 
@@ -350,7 +350,7 @@ python manage.py run server
 
 <br>
 
-### [FrontEnd]((https://github.com/rootkwak528/FE-ThreeMDB))
+### FrontEnd
 
 1. 라이브러리를 설치합니다.
 
