@@ -39,7 +39,6 @@
 * 기간 : 2021.05.20 - 2021.05.28
 * 인원 : 곽호근 (팀장 / Three.js, 배포), 정훈규 (Backend, Frontend)
 * 주제 : three.js를 활용한 3차원 영화 추천 웹 서비스
-* 소스코드 : [백엔드](https://github.com/rootkwak528/BE-ThreeMDB#1-threemdb-%EC%86%8C%EA%B0%9C) / [프론트엔드](https://github.com/rootkwak528/FE-ThreeMDB)
 
 <br><br>
 
